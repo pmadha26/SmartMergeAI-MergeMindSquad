@@ -1,0 +1,15 @@
+{
+  "prNumber": "1",
+  "timestamp": "2026-03-17T11:48:06.840Z",
+  "summary": {
+    "total": 0,
+    "critical": 0,
+    "high": 0,
+    "medium": 0
+  },
+  "changes": [],
+  "overrides": [],
+  "recommendations": [
+    "No breaking changes detected - safe to merge after review"
+  ]
+}
