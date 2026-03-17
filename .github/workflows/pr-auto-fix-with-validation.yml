@@ -1,0 +1,351 @@
+name: PR Auto-Fix with Validation
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+  pull_request_review:
+    types: [submitted]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR number to process'
+        required: true
+      action:
+        description: 'Action to perform (validate, fix, generate-files)'
+        required: true
+        default: 'validate'
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  checks: write
+
+jobs:
+  validate-and-prepare:
+    name: Validate PR & Generate Required Files
+    runs-on: ubuntu-latest
+    outputs:
+      has_breaking_changes: ${{ steps.validation.outputs.has_breaking_changes }}
+      needs_auto_fix: ${{ steps.validation.outputs.needs_auto_fix }}
+      validation_files_generated: ${{ steps.generate_files.outputs.files_generated }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: scripts/package.json
+      
+      - name: Install dependencies
+        working-directory: ./scripts
+        run: npm install
+      
+      - name: Run Breaking Changes Validation
+        id: validation
+        working-directory: ./scripts
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
+          GITHUB_REPOSITORY_NAME: ${{ github.event.repository.name }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: |
+          node pr-breaking-changes-validator.js \
+            --base="origin/${{ github.event.pull_request.base.ref }}" \
+            --head="origin/${{ github.event.pull_request.head.ref }}" \
+            --pr-number="${{ github.event.pull_request.number }}" \
+            --output="validation-report.json"
+          
+          # Check if breaking changes exist
+          if [ -f validation-report.json ]; then
+            HAS_BREAKING=$(jq -r '.breakingChanges | length > 0' validation-report.json)
+            NEEDS_FIX=$(jq -r '.warnings | length > 0 or .breakingChanges | length > 0' validation-report.json)
+            echo "has_breaking_changes=$HAS_BREAKING" >> $GITHUB_OUTPUT
+            echo "needs_auto_fix=$NEEDS_FIX" >> $GITHUB_OUTPUT
+          fi
+        continue-on-error: true
+      
+      - name: Generate Required Validation Files
+        id: generate_files
+        working-directory: ./scripts
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: |
+          echo "Generating validation files for PR..."
+          node generate-validation-files.js
+          
+          if [ -d "../.validation" ]; then
+            echo "files_generated=true" >> $GITHUB_OUTPUT
+            echo "✅ Validation files generated"
+          else
+            echo "files_generated=false" >> $GITHUB_OUTPUT
+          fi
+        continue-on-error: true
+      
+      - name: Upload Validation Artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation-reports-${{ github.event.pull_request.number }}
+          path: |
+            validation-report.json
+            .validation/
+          retention-days: 30
+          if-no-files-found: warn
+      
+      - name: Post Validation Summary
+        if: always()
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            
+            let reportContent = '## 🔍 Bob\'s PR Validation & Auto-Fix Report\n\n';
+            
+            try {
+              if (fs.existsSync('validation-report.json')) {
+                const report = JSON.parse(fs.readFileSync('validation-report.json', 'utf8'));
+                
+                reportContent += '### 📊 Validation Summary\n\n';
+                reportContent += `- **Breaking Changes:** ${report.breakingChanges?.length || 0}\n`;
+                reportContent += `- **Overrides:** ${report.overrides?.length || 0}\n`;
+                reportContent += `- **Warnings:** ${report.warnings?.length || 0}\n\n`;
+                
+                if (report.breakingChanges?.length > 0) {
+                  reportContent += '### ❌ Breaking Changes Detected\n\n';
+                  report.breakingChanges.slice(0, 5).forEach((change, i) => {
+                    reportContent += `${i + 1}. **${change.type}** (${change.severity})\n`;
+                    reportContent += `   - File: \`${change.file}\`\n`;
+                    reportContent += `   - ${change.message}\n`;
+                    reportContent += `   - 💡 ${change.suggestion}\n\n`;
+                  });
+                }
+                
+                // Add validation files info
+                if (fs.existsSync('.validation')) {
+                  reportContent += '### 📁 Validation Files Generated\n\n';
+                  reportContent += 'The following validation files have been generated for this PR:\n\n';
+                  reportContent += '- `.validation/breaking-changes.json` - Detailed breaking changes report\n';
+                  reportContent += '- `.validation/test-requirements.md` - Required tests for changes\n';
+                  reportContent += '- `.validation/migration-guide.md` - Migration guide for breaking changes\n';
+                  reportContent += '- `.validation/checklist.md` - PR validation checklist\n\n';
+                  reportContent += '📥 Download these files from the workflow artifacts.\n\n';
+                }
+              }
+            } catch (error) {
+              reportContent += `⚠️ Error reading validation report: ${error.message}\n\n`;
+            }
+            
+            reportContent += '\n---\n*Automated by Bob - PR Auto-Fix & Validation System*';
+            
+            // Find and update or create comment
+            const comments = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            
+            const botComment = comments.data.find(comment => 
+              comment.user.type === 'Bot' && 
+              comment.body.includes('Bob\'s PR Validation & Auto-Fix Report')
+            );
+            
+            if (botComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: reportContent
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: reportContent
+              });
+            }
+
+  auto-fix-approved:
+    name: Auto-Fix After Approval
+    runs-on: ubuntu-latest
+    needs: validate-and-prepare
+    if: |
+      github.event_name == 'pull_request_review' && 
+      github.event.review.state == 'approved' &&
+      needs.validate-and-prepare.outputs.needs_auto_fix == 'true'
+    
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Configure Git
+        run: |
+          git config user.name "Bob Bot"
+          git config user.email "bob-bot@github-actions"
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: scripts/package.json
+      
+      - name: Install dependencies
+        working-directory: ./scripts
+        run: npm install
+      
+      - name: Run Auto-Fix
+        working-directory: ./scripts
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
+          GITHUB_REPOSITORY_NAME: ${{ github.event.repository.name }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          AUTO_FIX_ACTION: 'fix'
+        run: node pr-auto-fixer.js
+        continue-on-error: true
+      
+      - name: Commit and Push Fixes
+        run: |
+          if ! git diff --quiet; then
+            git add -A
+            git commit -m "🤖 Auto-fix: Applied safe fixes after approval [Bob]"
+            git push origin ${{ github.event.pull_request.head.ref }}
+            echo "✅ Auto-fixes applied and pushed"
+          else
+            echo "ℹ️ No auto-fixes needed"
+          fi
+
+  provide-validation-files:
+    name: Provide Validation Files to PR
+    runs-on: ubuntu-latest
+    needs: validate-and-prepare
+    if: needs.validate-and-prepare.outputs.validation_files_generated == 'true'
+    
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Configure Git
+        run: |
+          git config user.name "Bob Bot"
+          git config user.email "bob-bot@github-actions"
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: scripts/package.json
+      
+      - name: Install dependencies
+        working-directory: ./scripts
+        run: npm install
+      
+      - name: Generate and commit validation files
+        working-directory: ./scripts
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: |
+          node generate-validation-files.js
+          
+          cd ..
+          if [ -d ".validation" ]; then
+            git add .validation/
+            if ! git diff --staged --quiet; then
+              git commit -m "📋 Add validation files for PR review [Bob]"
+              git push origin ${{ github.event.pull_request.head.ref }}
+              echo "✅ Validation files committed to PR"
+            fi
+          fi
+      
+      - name: Comment with validation files info
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const comment = `## 📋 Validation Files Added
+            
+            Bob has generated validation files to help with this PR review:
+            
+            ### Files Added to \`.validation/\` directory:
+            
+            1. **breaking-changes.json** - Detailed analysis of breaking changes
+            2. **test-requirements.md** - Tests that should be added/updated
+            3. **migration-guide.md** - Guide for users affected by breaking changes
+            4. **checklist.md** - Validation checklist for reviewers
+            5. **affected-files.json** - List of files that may be impacted
+            
+            ### How to Use:
+            
+            - Review each file in the \`.validation/\` directory
+            - Follow the checklist in \`checklist.md\`
+            - Ensure all test requirements are met
+            - If breaking changes exist, verify the migration guide is complete
+            
+            These files will be automatically removed when the PR is merged.
+            
+            ---
+            *Generated by Bob - Validation File Generator*`;
+            
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: comment
+            });
+
+  status-check:
+    name: Validation Status Check
+    runs-on: ubuntu-latest
+    needs: validate-and-prepare
+    if: always()
+    
+    steps:
+      - name: Set status based on validation
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const hasBreaking = '${{ needs.validate-and-prepare.outputs.has_breaking_changes }}' === 'true';
+            const state = hasBreaking ? 'failure' : 'success';
+            const description = hasBreaking 
+              ? '❌ Breaking changes detected - review required'
+              : '✅ No breaking changes detected';
+            
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: context.payload.pull_request.head.sha,
+              state: state,
+              target_url: `${context.payload.pull_request.html_url}/checks`,
+              description: description,
+              context: 'Bob / PR Validation & Auto-Fix'
+            });
+
+# Made with Bob

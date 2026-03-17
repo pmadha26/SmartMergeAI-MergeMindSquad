@@ -1,0 +1,297 @@
+name: Simple PR Validation
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  validate:
+    name: Validate PR Changes
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      
+      - name: Install dependencies
+        working-directory: ./scripts
+        run: npm install
+      
+      - name: Run Comprehensive Validator
+        id: validate
+        working-directory: ./scripts
+        continue-on-error: true
+        run: |
+          echo "Running comprehensive validator..."
+          node comprehensive-validator.js \
+            --base="origin/${{ github.event.pull_request.base.ref }}" \
+            --head="HEAD" \
+            --cwd=".." \
+            --output="../validation-report.json" 2>&1 | tee ../validation.log
+          
+          echo "Validator completed with exit code: $?"
+          
+          # Check if report was created
+          if [ -f ../validation-report.json ]; then
+            echo "✅ Validation report created"
+            cat ../validation-report.json
+          else
+            echo "❌ Validation report not found"
+          fi
+      
+      - name: Post Results and Set Status
+        if: always()
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            
+            let comment = '## 🔍 PR Validation Results\n\n';
+            let hasCriticalIssues = false;
+            let hasIssues = false;
+            
+            // Try to read validation report
+            const reportPath = path.join(process.cwd(), 'validation-report.json');
+            console.log('Looking for report at:', reportPath);
+            console.log('Files in current directory:', fs.readdirSync('.'));
+            
+            if (fs.existsSync(reportPath)) {
+              const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+              
+              const totalIssues = report.issues?.length || 0;
+              const criticalIssues = report.issues?.filter(i => i.severity === 'critical').length || 0;
+              const highIssues = report.issues?.filter(i => i.severity === 'high').length || 0;
+              
+              hasCriticalIssues = criticalIssues > 0;
+              hasIssues = totalIssues > 0;
+              
+              // Status badge
+              if (criticalIssues > 0) {
+                comment += '### 🚫 Status: MERGE BLOCKED\n\n';
+              } else if (totalIssues > 0) {
+                comment += '### ⚠️ Status: REVIEW REQUIRED\n\n';
+              } else {
+                comment += '### ✅ Status: VALIDATION PASSED\n\n';
+              }
+              
+              comment += `### 📊 Summary\n\n`;
+              comment += `- **Total Issues:** ${totalIssues}\n`;
+              comment += `- **Critical:** ${criticalIssues} 🔴\n`;
+              comment += `- **High:** ${highIssues} 🟠\n\n`;
+              
+              if (totalIssues === 0) {
+                comment += '### ✅ No Issues Found\n\n';
+                comment += 'All validations passed successfully!\n\n';
+              } else {
+                // Group issues by type
+                const issuesByType = {};
+                report.issues.forEach(issue => {
+                  if (!issuesByType[issue.type]) {
+                    issuesByType[issue.type] = [];
+                  }
+                  issuesByType[issue.type].push(issue);
+                });
+                
+                // Display missing imports
+                if (issuesByType['missing-import']) {
+                  comment += '### 📦 Missing Imports\n\n';
+                  issuesByType['missing-import'].forEach((issue, i) => {
+                    comment += `${i + 1}. **${issue.identifier}** not imported\n`;
+                    comment += `   - File: \`${issue.file}\`\n`;
+                    comment += `   - Line: ${issue.line}\n`;
+                    comment += `   - ${issue.message}\n`;
+                    comment += `   - 💡 ${issue.suggestion}\n\n`;
+                  });
+                }
+                
+                // Display undefined types
+                if (issuesByType['undefined-type']) {
+                  comment += '### 🔗 Undefined Types\n\n';
+                  issuesByType['undefined-type'].forEach((issue, i) => {
+                    comment += `${i + 1}. **${issue.typeName}** not imported\n`;
+                    comment += `   - File: \`${issue.file}\`\n`;
+                    comment += `   - Line: ${issue.line}\n`;
+                    comment += `   - ${issue.message}\n`;
+                    comment += `   - 💡 ${issue.suggestion}\n\n`;
+                  });
+                }
+                
+                // Display typos
+                if (issuesByType['typo']) {
+                  comment += '### 🔤 Typos Detected\n\n';
+                  issuesByType['typo'].forEach((issue, i) => {
+                    comment += `${i + 1}. **${issue.typo}** → **${issue.correct}**\n`;
+                    comment += `   - File: \`${issue.file}\`\n`;
+                    comment += `   - Line: ${issue.line}\n`;
+                    comment += `   - ${issue.message}\n\n`;
+                  });
+                }
+                
+                // Display other issues
+                const displayedTypes = ['missing-import', 'undefined-type', 'typo'];
+                const otherIssues = report.issues.filter(i => !displayedTypes.includes(i.type));
+                
+                if (otherIssues.length > 0) {
+                  comment += '### 🔍 Other Issues\n\n';
+                  otherIssues.slice(0, 5).forEach((issue, i) => {
+                    comment += `${i + 1}. **${issue.type}** (${issue.severity})\n`;
+                    comment += `   - File: \`${issue.file}\`\n`;
+                    if (issue.line) comment += `   - Line: ${issue.line}\n`;
+                    comment += `   - ${issue.message}\n\n`;
+                  });
+                  
+                  if (otherIssues.length > 5) {
+                    comment += `*... and ${otherIssues.length - 5} more issues*\n\n`;
+                  }
+                }
+              }
+              
+              // Add action items
+              if (criticalIssues > 0) {
+                comment += '### 🚫 Action Required\n\n';
+                comment += '**Critical issues must be fixed before merge:**\n';
+                comment += '1. Review all critical issues above\n';
+                comment += '2. Fix the issues in your code\n';
+                comment += '3. Push the fixes to re-run validation\n\n';
+              }
+              
+            } else {
+              comment += '### ⚠️ Validation Report Not Found\n\n';
+              comment += 'The validation report could not be generated. Please check the workflow logs.\n\n';
+              
+              // Try to show validation log
+              const logPath = path.join(process.cwd(), 'validation.log');
+              if (fs.existsSync(logPath)) {
+                const log = fs.readFileSync(logPath, 'utf8');
+                comment += '### 📋 Validation Log\n\n';
+                comment += '```\n';
+                comment += log.substring(0, 2000);
+                comment += '\n```\n\n';
+              }
+            }
+            
+            comment += '---\n';
+            comment += '*Automated by SmartMergeAI Validation System*\n';
+            
+            // Remove old labels
+            try {
+              const labels = await github.rest.issues.listLabelsOnIssue({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+              });
+              
+              const labelsToRemove = ['validation-passed', 'validation-failed', 'has-critical-issues'];
+              for (const label of labels.data) {
+                if (labelsToRemove.includes(label.name)) {
+                  await github.rest.issues.removeLabel({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: context.issue.number,
+                    name: label.name
+                  }).catch(() => {}); // Ignore if label doesn't exist
+                }
+              }
+            } catch (error) {
+              console.log('Error removing labels:', error.message);
+            }
+            
+            // Add appropriate label
+            try {
+              if (hasCriticalIssues) {
+                await github.rest.issues.addLabels({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.issue.number,
+                  labels: ['validation-failed', 'has-critical-issues']
+                });
+              } else if (hasIssues) {
+                await github.rest.issues.addLabels({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.issue.number,
+                  labels: ['validation-failed']
+                });
+              } else {
+                await github.rest.issues.addLabels({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.issue.number,
+                  labels: ['validation-passed']
+                });
+              }
+            } catch (error) {
+              console.log('Error adding labels:', error.message);
+            }
+            
+            // Set commit status
+            try {
+              let state, description;
+              if (hasCriticalIssues) {
+                state = 'failure';
+                description = '🚫 Critical issues found - merge blocked';
+              } else if (hasIssues) {
+                state = 'pending';
+                description = '⚠️ Issues found - review required';
+              } else {
+                state = 'success';
+                description = '✅ All validations passed';
+              }
+              
+              await github.rest.repos.createCommitStatus({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                sha: context.payload.pull_request.head.sha,
+                state: state,
+                target_url: `${context.payload.pull_request.html_url}/checks`,
+                description: description,
+                context: 'SmartMergeAI / Validation'
+              });
+            } catch (error) {
+              console.log('Error setting commit status:', error.message);
+            }
+            
+            // Post or update comment
+            const comments = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            
+            const botComment = comments.data.find(c => 
+              c.user.type === 'Bot' && c.body.includes('PR Validation Results')
+            );
+            
+            if (botComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: comment
+              });
+              console.log('Updated existing comment');
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: comment
+              });
+              console.log('Created new comment');
+            }
+
+# Made with Bob

@@ -1,0 +1,13 @@
+{
+  "timestamp": "2026-03-17T06:50:42.587Z",
+  "baseRef": "demo/missing_files_check",
+  "headRef": "origin/feature/ibm-icc-return-service-integration",
+  "summary": {
+    "total": 0,
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 0
+  },
+  "issues": []
+}

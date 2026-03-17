@@ -1,0 +1,320 @@
+name: Bob - Consolidated Analysis (Single Email)
+
+# This workflow runs all analyses and posts ONE consolidated comment
+# This reduces email notifications from ~5 emails to just 1 email
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, edited]
+  pull_request_target:
+    types: [opened, reopened, synchronize, edited]
+  pull_request_review:
+    types: [submitted]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR number to analyze'
+        required: false
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  statuses: write
+  checks: write
+
+jobs:
+  assign-reviewers:
+    name: Auto-Assign Reviewers
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && github.event.action == 'opened'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: scripts/package.json
+      
+      - name: Install dependencies
+        working-directory: ./scripts
+        run: npm install
+      
+      - name: Assign reviewers based on changed files
+        working-directory: ./scripts
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
+          GITHUB_REPOSITORY_NAME: ${{ github.event.repository.name }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: node pr-reviewer-assigner.js
+        continue-on-error: true
+
+  consolidated-analysis:
+    name: Consolidated PR Analysis
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    outputs:
+      has_issues: ${{ steps.analysis.outputs.has_issues }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: scripts/package.json
+      
+      - name: Install dependencies
+        working-directory: ./scripts
+        run: npm install
+      
+      - name: Run consolidated analysis (posts single comment)
+        id: analysis
+        working-directory: ./scripts
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
+          GITHUB_REPOSITORY_NAME: ${{ github.event.repository.name }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_ACTION: ${{ github.event.action }}
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: node consolidated-pr-analyzer.js
+        continue-on-error: true
+
+  merge-conflict-detection:
+    name: Merge Conflict Detection
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    outputs:
+      has_conflicts: ${{ steps.conflict_check.outputs.has_conflicts }}
+      can_auto_resolve: ${{ steps.conflict_check.outputs.can_auto_resolve }}
+    
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+      
+      - name: Fetch base branch
+        run: |
+          git fetch origin ${{ github.event.pull_request.base.ref }}
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: scripts/package.json
+      
+      - name: Install dependencies
+        working-directory: ./scripts
+        run: npm install
+      
+      - name: Detect and analyze merge conflicts
+        id: conflict_check
+        working-directory: ./scripts
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
+          GITHUB_REPOSITORY_NAME: ${{ github.event.repository.name }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: node merge-conflict-detector.js
+        continue-on-error: true
+
+  merge-blocker:
+    name: Block Merge if Issues Found
+    runs-on: ubuntu-latest
+    needs: [consolidated-analysis, merge-conflict-detection]
+    if: github.event_name == 'pull_request'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Check for blocking issues
+        id: check_blockers
+        run: |
+          HAS_CONFLICTS="${{ needs.merge-conflict-detection.outputs.has_conflicts }}"
+          HAS_ISSUES="${{ needs.consolidated-analysis.outputs.has_issues }}"
+          
+          echo "has_conflicts=$HAS_CONFLICTS"
+          echo "has_issues=$HAS_ISSUES"
+          
+          if [ "$HAS_CONFLICTS" = "true" ] || [ "$HAS_ISSUES" = "true" ]; then
+            echo "blocking=true" >> $GITHUB_OUTPUT
+            echo "❌ Merge blocked due to conflicts or validation issues"
+            exit 1
+          else
+            echo "blocking=false" >> $GITHUB_OUTPUT
+            echo "✅ No blocking issues found"
+            exit 0
+          fi
+      
+      - name: Update PR status
+        if: always()
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const blocking = '${{ steps.check_blockers.outputs.blocking }}' === 'true';
+            const state = blocking ? 'failure' : 'success';
+            const description = blocking 
+              ? '❌ Merge blocked: Fix conflicts and validation issues first'
+              : '✅ Ready to merge';
+            
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: context.payload.pull_request.head.sha,
+              state: state,
+              target_url: `${context.payload.pull_request.html_url}/checks`,
+              description: description,
+              context: 'Bob / Merge Blocker'
+            });
+
+  auto-resolve-conflicts:
+    name: Auto-Resolve Simple Conflicts
+    runs-on: ubuntu-latest
+    needs: [merge-conflict-detection]
+    if: |
+      github.event_name == 'pull_request_review' && 
+      github.event.review.state == 'approved' &&
+      needs.merge-conflict-detection.outputs.can_auto_resolve == 'true'
+    
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Configure Git
+        run: |
+          git config user.name "Bob Bot"
+          git config user.email "bob-bot@github-actions"
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: scripts/package.json
+      
+      - name: Install dependencies
+        working-directory: ./scripts
+        run: npm install
+      
+      - name: Auto-resolve simple conflicts
+        working-directory: ./scripts
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
+          GITHUB_REPOSITORY_NAME: ${{ github.event.repository.name }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: node auto-resolve-conflicts.js
+      
+      - name: Push resolved conflicts
+        run: |
+          if git diff --staged --quiet; then
+            echo "No conflicts were auto-resolved"
+          else
+            git commit -m "🤖 Auto-resolve simple merge conflicts [Bob]"
+            git push origin ${{ github.event.pull_request.head.ref }}
+            echo "✅ Conflicts auto-resolved and pushed"
+          fi
+
+  auto-fix:
+    name: Auto-Fix Safe Issues
+    runs-on: ubuntu-latest
+    needs: consolidated-analysis
+    if: github.event_name == 'pull_request_review' && github.event.review.state == 'approved'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: scripts/package.json
+      
+      - name: Install dependencies
+        working-directory: ./scripts
+        run: npm install
+      
+      - name: Run auto-fix
+        working-directory: ./scripts
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
+          GITHUB_REPOSITORY_NAME: ${{ github.event.repository.name }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REMOVE_DEBUG: 'false'
+        run: node pr-auto-fixer.js
+        continue-on-error: true
+
+  quality-checks:
+    name: Quality Checks
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      
+      - name: Install dependencies
+        run: |
+          if [ -f package.json ]; then
+            npm ci
+          fi
+        continue-on-error: true
+      
+      - name: Run linting
+        run: |
+          if [ -f package.json ] && grep -q "lint" package.json; then
+            npm run lint
+          else
+            echo "No lint script found, skipping"
+          fi
+        continue-on-error: true
+      
+      - name: Run tests
+        run: |
+          if [ -f package.json ] && grep -q "test" package.json; then
+            npm test
+          else
+            echo "No test script found, skipping"
+          fi
+        continue-on-error: true
+
+# Made with Bob - Consolidated version with merge blocking and auto-resolution

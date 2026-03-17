@@ -1,0 +1,24 @@
+{
+  "name": "pr-automation-scripts",
+  "version": "1.0.0",
+  "description": "Scripts for PR automation bot - Supports GitHub, GitHub Enterprise, and Bitbucket",
+  "scripts": {
+    "size-check": "node pr-size-checker.js",
+    "assign-reviewers": "node pr-reviewer-assigner.js",
+    "validate-description": "node pr-description-validator.js",
+    "behavior-analysis": "node pr-behavior-analyzer.js",
+    "regression-detection": "node pr-regression-detector.js",
+    "auto-fix": "node pr-auto-fixer.js",
+    "validate-commit": "node commit-impact-validator.js",
+    "validate-specific-commit": "node validate-commit.js",
+    "test-validator": "node test-validator.js",
+    "resolve-conflicts": "node auto-merge-conflict-resolver.js"
+  },
+  "dependencies": {
+    "@octokit/rest": "^19.0.11",
+    "axios": "^1.6.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

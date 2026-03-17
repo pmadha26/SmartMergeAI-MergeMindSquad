@@ -1,0 +1,245 @@
+name: PR Breaking Changes & Override Validator
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  validate-breaking-changes:
+    name: Validate Breaking Changes & Overrides
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          
+      - name: Install dependencies
+        run: |
+          cd scripts
+          npm install
+          
+      - name: Run Breaking Changes Detection
+        id: breaking_changes
+        run: |
+          echo "🔍 Analyzing PR for breaking changes and overrides..."
+          
+          # Get base and head branches
+          BASE_REF="${{ github.event.pull_request.base.ref }}"
+          HEAD_REF="${{ github.event.pull_request.head.ref }}"
+          
+          echo "Base: $BASE_REF"
+          echo "Head: $HEAD_REF"
+          
+          # Fetch branches
+          git fetch origin $BASE_REF
+          git fetch origin $HEAD_REF
+          
+          # Run validation script
+          node scripts/pr-breaking-changes-validator.js \
+            --base="origin/$BASE_REF" \
+            --head="origin/$HEAD_REF" \
+            --pr-number="${{ github.event.pull_request.number }}" \
+            --output="validation-report.json"
+          
+      - name: Run Regression Detection
+        id: regression
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
+          GITHUB_REPOSITORY_NAME: ${{ github.event.repository.name }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          echo "🔍 Running regression detection..."
+          node scripts/pr-regression-detector.js
+          
+      - name: Run Commit Impact Validation
+        id: commit_impact
+        continue-on-error: true
+        run: |
+          echo "🔍 Validating commit impact..."
+          
+          # Get all commits in PR
+          git fetch origin ${{ github.event.pull_request.base.ref }}
+          COMMITS=$(git rev-list origin/${{ github.event.pull_request.base.ref }}..HEAD)
+          
+          echo "Commits to validate:"
+          echo "$COMMITS"
+          
+          # Validate each commit
+          for commit in $COMMITS; do
+            echo "Validating commit: $commit"
+            git checkout $commit
+            node scripts/commit-impact-validator.js || true
+          done
+          
+          # Return to HEAD
+          git checkout HEAD
+          
+      - name: Generate Validation Report
+        if: always()
+        run: |
+          echo "📊 Generating comprehensive validation report..."
+          
+          # Read validation results
+          if [ -f validation-report.json ]; then
+            VALIDATION_RESULTS=$(cat validation-report.json)
+          else
+            VALIDATION_RESULTS='{"status":"error","message":"Validation report not generated"}'
+          fi
+          
+          # Create markdown report
+          cat > validation-report.md << 'EOF'
+          ## 🔍 Bob's Breaking Changes & Override Validation Report
+          
+          ### Summary
+          This PR has been analyzed for:
+          - ✅ Breaking changes in APIs and interfaces
+          - ✅ Functionality overrides that may break existing code
+          - ✅ Missing imports and broken references
+          - ✅ Removed dependencies still in use
+          - ✅ Test coverage and regression risks
+          
+          EOF
+          
+          # Add validation results
+          echo "$VALIDATION_RESULTS" | jq -r '.summary // "No summary available"' >> validation-report.md || echo "Error parsing validation results" >> validation-report.md
+          
+          echo "" >> validation-report.md
+          echo "---" >> validation-report.md
+          echo "*Automated validation by Bob - Breaking Changes Validator*" >> validation-report.md
+          
+          # Display report
+          cat validation-report.md
+          
+      - name: Post Validation Report
+        if: always()
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            
+            let reportContent = '## 🔍 Bob\'s Breaking Changes & Override Validation Report\n\n';
+            reportContent += '### ⚠️ Validation Status\n\n';
+            
+            try {
+              if (fs.existsSync('validation-report.md')) {
+                reportContent = fs.readFileSync('validation-report.md', 'utf8');
+              } else {
+                reportContent += '❌ Validation report file not found.\n\n';
+              }
+            } catch (error) {
+              reportContent += `❌ Error reading validation report: ${error.message}\n\n`;
+            }
+            
+            // Add job status
+            reportContent += '\n### 🎯 Validation Jobs Status\n\n';
+            reportContent += `- Breaking Changes Detection: ${{ steps.breaking_changes.outcome }}\n`;
+            reportContent += `- Regression Detection: ${{ steps.regression.outcome }}\n`;
+            reportContent += `- Commit Impact Validation: ${{ steps.commit_impact.outcome }}\n`;
+            
+            // Find existing comment
+            const comments = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            
+            const botComment = comments.data.find(comment => 
+              comment.user.type === 'Bot' && 
+              comment.body.includes('Breaking Changes & Override Validation Report')
+            );
+            
+            if (botComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: reportContent
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: reportContent
+              });
+            }
+            
+      - name: Add Validation Labels
+        if: always()
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const labels = [];
+            
+            // Determine labels based on validation results
+            const breakingChangesStatus = '${{ steps.breaking_changes.outcome }}';
+            const regressionStatus = '${{ steps.regression.outcome }}';
+            
+            if (breakingChangesStatus === 'failure') {
+              labels.push('breaking-changes-detected');
+            }
+            
+            if (regressionStatus === 'failure') {
+              labels.push('regression-risk');
+            }
+            
+            if (breakingChangesStatus === 'success' && regressionStatus === 'success') {
+              labels.push('validation-passed');
+            }
+            
+            // Remove old validation labels
+            const existingLabels = await github.rest.issues.listLabelsOnIssue({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            
+            for (const label of existingLabels.data) {
+              if (label.name.includes('validation-') || label.name.includes('breaking-') || label.name.includes('regression-')) {
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.issue.number,
+                  name: label.name
+                }).catch(() => {});
+              }
+            }
+            
+            // Add new labels
+            if (labels.length > 0) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                labels: labels
+              });
+            }
+            
+      - name: Upload Validation Artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation-reports
+          path: |
+            validation-report.json
+            validation-report.md
+          retention-days: 30
+
+# Made with Bob
