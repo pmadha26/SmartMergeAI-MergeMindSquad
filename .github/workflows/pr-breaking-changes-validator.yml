@@ -200,19 +200,18 @@ jobs:
               labels.push('regression-risk');
             }
             
-            if (breakingChangesStatus === 'success' && regressionStatus === 'success') {
-              labels.push('validation-passed');
-            }
-            
-            // Remove old validation labels
+            // Get existing labels
             const existingLabels = await github.rest.issues.listLabelsOnIssue({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
             });
             
+            // Only remove labels that THIS workflow manages (breaking-changes and regression-risk)
+            // DO NOT remove validation-passed/validation-failed labels set by other workflows
+            const labelsToRemove = ['breaking-changes-detected', 'regression-risk'];
             for (const label of existingLabels.data) {
-              if (label.name.includes('validation-') || label.name.includes('breaking-') || label.name.includes('regression-')) {
+              if (labelsToRemove.includes(label.name)) {
                 await github.rest.issues.removeLabel({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
@@ -222,13 +221,16 @@ jobs:
               }
             }
             
-            // Add new labels
-            if (labels.length > 0) {
+            // Add new labels only if they don't already exist
+            const currentLabelNames = existingLabels.data.map(l => l.name);
+            const newLabels = labels.filter(l => !currentLabelNames.includes(l));
+            
+            if (newLabels.length > 0) {
               await github.rest.issues.addLabels({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: context.issue.number,
-                labels: labels
+                labels: newLabels
               });
             }
             
