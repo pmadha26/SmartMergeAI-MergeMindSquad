@@ -1,0 +1,11 @@
+{
+  "ROUTE_NAMES": {
+    "LABEL_RETURN_SEARCH": "반품 상세검색",
+    "LABEL_RETURN_SEARCH_RESULT": "반품-검색-결과",
+    "LABEL_RETURN_DETAILS": "반품-세부사항"
+  },
+  "CUSTOMER_SEARCH_MODAL": {
+    "HEADER_CUSTOMER_SEARCH": "고객 상세검색",
+    "LABEL_SELECT_CUSTOMER": "고객 선택"
+  }
+}

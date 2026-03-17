@@ -1,0 +1,136 @@
+<!--
+* IBM Confidential
+* OCO Source Materials
+* 5737-D18, 5725-D10
+*
+* (C) Copyright International Business Machines Corp. 2022, 2023
+*
+* The source code for this program is not published or otherwise divested
+* of its trade secrets, irrespective of what has been deposited with the
+* U.S. Copyright Office.
+-->
+
+<ng-template bucExtension [componentName]="componentId" [placement]="'top'" [id]="EXTENSION.TOP" [parent]="this">
+</ng-template>
+
+<article *ngIf="note.displayNote && note.isFiltered && note.typeFiltered" [class.new-note]="note.isNewNote && !isModal"
+  [class.border-bottom]="partOfList">
+  <div class="margin--1rem" [class.notes-card]="!isModal" [class.padding-top--0_5rem]="isModal">
+    <div class="item-title" [attr.tid]="componentId + 'reasonText'" *ngIf="showNoteReasonText">
+      {{ note.reasonText}}
+    </div>
+
+    <!-- We do not allow system notes to be edited/deleted -->
+    <div class="controls" *ngIf="showControls && note.user">
+      <ng-container *ngIf="tagPosition === 'top' && (getNumber(note.priority) === 1 || note.visibleToAll ==='N')">
+        <ng-container *ngTemplateOutlet="tagsTemplate"></ng-container>
+      </ng-container>
+      <cds-tooltip class="tooltip-pos" [description]="showTooltip" trigger="hover"  [autoAlign]="'true'" [disabled]="!(isHistoryOrder || isHistoryOrder === 'Y')">
+        <buc-button [resourceId]="notesResourcePermission.DELETE" [isDisabled]="(isHistoryOrder || isHistoryOrder === 'Y')"  [attr.tid]="componentId + '-deleteIcon'" [iconOnly]="true" type="ghost" btnSize="sm" (click)="deleteNote.emit(note)">
+          <svg ibmIcon="trash-can" class="cds--btn__icon" size="16"></svg>
+        </buc-button>
+      </cds-tooltip>
+      <cds-tooltip class="tooltip-pos" [description]="showTooltip" trigger="hover" [autoAlign]="'true'" [disabled]="!(isHistoryOrder || isHistoryOrder === 'Y')">
+        <buc-button [resourceId]="notesResourcePermission.EDIT" *ngIf="isEditableByUser" [isDisabled]="(isHistoryOrder || isHistoryOrder === 'Y')" [attr.tid]="componentId + '-editIcon'" [iconOnly]="true" type="ghost" btnSize="sm" (click)="editNote.emit(note)">
+          <svg ibmIcon="edit" class="cds--btn__icon" size="16"></svg>
+        </buc-button>
+      </cds-tooltip>
+       <ng-template #showTooltip let-tooltip="$implicit">
+        <div class="item-description-tooltip-template" [attr.tid]="componentId + '-show-return-notes-card-tooltip'">
+          {{'RETURN_SUMMARY.RESTORE_ORDER.RESTORE_ORDER_DISABLED_ACTION' | translate}}
+        </div>
+      </ng-template>
+    </div>
+
+    <div class="cds--label display-flex" *ngIf="note.user"
+      [attr.tid]="componentId + 'textUserInfo'">
+      <svg ibmIcon="user" size="16"></svg>
+      <span *ngIf="isModal" class="posted-text">
+        {{ 'SHARED.NOTES.MSG_POSTED_BY' | translate:{username: note.user, createdAt: note.contactTime | bucCommonDateFmt:'L LT'} }}
+        </span>
+        <span *ngIf="!isModal" class="display-flex"> {{ 'SHARED.NOTES.MSG_POSTED_BY' | translate:{username: note.user, createdAt: note.contactTime | bucCommonDateFmt:'L LT'} }}
+
+          <ng-container *ngIf="note.createts !== note.modifyts">
+            <cds-tooltip [align]="'left'" [autoAlign]="'true'" alignment="center" [description]="('SHARED.NOTES.LABEL_MODIFIED_BY' | translate:{username: note.modifyUserName, modifiedAt: note.modifyts | bucCommonDateFmt:'L LT'})">
+              <svg ibmIcon="information" size="16" class="modified-note"></svg>
+            </cds-tooltip>
+          </ng-container>
+        </span>
+    </div>
+
+    <ng-container *ngIf="isModal">
+      <div class="contact-details cds--label display-flex"
+        *ngIf="note.createts !== note.modifyts">
+        <svg ibmIcon="information" size="16" class="cds--btn__icon"></svg>
+        <span *ngIf="isModal" class="posted-text" [attr.tid]="componentId + '-updatedUserInfo'" >
+          {{ 'SHARED.NOTES.LABEL_MODIFIED_BY' | translate:{username: note.modifyUserName,  modifiedAt: note.modifyts | bucCommonDateFmt:'L LT' } }}
+        </span>
+      </div>
+    </ng-container>
+
+    <div class="contact-details cds--label display-flex" *ngIf="!note.user" [attr.tid]="componentId + 'contact-details'">
+      <svg ibmIcon="screen" size="16"></svg>
+      <span *ngIf="!note.contactTime" > {{ 'SHARED.NOTES.LABEL_SYSTEM' | translate}} </span>
+      <span *ngIf="isModal && note.contactTime" class="posted-text">
+        {{ 'SHARED.NOTES.MSG_POSTED_BY' | translate:{username: ('SHARED.NOTES.LABEL_SYSTEM' | translate), createdAt: note.contactTime |
+        bucCommonDateFmt:'L LT'} }}
+      </span>
+      <span *ngIf="!isModal && note.contactTime" class="display-flex"> {{ 'SHARED.NOTES.MSG_POSTED_BY' | translate:{username: ('SHARED.NOTES.LABEL_SYSTEM' | translate),
+        createdAt: note.contactTime | bucCommonDateFmt:'L LT'} }}
+      </span>
+    </div>
+
+    <!-- order line notes with item -->
+    <div class="cds--label display-flex" *ngIf="note.isOrderLineNote"
+      [attr.tid]="componentId + 'item-details'">
+      <svg ibmIcon="tag" size="16"></svg>
+      {{ note.itemInfo}}
+    </div>
+
+    <div class="cds--label display-flex" *ngIf="note.contactType && isModal && note.contactReference"
+      [attr.tid]="componentId + 'contactTypes '">
+      <svg *ngIf="note.contactType === contactTypes.email" ibmIcon="email" size="16">
+      </svg>
+      <svg *ngIf="note.contactType === contactTypes.phone" ibmIcon="phone" size="16">
+      </svg>
+      <svg *ngIf="note.contactType === contactTypes.inPerson" ibmIcon="group" size="16">
+      </svg>
+
+      <span
+        [class.no-contact-type]="note.contactType !== contactTypes.phone && note.contactType !== contactTypes.email && note.contactType !== contactTypes.inPerson">{{
+        note.contactReference}}</span>
+      <div class="display--inline-block copy-container" [attr.tid]="componentId + 'copyToClipboard '">
+        <div class="outer-layer" *ngIf="displayCopyText">
+          <div class="content-layer">
+            <div class="copy-text"> {{ 'SHARED.NOTES.MSG_COPIED' | translate}} </div>
+            <div class="triangle"></div>
+          </div>
+        </div>
+        <svg ibmIcon="copy" size="16" (click)="copyToClipboard(note.contactReference)" class="cds--btn__icon copy-btn">
+        </svg>
+      </div>
+    </div>
+    <div class="item-description cds--label display-flex" [attr.tid]="componentId + 'item-description '" [class.height-2rem]="!isModal" [class.margin-top--1-5rem]="isModal && showControls && note.user">
+    <div *ngIf="isModal"><svg ibmIcon="document" size="16" class="cds--btn__icon"></svg></div>
+      <div [class.overflow-ellipsis]="!isModal" [class.modal-details]="isModal"
+      [innerHTML]="note.noteText | highlight : searchKey"> </div>
+    </div>
+    <div class="tags" [class.margin-left--1rem]="isModal"
+      *ngIf="tagPosition === 'bottom' && (getNumber(note.priority) === 1 || note.visibleToAll ==='N')"
+      [attr.tid]="componentId + 'item-priority'">
+      <ng-container *ngTemplateOutlet="tagsTemplate"></ng-container>
+    </div>
+  </div>
+</article>
+
+<ng-template #tagsTemplate>
+  <buc-tag [type]="'blue'" *ngIf="getNumber(note.priority) === 1">
+    <span class="basic"> {{'SHARED.NOTES.LABEL_HIGH_PRIORITY' | translate}} </span>
+  </buc-tag>
+  <buc-tag [type]="'blue'" *ngIf="note.visibleToAll === 'N'">
+    <span class="basic"> {{'SHARED.NOTES.LABEL_INTERNAL' | translate}} </span>
+  </buc-tag>
+</ng-template>
+
+<ng-template bucExtension [componentName]="componentId" [placement]="'bottom'" [id]="EXTENSION.BOTTOM" [parent]="this">
+</ng-template>

@@ -1,0 +1,19 @@
+{
+    "name": "@call-center/return-shared",
+    "version": "0.0.1",
+    "peerDependencies": {
+        "@angular/common": "^18.0.0",
+        "@angular/core": "^18.0.0"
+    },
+    "dependencies": {
+        "tslib": "^2.0.0"
+    },
+    "private": true,
+    "scripts": {
+        "ng": "node --max_old_space_size=8048 ../../node_modules/@angular/cli/bin/ng",
+        "build-lib": "ng build return-shared --configuration production",
+        "dev-build": "ng build return-shared --watch",
+        "test": "ng test return-shared",
+        "lint": "ng lint return-shared"
+    }
+}

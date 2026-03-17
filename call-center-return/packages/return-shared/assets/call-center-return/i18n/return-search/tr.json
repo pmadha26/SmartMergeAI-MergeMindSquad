@@ -1,0 +1,62 @@
+{
+  "RETURN_SEARCH": {
+    "GENERAL": {
+      "LABEL_SHOW_DRAFT_RETURNS": "Taslak iadeleri göster",
+      "LABEL_RETURN_LINE_STATUS": "İade satırı durumu",
+      "LABEL_ADVANCED_SEARCH": "Gelişmiş iade araması",
+      "LABEL_RESULTS": "İade arama sonuçları",
+      "LABEL_ENTERPRISE": "Kuruluş",
+      "LABEL_RETURN_NUMBER": "İade numarası",
+      "LABEL_CUSTOMER_PO": "Müşteri satın alma siparişi numarası",
+      "LABEL_ORIGINAL_ORDER_NUMBER": "Orijinal sipariş numarası",
+      "LABEL_RETURN_DATE_RANGE": "İade tarihi aralığı",
+      "LABEL_HOLD_TYPE": "Tutma tipi",
+      "LABEL_RETURN_STATUS": "İade durumu",
+      "LABEL_RETURN_AGE": "İade yaşı",
+      "LABEL_EMAIL": "E-posta adresi",
+      "LABEL_CUSTOMER_TELEPHONE": "Telefon numarası",
+      "LABEL_FIRST_NAME": "Adı",
+      "LABEL_LAST_NAME": "Soyadı",
+      "LABEL_POSTAL_CODE": "Posta kodu",
+      "LABEL_ORDER_NAME": "İade adı",
+      "LABEL_CUSTOMER_CREDIT_CARD_NUMBER": "Kredi kartının son 4 basamağı",
+      "LABEL_RETURN_SEARCH": "Ara",
+      "LABEL_CLEAR": "Temizle",
+      "LABEL_SEARCH_BY_RETURN_INFO": "İade ayrıntılarına göre ara",
+      "LABEL_SEARCH_BY_CUSTOMER_INFO": "Müşteri ayrıntılarına göre ara",
+      "LABEL_QUERY_is": ":",
+      "LABEL_QUERY_starts_with": "şununla başlar",
+      "LABEL_QUERY_contains": "şunu içerir",
+      "MESSAGE_SEARCH_GRP_DIFF": "Bu kaydedilmiş aramada belirtilen alanlardan biri ya da daha fazlası artık gruplanamayabilir ya da farklı bir şekilde gruplanabilir. Arama sonuçları değişiklik gösterebilir.",
+      "CONFIRM_RETURN": "Onaylı iade",
+      "DRAFT_RETURN": "Taslak iade",
+      "RECENT_RETURNS": "Son iadeler",
+      "ARCHIVED_RETURNS": "Arşivlenen iadeler",
+      "LABEL_SKU_NUMBER": "Stok kodu numarası",
+      "TOO_MANY_RESULTS": "Aramanız sonucunda {{total}} eşleşme bulundu. Arama en çok {{max}} kayıt getirecek şekilde yapılandırılmıştır.",
+      "ALL_ORDERS": "Tüm siparişler",
+      "CONFIRMED_ORDERS": "Onaylanan siparişler",
+      "DRAFT_ORDERS": "Taslak siparişler"
+    },
+    "ORDER_LINE_STATUS_DROPDOWN": {
+      "LABEL_CREATED": "Yaratıldı",
+      "LABEL_RECEIVED": "Alındı",
+      "LABEL_RECEIPT_CLOSED": "Alındı kapatıldı",
+      "LABEL_CANCELLED": "İptal edildi",
+      "TOOLTIP_MESSAGE": "Seçilen duruma sahip tek bir satır içeren siparişler listelenir.",
+      "MESSAGE_WRONG_COMBOBOX_SEARCH_TEXT": "Geçerli bir değer gereklidir"
+    },
+    "RETURN_DATE_RANGE": {
+      "TOOLTIP_MESSAGE": "Varsayılan tarih aralığı: {{duration}} {{durationUnit}}",
+      "LABEL_YEARS_PLURAL": "yıl",
+      "LABEL_MONTHS_PLURAL": "ay",
+      "LABEL_DAYS_PLURAL": "gün",
+      "LABEL_YEARS_SINGULAR": "yıl",
+      "LABEL_MONTHS_SINGULAR": "ay",
+      "LABEL_DAYS_SINGULAR": "gün"
+    },
+    "RETURN_AGE": {
+      "HELPER_TEXT": "İade tarih aralığını gözden geçir"
+    }
+  }
+}

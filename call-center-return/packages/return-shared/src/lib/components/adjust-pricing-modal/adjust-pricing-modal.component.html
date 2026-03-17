@@ -1,0 +1,206 @@
+<!--
+* IBM Confidential
+* OCO Source Materials
+* 5737-D18, 5725-D10
+*
+* (C) Copyright International Business Machines Corp. 2022, 2023
+*
+* The source code for this program is not published or otherwise divested
+* of its trade secrets, irrespective of what has been deposited with the
+* U.S. Copyright Office.
+-->
+
+<ibm-modal [size]="modalData.size" [open]="open">
+    <ibm-modal-header (closeSelect)="onCloseModalClick()" [attr.tid]="componentId + 'ibm-modal-header'">
+        <span>{{ (isResourceAllowedToAddChangeOrderCharges ?
+        (modalData.isExchange ? 'ADJUST_PRICING_MODAL.LABEL_ADJUST_EXCHANGE_PRICING' : 
+            'ADJUST_PRICING_MODAL.LABEL_ADJUST_PRICING') :
+            'ADJUST_PRICING_MODAL.LABEL_VIEW_PRICING') | translate }}</span>
+        <span *ngIf="isLineLevel"> {{ 'ADJUST_PRICING_MODAL.LABEL_ONE_LINE' | translate
+            }}</span>
+        <ng-container *ngIf="isResourceAllowedToAddChangeOrderCharges">
+            <button class="tooltip-btn" [attr.tid]="componentId + 'headerButton'"></button>
+            <cds-tooltip class="info-toolip" [align]="'bottom'" trigger="hover" [autoAlign]="'true'" [description]="tooltipTemplate" [attr.tid]="componentId + 'hToolTip'">
+                <svg ibmIcon="information" size="16"></svg>
+            </cds-tooltip>
+        </ng-container>
+    </ibm-modal-header>
+    <ng-container>
+      <buc-loading *ngIf="isLoader" [isActive]="isLoader" (loadTimeout)="isLoader = false"></buc-loading>
+    </ng-container>
+    <section class="cds--modal-content adjust-pricing-modal-section" [attr.tid]="componentId + '-modal-content'">
+    <ng-template bucExtension [componentName]="componentId" [placement]="'top'" [id]="EXTENSION.TOP" [parent]="this">
+    </ng-template>
+
+        <div class="modalNotification set-pos" *ngIf="notificationShown">
+            <buc-notification [attr.tid]="componentId + '-adjust-pricining-notification'"
+                [notificationObj]="notificationObj" (click)="closeNotification()"></buc-notification>
+        </div>
+        <div class="cds--grid cds--no-gutter" [ngClass]="notificationShown?'mtop3rem':'mtop0_5rem'">
+            <div *ngIf="!isSaveAllChargesEnabled && !isLineLevel && isResourceAllowedToAddChangeOrderCharges"
+                [attr.tid]="componentId + 'order-table'">
+                <call-center-adjust-pricing-return-table [selectedOrder]="[summaryDetails]">
+                </call-center-adjust-pricing-return-table>
+            </div>
+            <div *ngIf="!isSaveAllChargesEnabled && isLineLevel && isResourceAllowedToAddChangeOrderCharges"
+                [attr.tid]="componentId + 'order-line-table'">
+                <call-center-adjust-pricing-return-line-table [selectedOrderLines]="selectedOrderLines">
+                </call-center-adjust-pricing-return-line-table>
+            </div>
+
+            <div class="cds--row" [ngClass]="isSaveAllChargesEnabled ? '' : 'margin-top--2_5rem'" *ngIf="!isLineLevel && isExchange" [attr.tid]="componentId + 'promotion-box'">
+                <call-center-promotion-box [appliedCouponPromo]="appliedCouponPromo" [orderHeaderKey]="orderHeaderKey"  [recordPendingChangesMode]="isSaveAllChargesEnabled ? false : true" [isModal]="true"
+                    (callGetOrderDetails)="getOrderDetails($event)" [isDraftOrder] ="isDraft" [showAdjustPricingWarning]="showAdjustPricingWarning"
+                    (promoUpdated)="promoUpdated()"
+                    (promoError)="onPromoError($event)" [isSaveAllChargesEnabled]="isSaveAllChargesEnabled"
+                (callSetFlags)="setFlags($event)" [returnOrderHeaderKey]="returnOrderHeaderKey">
+                </call-center-promotion-box>
+            </div>
+            <br>
+
+            <div class="margin-top--2rem adjust-pricing-table" [attr.tid]="componentId + 'chargesTable'">
+                <buc-table [attr.tid]="'buc-adjust-pricing-modal.table'"
+                    [model]="model" [skeleton]="model.isLoading" [paginationTranslations]="paginationTranslations"
+                    [showEmptyState]="false" [showSelectionColumn]="false" [showEmptyState]="false" [size]="'sm'">
+                    <buc-empty-state *ngIf="!model.isLoading && model.totalDataLength === 0"
+                        [stateMessage]="'ADJUST_PRICING_MODAL.NO_DATA_MESSAGE' | translate">
+                    </buc-empty-state>
+                </buc-table>
+            </div>
+            <ng-container *ngIf="isResourceAllowedToAddChangeOrderCharges">
+                <div style="display:flex; ">
+                    <buc-button #b type="ghost" [attr.tid]="componentId + 'addChargeBtn'" btnSize="sm"
+                        [isDisabled]="!enableAddCharge || !isResourceAllowedToAddChangeOrderCharges || !allowModificationPrice"
+                        (click)="addNewChargeRow()">{{
+                        'ADJUST_PRICING_MODAL.LABEL_ADD_ADJUSTMENT' | translate }}
+                        <svg ibmIcon="add" size="16" [attr.tid]="componentId + '-add-icon'"
+                            class="addBtn cds--btn__icon"></svg>
+                    </buc-button>
+                    <div *ngIf="!allowModificationPrice">
+                        <button class="tooltip-btn" [attr.tid]="componentId + 'btnTooltip'"></button>
+                        <cds-tooltip class="info-disable" [align]="'right'" [autoAlign]="'true'" [description]="disableInfoTemplate">
+                            <svg ibmIcon="information" size="16"></svg>
+                        </cds-tooltip>
+                    </div>
+                </div>
+            </ng-container>
+
+            <ng-container *ngIf="isResourceAllowedToAddChangeOrderCharges">
+                <div class="margin-top--2_5rem">
+                    <buc-textarea [(inputValue)]="note" rows="2" [attr.tid]="componentId + 'noteTextArea'"
+                        maxlength="800" [label]="'ADJUST_PRICING_MODAL.LABEL_NOTE' | translate"
+                        (inputValueChange)="onNoteChange()">
+                    </buc-textarea>
+                </div>
+            </ng-container>
+        </div>
+    <ng-template bucExtension [componentName]="componentId" [placement]="'bottom'" [id]="EXTENSION.BOTTOM" [parent]="this">
+    </ng-template>
+    </section>
+
+    <ibm-modal-footer>
+        <button class="cds--btn cds--btn--secondary" (click)="onCloseModalClick()" [attr.tid]="componentId + 'btnCancel'">
+            {{ (isSaveAllChargesEnabled ? 'ADJUST_PRICING_MODAL.LABEL_CANCEL' : 'ADJUST_PRICING_MODAL.LABEL_CLOSE') | translate }}
+        </button>
+        <button *ngIf="isSaveAllChargesEnabled" class="cds--btn cds--btn--primary" (click)="onSaveClick()" [disabled]="!saveChargesEnabled" [attr.tid]="componentId + 'btnSave'">
+            {{ 'ADJUST_PRICING_MODAL.LABEL_SAVE' | translate }}
+        </button>
+    </ibm-modal-footer>
+
+    <ng-template #tooltipTemplate let-tooltip="tooltip">
+      <div class="return-adjust-pricing-modal-tooltip">
+        <div [attr.tid]="componentId + 'tooltipInfo'">
+            {{(isLineLevel ? 'ADJUST_PRICING_MODAL.MSG_TOOLTIP_ORDER_LINE' :
+            'ADJUST_PRICING_MODAL.MSG_TOOLTIP_ORDER') | translate}}
+        </div>
+      </div>
+    </ng-template>
+
+    <ng-template #disableInfoTemplate let-tooltip="tooltip">
+      <div class="return-adjust-pricing-modal-tooltip">
+        <div [attr.tid]="componentId + 'noActionTooltip'">
+            {{'ADJUST_PRICING_MODAL.LABEL_ACTION_NOT_AVAILABLE' | translate}}
+        </div>
+      </div>
+    </ng-template>
+
+    <ng-template #chargeName let-data="data">
+        <ng-container *ngIf="!data.newRow">{{data.value}}</ng-container>
+        <buc-dropdown *ngIf="data.newRow" [items]="data.list" [attr.tid]="componentId + 'chargeName'"
+            [disabled]="data.isDisable" (selected)="changeInChargeNameList($event,data.index)">
+        </buc-dropdown>
+    </ng-template>
+
+
+    <ng-template #chargeApplyTo let-data="data">
+        <buc-dropdown [items]="data.list" [attr.tid]="componentId + 'chargeApplyTo'" [disabled]="data.isDisable"
+            (selected)="ChangeInApplyToField($event,data)">
+        </buc-dropdown>
+    </ng-template>
+
+    <ng-template #chargeType let-data="data">
+        <ng-container *ngIf="!data.newRow">{{data.value}}</ng-container>
+        <buc-dropdown *ngIf="data.newRow" [items]="data.list" [attr.tid]="componentId + 'chargeType'"
+            [disabled]="data.isDisable" (selected)="changeInChargeType($event,data.index)">
+        </buc-dropdown>
+    </ng-template>
+    <ng-template #amount let-data="data">
+            <div class="parentAmount" [ngClass]="!currencySymbolBefore ? 'reverse' : 'normal'">
+                <span class="currencyStyling" [ngClass]="!currencySymbolBefore ? 'width--30' : 'width--unset'">{{ null | bucCommonCurrencyFmt: summaryDetails?.PriceInfo.Currency: 'symbol' }}</span>
+            <!-- <ibm-label>
+                <input [attr.tid]="componentId + 'amount'" ibmText bucNumericValuesOnly [disabled]="data.isDisable"
+                    [theme]="'dark'" [(ngModel)]="data.value" (ngModelChange)="changeInAmountField(data, $event)">
+            </ibm-label> -->
+            <buc-number-ext
+                [theme]="'dark'"
+                [tagId]="componentId + 'amount'"
+                [isDisabled]="data.isDisable"
+                [stepButtonEnabled]="false"
+                [curLocale]="curLocale"
+                [(value)]="data.value"
+                [validationType]="'decimal'"
+                (invalidNumber)="changeInAmountField(data, undefined)"
+                (change)="changeInAmountField(data, $event)">
+        </buc-number-ext>
+        </div>
+    </ng-template>
+
+
+
+    <ng-template #chargeTypeReadOnly let-data="data" [attr.tid]="componentId + 'chargeTypeReadOnly'">
+        {{data.value}}
+    </ng-template>
+    <ng-template #chargeNameReadOnly let-data="data" [attr.tid]="componentId + 'chargeNameReadOnly'">
+        {{data.value}}
+        <cds-tooltip *ngIf="data.discountChargeLabel" class="tooltip-justify" [align]="'right'" [autoAlign]="'true'"
+            [attr.tid]="componentId + 'hToolTip'" [description]="tooltipNameTemplate">
+            <svg ibmIcon="information" size="16"></svg>
+        </cds-tooltip>
+    </ng-template>
+
+    <ng-template #tooltipNameTemplate let-tooltip="$implicit">
+        <div class="return-adjust-pricing-modal-tooltip">
+          <div class="cds--label" [attr.tid]="componentId + 'tooltipInfo'">
+              {{ tooltip?.discountChargeLabel | translate}}
+          </div>
+        </div>
+      </ng-template>
+
+    <ng-template #removeActionTemplateRef let-data="data">
+        <div *ngIf="data?.newRow" class="icon-style">
+            <span>
+                <svg ibmIcon="trash-can" [attr.tid]="componentId + '-delete-icon'" size="16" role="button"
+                    (click)="chargeRemoveAction(data.index)">
+                </svg>
+            </span>
+        </div>
+    </ng-template>
+
+    <ng-template #chargeApplyToReadOnly let-data="data" [attr.tid]="componentId + 'chargeApplyToReadOnly'">
+        {{data.value}}
+    </ng-template>
+
+    <ng-template #amountReadOnly let-data="data" [attr.tid]="componentId + 'amountReadOnly'">
+        <span>{{ data.value | bucCommonCurrencyFmt: summaryDetails?.PriceInfo.Currency: 'symbol' }}</span>
+    </ng-template>
+</ibm-modal>

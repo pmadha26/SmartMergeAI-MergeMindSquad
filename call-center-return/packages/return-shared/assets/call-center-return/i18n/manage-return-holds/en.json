@@ -1,0 +1,52 @@
+{
+  "MANAGE_HOLDS": {
+    "LABEL_MANAGE_HOLDS": "View or resolve holds",
+    "LABEL_MANAGE_HOLDS_COUNT": "Resolve holds from lines: {{count}}",
+    "LABEL_MANAGE_HOLDS_COUNTS": "Resolve holds from lines: {{count}}",
+    "LABEL_LINE_NOTIFICATION_COUNT": "Holds are not applied on {{ count }} selected line.", 
+    "LABEL_LINE_NOTIFICATION_COUNTS": "Holds are not applied on {{ count }} selected lines.",
+    "LABEL_BACK_TO_RETURN_SUMMARY": "Back to return summary",
+    "TOOLTIP_MSG_RESOLVE_HOLDS": "No holds are applied yet."
+  },
+  "ACTIVE_HOLDS_TABLE": {
+    "LABEL_ACTIVE_HOLDS": "Active holds",
+    "LABEL_OPEN_ALERTS": "Open alerts",
+    "LABEL_HEADER_LINE": "Line",
+    "LABEL_HEADER_ITEM": "Return or item",
+    "LABEL_HEADER_HOLD_TYPE": "Hold type",
+    "LABEL_HEADER_DATE": "Date",
+    "LABEL_HEADER_COMMENTS": "Comments",
+    "LABEL_RESOLVE": "Resolve",
+    "LABEL_addHold": "Add hold",
+    "LABEL_NO_ACTIVE_HOLDS": "No active holds",
+    "LABEL_USER_PERMISSION": "You do not have the permission to resolve the hold.",
+    "LABEL_STATUS_MOD_PERMISSION": "Holds cannot be applied in the item's current status."
+  },
+  "RESOLVED_HOLDS_TABLE": {
+    "LABEL_RESOLVED_HOLDS": "Resolved holds",
+    "LABEL_HEADER_LINE": "Line",
+    "LABEL_HEADER_ITEM": "Return or item",
+    "LABEL_HEADER_HOLD_TYPE": "Hold type",
+    "LABEL_HEADER_DATE": "Date",
+    "LABEL_HEADER_COMMENTS": "Comments",
+    "LABEL_NO_RESOLVE_HOLDS": "No resolved holds"
+  },
+  "RESOLVE_HOLDS_MODAL": {
+    "LABEL_HEADER_RESOLVE_HOLDS": "Resolve holds",
+    "LABEL_HEADER_RESOLVE_HOLDS_COUNT": "Resolve holds from lines: {{count}}",
+    "LABEL_HEADER_RESOLVE_HOLDS_COUNTS": "Resolve holds from lines: {{count}}",
+    "LABEL_HEADER_LINE": "Line",
+    "LABEL_HEADER_ITEM": "Item",
+    "LABEL_HEADER_HOLD_TYPE": "Hold type",
+    "LABEL_HEADER_COMMENTS": "Comments (optional)",
+    "LABEL_CANCEL": "Cancel",
+    "LABEL_RESOLVE": "Resolve",
+    "LABEL_RESOLVE_HOLD_MSG_LINE": "Resolved. Holds removed from lines: {{count}}.",
+    "LABEL_RESOLVE_HOLD_MSG_LINES": "Resolved. Holds removed from lines: {{count}}.",
+    "LABEL_RESOLVE_HOLD_MSG_ORDER": "Resolved {{ count }} of {{ count1 }} holds on this order.",
+    "RESOLVE_HOLD_FAILED_ERROR_MSG": "Request to resolve holds failed."
+  },
+  "SIDE_PANEL": {
+    "LABEL_NOTES": "Notes ({{count}})"
+  }
+}

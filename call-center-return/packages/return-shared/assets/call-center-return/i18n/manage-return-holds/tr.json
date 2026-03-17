@@ -1,0 +1,52 @@
+{
+  "MANAGE_HOLDS": {
+    "LABEL_MANAGE_HOLDS": "Bekletmeleri görüntüle veya kaldır",
+    "LABEL_MANAGE_HOLDS_COUNT": "Şu satırlardaki tutmaları çöz: {{count}}",
+    "LABEL_MANAGE_HOLDS_COUNTS": "Şu satırlardaki tutmaları çöz: {{count}}",
+    "LABEL_LINE_NOTIFICATION_COUNT": "{{ count }} seçili satıra tutma uygulanmadı.",
+    "LABEL_LINE_NOTIFICATION_COUNTS": "{{ count }} seçili satıra tutma uygulanmadı.",
+    "LABEL_BACK_TO_RETURN_SUMMARY": "İade özete geri dön",
+    "TOOLTIP_MSG_RESOLVE_HOLDS": "Henüz herhangi bir tutma uygulanmadı."
+  },
+  "ACTIVE_HOLDS_TABLE": {
+    "LABEL_ACTIVE_HOLDS": "Aktif tutma işlemleri",
+    "LABEL_OPEN_ALERTS": "Açık uyarılar",
+    "LABEL_HEADER_LINE": "Satır",
+    "LABEL_HEADER_ITEM": "İade veya ürün",
+    "LABEL_HEADER_HOLD_TYPE": "Tutma tipi",
+    "LABEL_HEADER_DATE": "Tarih",
+    "LABEL_HEADER_COMMENTS": "Yorumlar",
+    "LABEL_RESOLVE": "Çözümle",
+    "LABEL_addHold": "Tutma ekle",
+    "LABEL_NO_ACTIVE_HOLDS": "Etkin tutma yok",
+    "LABEL_USER_PERMISSION": "Bekletmeyi kaldırma izniniz yok.",
+    "LABEL_STATUS_MOD_PERMISSION": "Öğenin geçerli durumunda tutma uygulanamıyor."
+  },
+  "RESOLVED_HOLDS_TABLE": {
+    "LABEL_RESOLVED_HOLDS": "Çözülen tutmalar",
+    "LABEL_HEADER_LINE": "Satır",
+    "LABEL_HEADER_ITEM": "İade veya ürün",
+    "LABEL_HEADER_HOLD_TYPE": "Tutma tipi",
+    "LABEL_HEADER_DATE": "Tarih",
+    "LABEL_HEADER_COMMENTS": "Yorumlar",
+    "LABEL_NO_RESOLVE_HOLDS": "Çözülmüş tutma işlemi yok"
+  },
+  "RESOLVE_HOLDS_MODAL": {
+    "LABEL_HEADER_RESOLVE_HOLDS": "Tutma işlemlerini çöz",
+    "LABEL_HEADER_RESOLVE_HOLDS_COUNT": "Şu satırlardaki tutmaları çöz: {{count}}",
+    "LABEL_HEADER_RESOLVE_HOLDS_COUNTS": "Şu satırlardaki tutmaları çöz: {{count}}",
+    "LABEL_HEADER_LINE": "Satır",
+    "LABEL_HEADER_ITEM": "Öğe",
+    "LABEL_HEADER_HOLD_TYPE": "Tutma tipi",
+    "LABEL_HEADER_COMMENTS": "Yorumlar (isteğe bağlı)",
+    "LABEL_CANCEL": "İptal",
+    "LABEL_RESOLVE": "Çözümle",
+    "LABEL_RESOLVE_HOLD_MSG_LINE": "Çözüldü. Tutmaların kaldırıldığı satır sayısı: {{count}}.",
+    "LABEL_RESOLVE_HOLD_MSG_LINES": "Çözüldü. Tutmaların kaldırıldığı satır sayısı: {{count}}.",
+    "LABEL_RESOLVE_HOLD_MSG_ORDER": "Bu siparişteki {{ count1 }} tutmadan {{ count }} tanesi çözüldü.",
+    "RESOLVE_HOLD_FAILED_ERROR_MSG": "Tutmaları çözme isteği başarısız oldu."
+  },
+  "SIDE_PANEL": {
+    "LABEL_NOTES": "Notlar ({{count}})"
+  }
+}

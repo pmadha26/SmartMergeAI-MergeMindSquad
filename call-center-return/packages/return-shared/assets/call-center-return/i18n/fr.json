@@ -1,0 +1,11 @@
+{
+  "ROUTE_NAMES": {
+    "LABEL_RETURN_SEARCH": "Recherche de retour avancée",
+    "LABEL_RETURN_SEARCH_RESULT": "renvoyer-résultat-recherche",
+    "LABEL_RETURN_DETAILS": "détails-retour"
+  },
+  "CUSTOMER_SEARCH_MODAL": {
+    "HEADER_CUSTOMER_SEARCH": "Recherche avancée de clients",
+    "LABEL_SELECT_CUSTOMER": "Sélectionner un client"
+  }
+}

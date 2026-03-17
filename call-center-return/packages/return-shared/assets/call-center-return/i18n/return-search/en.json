@@ -1,0 +1,62 @@
+{
+    "RETURN_SEARCH": {
+        "GENERAL": {
+            "LABEL_SHOW_DRAFT_RETURNS": "Show draft returns",
+            "LABEL_RETURN_LINE_STATUS": "Return line status",
+            "LABEL_ADVANCED_SEARCH": "Advanced return search",
+            "LABEL_RESULTS": "Return search results",
+            "LABEL_ENTERPRISE": "Enterprise",
+            "LABEL_RETURN_NUMBER": "Return number",
+            "LABEL_CUSTOMER_PO": "Customer purchase order number",
+            "LABEL_ORIGINAL_ORDER_NUMBER": "Original  order number",
+            "LABEL_RETURN_DATE_RANGE": "Return date range",
+            "LABEL_HOLD_TYPE": "Hold type",
+            "LABEL_RETURN_STATUS": "Return status",
+            "LABEL_RETURN_AGE": "Return age",
+            "LABEL_EMAIL": "Email address",
+            "LABEL_CUSTOMER_TELEPHONE": "Phone number",
+            "LABEL_FIRST_NAME": "Given name",
+            "LABEL_LAST_NAME": "Surname",
+            "LABEL_POSTAL_CODE": "Postal code",
+            "LABEL_ORDER_NAME": "Return name",
+            "LABEL_CUSTOMER_CREDIT_CARD_NUMBER": "Last 4 digits of credit card",
+            "LABEL_RETURN_SEARCH": "Search",
+            "LABEL_CLEAR": "Clear",
+            "LABEL_SEARCH_BY_RETURN_INFO": "Search by return details",
+            "LABEL_SEARCH_BY_CUSTOMER_INFO": "Search by customer details",
+            "LABEL_QUERY_is": "is",
+            "LABEL_QUERY_starts_with": "starts with",
+            "LABEL_QUERY_contains": "contains",
+            "MESSAGE_SEARCH_GRP_DIFF": "One or more fields that are specified in this saved search might no longer be grouped or might be grouped differently. Search results might vary.",
+            "CONFIRM_RETURN": "Confirmed return",
+            "DRAFT_RETURN": "Draft return",
+            "RECENT_RETURNS": "Recent returns",
+            "ARCHIVED_RETURNS": "Archived returns",
+            "LABEL_SKU_NUMBER": "SKU number",
+            "TOO_MANY_RESULTS": "Your search resulted in {{total}} matches. Search is configured to return a maximum of {{max}} records.",
+            "ALL_ORDERS": "All orders",
+            "CONFIRMED_ORDERS": "Confirmed orders",
+            "DRAFT_ORDERS": "Draft orders"
+        },
+        "ORDER_LINE_STATUS_DROPDOWN":{
+            "LABEL_CREATED": "Created",
+            "LABEL_RECEIVED": "Received",
+            "LABEL_RECEIPT_CLOSED": "Receipt closed",
+            "LABEL_CANCELLED": "Cancelled",
+            "TOOLTIP_MESSAGE": "Orders that contain even one line with the selected status will be listed.",
+            "MESSAGE_WRONG_COMBOBOX_SEARCH_TEXT": "A valid value is required"
+        },
+        "RETURN_DATE_RANGE": {
+            "TOOLTIP_MESSAGE": "The default date range is {{duration}} {{durationUnit}}",
+            "LABEL_YEARS_PLURAL": "years",
+            "LABEL_MONTHS_PLURAL": "months",
+            "LABEL_DAYS_PLURAL": "days",
+            "LABEL_YEARS_SINGULAR": "year",
+            "LABEL_MONTHS_SINGULAR": "month",
+            "LABEL_DAYS_SINGULAR": "day"
+        },
+        "RETURN_AGE":{
+            "HELPER_TEXT": "Review the return date range"
+        }
+    }
+}

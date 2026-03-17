@@ -1,0 +1,52 @@
+{
+  "MANAGE_HOLDS": {
+    "LABEL_MANAGE_HOLDS": "檢視或解決保留",
+    "LABEL_MANAGE_HOLDS_COUNT": "從下列字行解決保留：{{count}}",
+    "LABEL_MANAGE_HOLDS_COUNTS": "從下列字行解決保留：{{count}}",
+    "LABEL_LINE_NOTIFICATION_COUNT": "保留未套用於所選取的 {{ count }} 行。",
+    "LABEL_LINE_NOTIFICATION_COUNTS": "保留未套用於所選取的 {{ count }} 行。",
+    "LABEL_BACK_TO_RETURN_SUMMARY": "返回退貨摘要",
+    "TOOLTIP_MSG_RESOLVE_HOLDS": "尚未套用保留。"
+  },
+  "ACTIVE_HOLDS_TABLE": {
+    "LABEL_ACTIVE_HOLDS": "作用中的保留",
+    "LABEL_OPEN_ALERTS": "開啟的警示",
+    "LABEL_HEADER_LINE": "明細行",
+    "LABEL_HEADER_ITEM": "退貨或項目",
+    "LABEL_HEADER_HOLD_TYPE": "保留類型",
+    "LABEL_HEADER_DATE": "日期",
+    "LABEL_HEADER_COMMENTS": "註解",
+    "LABEL_RESOLVE": "解決",
+    "LABEL_addHold": "新增保留",
+    "LABEL_NO_ACTIVE_HOLDS": "無作用中保留",
+    "LABEL_USER_PERMISSION": "您沒有權限解除保留。",
+    "LABEL_STATUS_MOD_PERMISSION": "在項目的現行狀態下無法套用保留。"
+  },
+  "RESOLVED_HOLDS_TABLE": {
+    "LABEL_RESOLVED_HOLDS": "已解決保留",
+    "LABEL_HEADER_LINE": "明細行",
+    "LABEL_HEADER_ITEM": "退貨或項目",
+    "LABEL_HEADER_HOLD_TYPE": "保留類型",
+    "LABEL_HEADER_DATE": "日期",
+    "LABEL_HEADER_COMMENTS": "註解",
+    "LABEL_NO_RESOLVE_HOLDS": "沒有已解決的保留"
+  },
+  "RESOLVE_HOLDS_MODAL": {
+    "LABEL_HEADER_RESOLVE_HOLDS": "已解決的保留",
+    "LABEL_HEADER_RESOLVE_HOLDS_COUNT": "從下列字行解決保留：{{count}}",
+    "LABEL_HEADER_RESOLVE_HOLDS_COUNTS": "從下列字行解決保留：{{count}}",
+    "LABEL_HEADER_LINE": "明細行",
+    "LABEL_HEADER_ITEM": "項目",
+    "LABEL_HEADER_HOLD_TYPE": "保留類型",
+    "LABEL_HEADER_COMMENTS": "註解（選用）",
+    "LABEL_CANCEL": "取消",
+    "LABEL_RESOLVE": "解決",
+    "LABEL_RESOLVE_HOLD_MSG_LINE": "已解決。 從行中移除的保留：{{count}} 行。",
+    "LABEL_RESOLVE_HOLD_MSG_LINES": "已解決。 從行中移除的保留：{{count}} 行。",
+    "LABEL_RESOLVE_HOLD_MSG_ORDER": "此訂單上已解決的 {{ count }} 筆（共 {{ count1 }} 筆）保留。",
+    "RESOLVE_HOLD_FAILED_ERROR_MSG": "解決保留的要求失敗。"
+  },
+  "SIDE_PANEL": {
+    "LABEL_NOTES": "附註 ({{count}})"
+  }
+}

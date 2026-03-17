@@ -1,0 +1,89 @@
+<!--
+* IBM Confidential
+* OCO Source Materials
+* 5737-D18, 5725-D10
+*
+* (C) Copyright International Business Machines Corp. 2022, 2023
+*
+* The source code for this program is not published or otherwise divested
+* of its trade secrets, irrespective of what has been deposited with the
+* U.S. Copyright Office.
+-->
+
+<ng-template bucExtension [componentName]="componentId" [placement]="'top'" [id]="EXTENSION.TOP" [parent]="this">
+</ng-template>
+
+<ibm-modal size="md" [open]="open" (overlaySelected)="closeModal()">
+  <ibm-modal-header (closeSelect)="closeModal()">
+    <ng-container *ngIf="categoryType === 'EXCHANGE' && modalData.returnDetails?.exchangeOrder?.orderNo; else returnHeader">
+      {{ "SHARED.NOTES.LABEL_VIEW_EXCHANGE_NOTES_HEADER" | translate:{number: modalData.returnDetails?.exchangeOrder?.orderNo} }}
+    </ng-container>
+    <ng-template #returnHeader>
+      <ng-container *ngIf="!modalData.lineDetails?.PrimeLineNo; else lineHeader" >
+      {{ "SHARED.NOTES.LABEL_VIEW_RETURN_NOTES_HEADER" | translate:{number: modalData.returnDetails.returnNo} }}
+      </ng-container>
+    </ng-template>
+    <ng-template #lineHeader>
+      {{ "SHARED.NOTES.LABEL_VIEW_LINE_NOTES_HEADER" | translate:{number: modalData.lineDetails?.PrimeLineNo} }}
+    </ng-template>
+  </ibm-modal-header>
+  <section class="cds--modal-content">
+    <ng-container *ngIf="isContentInitialized; else loading">
+      <div class="filter-controls">
+        <call-center-notes-filter [notesTypeList]="notesTypeList" (filterChange)="applyFilter($event)"
+          [disabled]="noteEditInProgress" [categoryList]="categoryList" [categoryType]="categoryType" [allowExchangeNotes]="allowExchangeNotes"></call-center-notes-filter>
+      <cds-tooltip class="tooltip-pos" [description]="showTooltip" trigger="hover" [align]="'top'" [autoAlign]="'true'" [disabled]="!isHistoryReturn">
+        <button *ngIf="hasAddNotePermission" ibmButton size="default" style="margin-top: 0.25rem;" [disabled]="noteEditInProgress || isHistoryReturn"
+          (click)="addNewNote()">
+          {{'SHARED.NOTES.LABEL_ADD_NOTE' | translate }}
+        </button>
+      </cds-tooltip>
+      <ng-template #showTooltip let-tooltip="$implicit">
+        <div class="item-description-tooltip-template" [attr.tid]="componentId + '-view-all-notes-tooltip'">
+          {{'RETURN_SUMMARY.RESTORE_ORDER.RESTORE_ORDER_DISABLED_ACTION' | translate}}
+        </div>
+      </ng-template>
+      </div>
+
+      <div *ngIf="notesList && notesList.length > 0" [attr.tid]="componentId + 'cards'">
+        <ng-container *ngFor="let note of notesList; let i=index;">
+          <!-- {{ note | json}} -->
+          <call-center-return-notes-card *ngIf="!note.isEditMode" [note]="note" [isModal]="true" [partOfList]="true"
+            [showControls]="!noteEditInProgress" [searchKey]="searchKey" [attr.tid]="componentId + '-cards-' + i"
+            (editNote)="editNote(i)" (deleteNote)="confirmNoteDelete(i)" tagPosition="top" [categoryType]="categoryType" [isHistoryOrder]="isHistoryReturn">
+          </call-center-return-notes-card>
+
+          <ng-container *ngIf="hasAddNotePermission && note.isEditMode">
+            <call-center-notes-form [note]="note" [returnReasons]="notesTypeList" (changeNote)="changeNote($event)"
+              [toggleValidation]="toggleValidation" [contactTypeList]="contactTypeList" [allowExchangeNotes]="allowExchangeNotes" [categoryType]="categoryType" (setCategoryType)="setCategoryType($event)" [categoryEditable]="categoryEditable" [categoryVisible]="modalData.categoryVisible"></call-center-notes-form>
+            <div class="edit-controls">
+              <button (click)="saveNote(i)" ibmButton>
+                {{ 'SHARED.GENERAL.LABEL_SAVE' | translate }}
+              </button>
+              <button (click)="cancelOperation(i)" ibmButton="secondary">
+                {{ 'SHARED.NOTES.LABEL_DISMISS' | translate }}
+              </button>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+      <div class="empty-block margin-left-right--1rem margin-top--1rem" *ngIf="emptyNotes"
+        [attr.tid]="componentId + 'empty-block'">
+        <buc-ai-empty-state icon="'default'">
+          <h3 bucAiEmptyStateTitle>{{'SHARED.NOTES.LABEL_NO_RECORDS_FOUND' | translate}}</h3>
+          <p bucAiEmptyStateBody>{{ 'SHARED.NOTES.LABEL_NO_RECORDS' | translate }}</p>
+        </buc-ai-empty-state>
+      </div>
+    </ng-container>
+  </section>
+</ibm-modal>
+
+
+<ng-template #loading>
+  <ng-container>
+    <buc-loading [isActive]="!isContentInitialized"></buc-loading>
+  </ng-container>
+</ng-template>
+
+<ng-template bucExtension [componentName]="componentId" [placement]="'bottom'" [id]="EXTENSION.BOTTOM" [parent]="this">
+</ng-template>

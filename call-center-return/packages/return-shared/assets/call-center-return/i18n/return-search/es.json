@@ -1,0 +1,62 @@
+{
+  "RETURN_SEARCH": {
+    "GENERAL": {
+      "LABEL_SHOW_DRAFT_RETURNS": "Mostrar borrador de devoluciones",
+      "LABEL_RETURN_LINE_STATUS": "Estado de línea de devolución",
+      "LABEL_ADVANCED_SEARCH": "Búsqueda avanzada de devoluciones",
+      "LABEL_RESULTS": "Resultados de la búsqueda de devoluciones",
+      "LABEL_ENTERPRISE": "Empresa",
+      "LABEL_RETURN_NUMBER": "Número de devolución",
+      "LABEL_CUSTOMER_PO": "Número de pedido de compra de cliente",
+      "LABEL_ORIGINAL_ORDER_NUMBER": "Número de orden original",
+      "LABEL_RETURN_DATE_RANGE": "Rango de fechas de devolución",
+      "LABEL_HOLD_TYPE": "Tipo de retención",
+      "LABEL_RETURN_STATUS": "Estado de devolución",
+      "LABEL_RETURN_AGE": "Antigüedad de devolución",
+      "LABEL_EMAIL": "Dirección de correo electrónico",
+      "LABEL_CUSTOMER_TELEPHONE": "Número de teléfono",
+      "LABEL_FIRST_NAME": "Nombre de pila",
+      "LABEL_LAST_NAME": "Apellido",
+      "LABEL_POSTAL_CODE": "Código postal",
+      "LABEL_ORDER_NAME": "Nombre de devolución",
+      "LABEL_CUSTOMER_CREDIT_CARD_NUMBER": "Últimos 4 dígitos de la tarjeta de crédito",
+      "LABEL_RETURN_SEARCH": "Búsqueda",
+      "LABEL_CLEAR": "Borrar",
+      "LABEL_SEARCH_BY_RETURN_INFO": "Buscar por detalles de devolución",
+      "LABEL_SEARCH_BY_CUSTOMER_INFO": "Buscar por detalles del cliente",
+      "LABEL_QUERY_is": "es",
+      "LABEL_QUERY_starts_with": "empieza por",
+      "LABEL_QUERY_contains": "contiene",
+      "MESSAGE_SEARCH_GRP_DIFF": "Es posible que uno o más campos especificados en esta búsqueda guardada ya no se agrupen o se puedan agrupar de forma diferente. Los resultados de la búsqueda pueden variar.",
+      "CONFIRM_RETURN": "Devolución confirmada",
+      "DRAFT_RETURN": "Borrador de devolución",
+      "RECENT_RETURNS": "Devoluciones recientes",
+      "ARCHIVED_RETURNS": "Devoluciones archivadas",
+      "LABEL_SKU_NUMBER": "Número de SKU",
+      "TOO_MANY_RESULTS": "El resultado de la búsqueda es de {{total}} coincidencias. La búsqueda está configurada para devolver un máximo de {{max}} registros.",
+      "ALL_ORDERS": "Todos los pedidos",
+      "CONFIRMED_ORDERS": "Pedidos confirmados",
+      "DRAFT_ORDERS": "Borrador de pedidos"
+    },
+    "ORDER_LINE_STATUS_DROPDOWN": {
+      "LABEL_CREATED": "Creado",
+      "LABEL_RECEIVED": "Recibidos",
+      "LABEL_RECEIPT_CLOSED": "Recibo cerrado",
+      "LABEL_CANCELLED": "Cancelados",
+      "TOOLTIP_MESSAGE": "Se listarán los pedidos que contengan al menos una línea con el estado seleccionado.",
+      "MESSAGE_WRONG_COMBOBOX_SEARCH_TEXT": "Se necesita un valor válido"
+    },
+    "RETURN_DATE_RANGE": {
+      "TOOLTIP_MESSAGE": "El rango de fechas predeterminado es {{duration}} {{durationUnit}}",
+      "LABEL_YEARS_PLURAL": "años",
+      "LABEL_MONTHS_PLURAL": "meses",
+      "LABEL_DAYS_PLURAL": "días",
+      "LABEL_YEARS_SINGULAR": "año",
+      "LABEL_MONTHS_SINGULAR": "mes",
+      "LABEL_DAYS_SINGULAR": "day"
+    },
+    "RETURN_AGE": {
+      "HELPER_TEXT": "Revisar el intervalo de fechas de devolución"
+    }
+  }
+}

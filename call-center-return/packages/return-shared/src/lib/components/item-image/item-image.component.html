@@ -1,0 +1,109 @@
+<!--
+* IBM Confidential
+* OCO Source Materials
+* 5737-D18, 5725-D10
+*
+* (C) Copyright International Business Machines Corp. 2022, 2025
+*
+* The source code for this program is not published or otherwise divested
+* of its trade secrets, irrespective of what has been deposited with the
+* U.S. Copyright Office.
+-->
+
+<div class="image-field">
+    <div *ngIf="isBundleComponent" class="margin-top--1rem margin-right--0_25rem">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="16" height="16" transform="matrix(1 0 0 -1 0 16)" fill="white"
+                style="mix-blend-mode:multiply" />
+            <path
+                d="M9.5 14L8.79295 13.2929L11.0859 11H5C4.73478 11 4.48043 10.8946 4.29289 10.7071C4.10536 10.5196 4 10.2652 4 10V2H5V10H11.0859L8.79295 7.70705L9.5 7L13 10.5L9.5 14Z"
+                fill="#8D8D8D" />
+        </svg>
+    </div>
+    <div *ngIf="parentLine?.lineNo" class="margin-top--1rem margin-right--0_25rem">
+        <span><svg ibmIcon="feature-membership" size="16"></svg></span>
+    </div>
+    <img [src]="imageUrl" [attr.data-defaultImageUrl]="defaultImageUrl"
+        onerror="this.src=event.target.getAttribute('data-defaultImageUrl')" />
+    <div class="item-description-container">
+        <div class="d--flex-center">
+            <cds-tooltip [ngClass]="{'width-95': isBundleParent || isBundleComponent}" class="display-block"
+                [align]="'top'" [autoAlign]="'true'" [description]="itemDescriptionTooltipTemplate"
+                [templateContext]="itemDescription">
+                <span class="display-block cds--btn__icon item-description width-link">{{itemDescription}}</span>
+            </cds-tooltip>
+            <div *ngIf="kitCode === 'BUNDLE'"
+                class="margin-top--1rem margin-left--0_5rem bundle-parent-icon">
+                <cds-tooltip class="margin-right--0_5rem" [attr.tid]="'return-image-bundle-parent-icon'"
+                    [description]="lineIconTooltipTemplate" trigger="hover" [align]="'top'" [autoAlign]="'true'"
+                    [templateContext]="'RETURN_LINE.LABEL_BUNDLE_TOOLTIP' | translate">
+                    <svg ibmIcon="box" size="16" role="button"></svg>
+                </cds-tooltip>
+            </div>
+            <div *ngIf="kitCode === 'PK'" class="margin-top--1rem margin-left--0_5rem physical-kit-item-icon">
+                <cds-tooltip class="margin-right--0_5rem" [attr.tid]="'return-image-physical-kit-icon'"
+                    [description]="lineIconTooltipTemplate" trigger="hover" [align]="'top'" [autoAlign]="'true'"
+                    [templateContext]="'RETURN_LINE.LABEL_PHYSICAL_KIT_TOOLTIP' | translate">
+                    <svg ibmIcon="nominal" size="16" role="button"></svg>
+                </cds-tooltip>
+            </div>
+            <button ibmButton="ghost" iconOnly="true" type="button" *ngIf="relatedLines?.length > 0"
+                (click)="openRelatedItemsModal()" class="margin-top--1rem margin-left--0_5rem">
+
+                <cds-tooltip [align]="'top'" [autoAlign]="'true'" [description]="itemDescriptionTooltipTemplate"
+                    [templateContext]="'RETURN_LINE.LABEL_PARENT_LINE_TOOLTIP' | translate">
+                    <span><svg ibmIcon="connect--reference" size="16"></svg></span>
+                </cds-tooltip>
+            </button>
+            <span *ngIf="isBundleComponent || isDerviedFromBundleComponent" class="margin-left--0_5rem">
+                <cds-tooltip class="margin-right--0_5rem" [attr.tid]="componentId + '-bundle-item-icon'"
+                    [description]="lineIconTooltipTemplate" trigger="hover" [align]="'top'" [autoAlign]="'true'"
+                    [templateContext]="'RETURN_LINE.LABEL_BUNDLE_ITEM_TOOLTIP' | translate">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="16" height="16" fill="white" style="mix-blend-mode:multiply" />
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M14.75 3.9957L11.25 2.0457C11.1 1.9457 10.9 1.9457 10.75 2.0457L7.25 3.9957C7.1 4.0957 7 4.2957 7 4.4457V6.3607L5.25 5.3857C5.1 5.2857 4.9 5.2857 4.75 5.3857L1.25 7.3357C1.1 7.4357 1 7.6357 1 7.7857V11.6357C1 11.8357 1.1 11.9857 1.25 12.0857L4.75 13.9857C4.8 14.0357 4.9 14.0357 5 14.0357C5.05 14.0357 5.0875 14.0232 5.125 14.0107C5.1625 13.9982 5.2 13.9857 5.25 13.9857L8.75 12.0357C8.9 11.9357 9 11.7857 9 11.5857V9.6957L10.75 10.6457C10.8 10.6957 10.9 10.6957 11 10.6957C11.05 10.6957 11.0875 10.6832 11.125 10.6707C11.1625 10.6582 11.2 10.6457 11.25 10.6457L14.75 8.6957C14.9 8.5957 15 8.4457 15 8.2457V4.4457C15 4.2957 14.9 4.0957 14.75 3.9957ZM9 8.6157L10.5 9.3957V6.6957L8 5.2957V6.91784L8.75 7.3357C8.9 7.4357 9 7.6357 9 7.7857V8.6157ZM11 5.7457L8.5 4.3457L11 2.9457L13.55 4.3457L11 5.7457ZM14 8.0957L11.5 9.3957V6.6457L14 5.2457V8.0957ZM2 11.4357L4.5 12.7357V10.0357L2 8.6357V11.4357ZM2.5 7.6857L5 9.0857L7.55 7.6857L5 6.2857L2.5 7.6857ZM5.5 12.7357L8 11.4357V8.5857L5.5 9.9857V12.7357Z"
+                        fill="#161616" />
+                </svg>
+                </cds-tooltip>
+            </span>
+            <cds-tooltip *ngIf="parentLine?.lineNo" class="margin-left--0_5rem"
+                [attr.tid]="componentId + '-related-line'" [align]="'top'" [autoAlign]="'true'"
+                [description]="itemDescriptionTooltipTemplate"
+                [templateContext]="'RETURN_LINE.LABEL_RELATED_LINE_TOOLTIP' | translate : {lineNo: parentLine.lineNo, itemDesc: parentLine.itemDesc }">
+                <span><svg ibmIcon="connect" size="16"></svg></span>
+            </cds-tooltip>
+        </div>
+        <div class="item-id-container">
+            <span class="item-id">
+                <span>{{itemId}}</span>
+                <buc-code-snippet type="single" [autoAlign]="'true'">{{itemId}}</buc-code-snippet>
+            </span>
+        </div>
+        <ng-content></ng-content>
+    </div>
+</div>
+
+<ng-template #itemDescriptionTooltipTemplate let-tooltip="$implicit">
+    <span class="item-description-tooltip-template" [innerHTML]="tooltip"></span>
+</ng-template>
+
+<ng-template #lineIconTooltipTemplate let-tooltip="$implicit">
+    <span>{{tooltip}}</span>
+</ng-template>
+
+<ng-template #relatedLinesTmpl let-data="data">
+    <div class="related-list-container">
+        <div class="related-list-grid header">
+            <span>{{'CREATE_RETURN.RETURN_LINES_TABLE.HEADER_LINE' | translate }}</span>
+            <span>{{'CREATE_RETURN.RETURN_LINES_TABLE.HEADER_ITEM' | translate}}</span>
+        </div>
+        <ng-container *ngFor="let item of data.modalContent">
+            <div class="related-list-grid">
+                <span class="padding-top--0_5rem">{{item.lineNo}}</span>
+                <ng-container *ngTemplateOutlet="itemDetailsTemplate;  context: { data: item.itemName}"></ng-container>
+            </div>
+        </ng-container>
+
+    </div>
+</ng-template>

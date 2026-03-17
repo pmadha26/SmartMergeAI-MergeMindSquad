@@ -1,0 +1,52 @@
+{
+  "MANAGE_HOLDS": {
+    "LABEL_MANAGE_HOLDS": "Ver o resolver retenciones",
+    "LABEL_MANAGE_HOLDS_COUNT": "Resolver retenciones de líneas: {{count}}",
+    "LABEL_MANAGE_HOLDS_COUNTS": "Resolver retenciones de líneas: {{count}}",
+    "LABEL_LINE_NOTIFICATION_COUNT": "Las retenciones no se aplican en {{ count }} línea seleccionada.",
+    "LABEL_LINE_NOTIFICATION_COUNTS": "Las retenciones no se aplican en las {{ count }} líneas seleccionadas.",
+    "LABEL_BACK_TO_RETURN_SUMMARY": "Volver al resumen de devoluciones",
+    "TOOLTIP_MSG_RESOLVE_HOLDS": "Aún no se han aplicado retenciones."
+  },
+  "ACTIVE_HOLDS_TABLE": {
+    "LABEL_ACTIVE_HOLDS": "Retenciones activas",
+    "LABEL_OPEN_ALERTS": "Alertas abiertas",
+    "LABEL_HEADER_LINE": "Línea",
+    "LABEL_HEADER_ITEM": "Devolución o artículo",
+    "LABEL_HEADER_HOLD_TYPE": "Tipo de retención",
+    "LABEL_HEADER_DATE": "Fecha",
+    "LABEL_HEADER_COMMENTS": "Comentarios",
+    "LABEL_RESOLVE": "Resolver",
+    "LABEL_addHold": "Añadir retención",
+    "LABEL_NO_ACTIVE_HOLDS": "Sin retenciones activas",
+    "LABEL_USER_PERMISSION": "No tiene permiso para resolver la retención.",
+    "LABEL_STATUS_MOD_PERMISSION": "Las retenciones no se pueden aplicar en el estado actual del artículo."
+  },
+  "RESOLVED_HOLDS_TABLE": {
+    "LABEL_RESOLVED_HOLDS": "Retenciones resueltas",
+    "LABEL_HEADER_LINE": "Línea",
+    "LABEL_HEADER_ITEM": "Devolución o artículo",
+    "LABEL_HEADER_HOLD_TYPE": "Tipo de retención",
+    "LABEL_HEADER_DATE": "Fecha",
+    "LABEL_HEADER_COMMENTS": "Comentarios",
+    "LABEL_NO_RESOLVE_HOLDS": "No hay retenciones resueltas"
+  },
+  "RESOLVE_HOLDS_MODAL": {
+    "LABEL_HEADER_RESOLVE_HOLDS": "Resolver retenciones",
+    "LABEL_HEADER_RESOLVE_HOLDS_COUNT": "Resolver retenciones de líneas: {{count}}",
+    "LABEL_HEADER_RESOLVE_HOLDS_COUNTS": "Resolver retenciones de líneas: {{count}}",
+    "LABEL_HEADER_LINE": "Línea",
+    "LABEL_HEADER_ITEM": "Artículo",
+    "LABEL_HEADER_HOLD_TYPE": "Tipo de retención",
+    "LABEL_HEADER_COMMENTS": "Comentarios (opcional)",
+    "LABEL_CANCEL": "Cancelar",
+    "LABEL_RESOLVE": "Resolver",
+    "LABEL_RESOLVE_HOLD_MSG_LINE": "Resuelto. Se han eliminado las retenciones de las líneas: {{count}}.",
+    "LABEL_RESOLVE_HOLD_MSG_LINES": "Resuelto. Se han eliminado las retenciones de las líneas: {{count}}.",
+    "LABEL_RESOLVE_HOLD_MSG_ORDER": "Se han resuelto {{ count }} de {{ count1 }} retenciones en este pedido.",
+    "RESOLVE_HOLD_FAILED_ERROR_MSG": "La solicitud de resolución de retenciones ha fallado."
+  },
+  "SIDE_PANEL": {
+    "LABEL_NOTES": "Notas ({{count}})"
+  }
+}

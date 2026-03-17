@@ -1,0 +1,61 @@
+<!--
+* IBM Confidential
+* OCO Source Materials
+* 5737-D18, 5725-D10
+*
+* (C) Copyright International Business Machines Corp. 2022, 2023
+*
+* The source code for this program is not published or otherwise divested
+* of its trade secrets, irrespective of what has been deposited with the
+* U.S. Copyright Office.
+-->
+
+<ng-template bucExtension [componentName]="componentId" [placement]="'top'" [id]="EXTENSION.TOP" [parent]="this">
+</ng-template>
+
+<section class="promotion-block">
+    <div class="cds--row promotion-text cds--label">{{ 'PAYMENT_SUMMARY.SIDE_PANEL.LABEL_PROMO_AND_COUPONS_EXCHANGE' | translate }}
+        <cds-tooltip *ngIf="isModal" class="tooltip-pos" [description]="orderLevelCouponTemplate" trigger="hover" [align]="'right'" [autoAlign]="'true'">
+            <svg ibmIcon="information" size="16"></svg>
+        </cds-tooltip>
+    </div>
+
+    <div class="cds--row cds--no-gutter">
+        <div class="cds--col-lg-9 margin-left--1rem margin-bottom--0_5rem">
+            <buc-combobox #couponCombobox  [attr.tid]="componentId + 'couponCombobox'" [items]="couponList" placeholder="" [invalid]="isCouponInvalid" [invalidText]="couponInvalidText"
+                (selectItemAction)="selectCouponCode($event)" (searchHandler)="onSearch($event)" [disabled]="!isResourcePermissionAvailable">
+            </buc-combobox>
+        </div>
+        <div class="cds--col-lg-5 margin-bottom--0_5rem">
+            <buc-button (click)="onApply()" [isDisabled]="(!isResourcePermissionAvailable) && applyEnabled" [attr.tid]="componentId + 'applybtn'">
+                {{ 'PAYMENT_SUMMARY.SIDE_PANEL.LABEL_APPLY' | translate }}
+            </buc-button>
+        </div>
+    </div>
+</section>
+
+<ng-template   #couponDescriptionTooltipTemplate let-tooltip="$implicit">
+  <span class="item-description-tooltip-template" [innerHTML]="tooltip"></span>
+</ng-template>
+
+<ng-container *ngFor="let n of appliedCouponPromo | slice: 0; let i = index">
+    <ng-container>
+        <cds-tooltip [description]="couponDescriptionTooltipTemplate" trigger="hover" [align]="'top'" [autoAlign]="'true'" [templateContext]="n.PricingRule?.Description ? n.PricingRule?.Description : n.PromotionId">
+            <buc-tag *ngIf="n.PromotionApplied === 'Y'" [attr.tid]="componentId + 'tag1'" [ngClass]="!isModal ? 'shortTag' : ''"
+                [isFilter]="true" type="blue" (closeFunc)="onClose(i, n)">
+                {{ n.PromotionId }}{{n.PricingRule?.Description ? ' - ' + n.PricingRule?.Description : ''}}
+            </buc-tag>
+        </cds-tooltip>
+    </ng-container>
+</ng-container>
+
+<ng-template #orderLevelCouponTemplate let-tooltip="$implicit" >
+    <div class="promotion-box-tooltip">
+        <div class="cds--label" [attr.tid]="componentId + 'orderLevelCouponLabel'">
+            {{'PAYMENT_SUMMARY.SIDE_PANEL.LABEL_TOOLTIP_ORDER_LEVEL_COUPON' | translate}}
+        </div>
+    </div>
+</ng-template>
+
+<ng-template bucExtension [componentName]="componentId" [placement]="'bottom'" [id]="EXTENSION.BOTTOM" [parent]="this">
+</ng-template>

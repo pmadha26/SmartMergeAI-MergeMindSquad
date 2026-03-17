@@ -1,0 +1,147 @@
+/*
+ * IBM Confidential
+ * OCO Source Materials
+ * 5737-D18, 5725-D10
+ *
+ * (C) Copyright International Business Machines Corp. 2022, 2023
+ *
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
+ * U.S. Copyright Office.
+ */
+@use 'variables' as *;
+
+:host{
+  .item-description-container {
+    buc-code-snippet, ibm-code-snippet {
+      visibility: hidden !important;
+    }
+    &:hover buc-code-snippet, ibm-code-snippet {
+      visibility: visible !important;
+    }
+  }
+  .item-description {
+    white-space: nowrap;
+    max-width: 25rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.875rem;
+  }
+  .width-95 {
+    width: 95% !important;
+  }
+
+  .item-id-container {
+    padding-top: 0.3rem;
+    .item-id {
+      font-size: 0.75rem;
+      line-height: 1rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .item-id:hover {
+      buc-code-snippet, ibm-code-snippet {
+        visibility: visible !important;
+      }
+    }
+
+  }
+  .item-description-tooltip-template {
+    max-width: 30rem;
+  }
+
+  .item-description-container {
+    min-width: 0;
+    max-width: 16rem;
+  }
+  .display-block {
+    display: inline-block;
+    width: 100%;
+  }
+
+}
+
+::ng-deep {
+  .item-id {
+    .cds--snippet--single {
+      background: transparent;
+      width: 1rem;
+      height: 1rem;
+      padding-right: 2rem;
+  
+      .cds--snippet-container {
+        display: none;
+      }
+      .cds--snippet-button {
+        background: transparent;
+        width: 1rem;
+        height: 1rem;
+  
+        .cds--btn--copy__feedback::after {
+          top: 3px;
+          left: -33px;
+        }
+  
+        .cds--btn--copy__feedback::before {
+          top: -5px;
+        }
+  
+        .cds--btn--copy__feedback {
+          top: 0;
+          left: 3.4rem;
+        }
+      }
+  
+      .cds--snippet-button:hover {
+        background: transparent;
+      }
+  
+      .cds--snippet-button:focus {
+        outline-offset: 0;
+      }
+    }
+  }
+
+  .relatedLines {
+    min-height: 20vh;
+
+    .cds--modal-container {
+      min-width: 45%;
+    }
+
+    .cds--accordion__item {
+      border: 1px solid $gray-20;
+      margin-bottom: 0.5rem;
+    }
+
+    .related-list-container {
+      border: 1px solid #e0e0e0;
+      margin-top: 1rem;
+
+      .related-list-grid {
+        display: grid;
+        grid-template-columns: 50px 1fr;
+        column-gap: 0.5rem;
+        padding: 0.5rem 0 0.5rem 1rem;
+
+        &:not(:first-child) {
+          border-block-start: inherit;
+        }
+
+        .item-description {
+          white-space: nowrap;
+          max-width: 25rem;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          font-size: 0.875rem;
+        }
+
+        &.header {
+          background-color: $layer-accent-01;
+        }
+      }
+    }
+  }
+
+}

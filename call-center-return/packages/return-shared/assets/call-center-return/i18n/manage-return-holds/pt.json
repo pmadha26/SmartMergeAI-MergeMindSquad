@@ -1,0 +1,52 @@
+{
+  "MANAGE_HOLDS": {
+    "LABEL_MANAGE_HOLDS": "Visualizar ou resolver pendências",
+    "LABEL_MANAGE_HOLDS_COUNT": "Resolver suspensões de linhas: {{count}}",
+    "LABEL_MANAGE_HOLDS_COUNTS": "Resolver suspensões de linhas: {{count}}",
+    "LABEL_LINE_NOTIFICATION_COUNT": "As suspensões não são aplicadas em {{ count }} linha selecionada.",
+    "LABEL_LINE_NOTIFICATION_COUNTS": "As suspensões não são aplicadas em {{ count }} linhas selecionadas.",
+    "LABEL_BACK_TO_RETURN_SUMMARY": "Voltar ao resumo de devolução",
+    "TOOLTIP_MSG_RESOLVE_HOLDS": "Nenhuma suspensão foi aplicada ainda."
+  },
+  "ACTIVE_HOLDS_TABLE": {
+    "LABEL_ACTIVE_HOLDS": "Retenções ativas",
+    "LABEL_OPEN_ALERTS": "Abrir alertas",
+    "LABEL_HEADER_LINE": "Linha",
+    "LABEL_HEADER_ITEM": "Devolução ou item",
+    "LABEL_HEADER_HOLD_TYPE": "Tipo de suspensão",
+    "LABEL_HEADER_DATE": "Data",
+    "LABEL_HEADER_COMMENTS": "Comentários",
+    "LABEL_RESOLVE": "Resolver",
+    "LABEL_addHold": "Incluir retenção",
+    "LABEL_NO_ACTIVE_HOLDS": "Nenhuma suspensão ativa",
+    "LABEL_USER_PERMISSION": "Você não tem permissão para resolver a pendência.",
+    "LABEL_STATUS_MOD_PERMISSION": "As suspensões não podem ser aplicadas no status atual do item."
+  },
+  "RESOLVED_HOLDS_TABLE": {
+    "LABEL_RESOLVED_HOLDS": "Retenções resolvidas",
+    "LABEL_HEADER_LINE": "Linha",
+    "LABEL_HEADER_ITEM": "Devolução ou item",
+    "LABEL_HEADER_HOLD_TYPE": "Tipo de suspensão",
+    "LABEL_HEADER_DATE": "Data",
+    "LABEL_HEADER_COMMENTS": "Comentários",
+    "LABEL_NO_RESOLVE_HOLDS": "Nenhuma retenção resolvida"
+  },
+  "RESOLVE_HOLDS_MODAL": {
+    "LABEL_HEADER_RESOLVE_HOLDS": "Resolver as retenções",
+    "LABEL_HEADER_RESOLVE_HOLDS_COUNT": "Resolver suspensões de linhas: {{count}}",
+    "LABEL_HEADER_RESOLVE_HOLDS_COUNTS": "Resolver suspensões de linhas: {{count}}",
+    "LABEL_HEADER_LINE": "Linha",
+    "LABEL_HEADER_ITEM": "Item",
+    "LABEL_HEADER_HOLD_TYPE": "Tipo de suspensão",
+    "LABEL_HEADER_COMMENTS": "Comentários (opcional)",
+    "LABEL_CANCEL": "Cancelar",
+    "LABEL_RESOLVE": "Resolver",
+    "LABEL_RESOLVE_HOLD_MSG_LINE": "Resolvido. Suspensões removidas das linhas: {{count}}.",
+    "LABEL_RESOLVE_HOLD_MSG_LINES": "Resolvido. Suspensões removidas das linhas: {{count}}.",
+    "LABEL_RESOLVE_HOLD_MSG_ORDER": "Resolvidas {{ count }} de {{ count1 }} suspensões neste pedido.",
+    "RESOLVE_HOLD_FAILED_ERROR_MSG": "A solicitação para resolver suspensões falhou."
+  },
+  "SIDE_PANEL": {
+    "LABEL_NOTES": "Notas ({{count}})"
+  }
+}

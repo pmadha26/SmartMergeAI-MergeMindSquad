@@ -1,0 +1,17 @@
+{
+  "name": "return-search",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "ng": "node --max_old_space_size=8048 ../../node_modules/@angular/cli/bin/ng",
+    "lint": "ng lint return-search",
+    "build": "ng build return-search --configuration production",
+    "start": "ng serve return-search",
+    "build-merged": "ng build return-search --configuration=merged-prod",
+    "start-merged": "ng serve return-search --configuration=merged",
+    "start-merged-prod": "ng serve return-search --configuration=merged-prod"
+  },
+  "dependencies": {
+    "@call-center/return-shared": "^0.0.1"
+  }
+}

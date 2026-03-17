@@ -1,0 +1,11 @@
+{
+  "ROUTE_NAMES": {
+    "LABEL_RETURN_SEARCH": "Gelişmiş iade araması",
+    "LABEL_RETURN_SEARCH_RESULT": "iade-arama-sonuç",
+    "LABEL_RETURN_DETAILS": "iade-ayrıntılar"
+  },
+  "CUSTOMER_SEARCH_MODAL": {
+    "HEADER_CUSTOMER_SEARCH": "Gelişmiş müşteri araması",
+    "LABEL_SELECT_CUSTOMER": "Müşteri seç"
+  }
+}

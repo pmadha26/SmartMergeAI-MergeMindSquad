@@ -1,0 +1,238 @@
+/*
+ * IBM Confidential
+ * OCO Source Materials
+ * 5737-D18, 5725-D10
+ *
+ * (C) Copyright International Business Machines Corp. 2022, 2023
+ *
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
+ * U.S. Copyright Office.
+ */
+
+@use 'variables' as *;
+$disable-color: $gray-30;
+
+.charge-payment-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0rem 0.5rem;
+  margin-bottom: 7rem;
+}
+
+.preserve-whitespace {
+  white-space: pre;
+}
+
+.pricing-alignment {
+  display: flex;
+  padding-right: 0;
+  justify-content: flex-end;
+}
+
+.subTotalToTaxes {
+  padding-right: 0rem;
+  overflow-y: auto;
+  font-size: 12px;
+  line-height: 15px;
+  color: #161616;
+  .priceFont {
+    font-family: "IBM Plex Sans";
+    font-size: 14px;
+    letter-spacing: 0.16px;
+    line-height: 20px;
+    text-align: right;
+  }
+  .itemPriceFont {
+    color: #525252;
+  }
+}
+
+// CSS Accordion
+input {
+  position: absolute;
+  opacity: 0;
+  z-index: -1;
+  display: none;
+}
+
+// Layout
+.row {
+  display: flex;
+
+  .col {
+    flex: 1;
+  }
+}
+
+/* Accordion styles */
+.tabs {
+  border-radius: 8px;
+  overflow: hidden;
+  // box-shadow: 0 4px 4px -2px rgba(0,0,0,0.5);
+}
+
+.tab {
+  width: 100%;
+  // color: white;
+  overflow: hidden;
+
+  &-label {
+    display: flex;
+    cursor: pointer;
+  }
+
+  &-content {
+    max-height: 0;
+    padding: 0 1rem;
+    transition: all 110ms;
+  }
+
+  &-close {
+    display: flex;
+    justify-content: flex-end;
+    padding: 1em;
+    font-size: 0.75em;
+    cursor: pointer;
+  }
+}
+
+.accordion-header-amount {
+  padding-right: 0;
+}
+
+.total-amount {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  border-top: 1px solid #8e8c8c;
+  border-bottom: 1px solid #8e8c8c;
+  margin-right: 0rem;
+}
+
+.exchange-total-amount {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #8e8c8c;
+  margin-right: 0rem;
+}
+
+
+.amount {
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #8e8c8c;
+  margin-right: 0rem;
+}
+
+.font-size--110 {
+  font-size: 110%;
+}
+
+.link {
+  margin-left: 0.25rem;
+}
+
+input:not(:checked) {
+  ~.tab-content {
+    display: none;
+  }
+}
+
+input:checked {
+
+  ~.tab-content {
+    max-height: 100vh;
+    padding: 0.5rem 1rem;
+    padding-bottom: 0;
+
+    .cds--row {
+      margin-bottom: 0.6rem;
+    }
+
+    .cds--row:last-child,
+    .cds--label {
+      margin-bottom: 0 !important;
+    }
+  }
+
+  ~div button {
+    transform: rotate(180deg) !important;
+    transition: all 110ms;
+    transform-origin: 43% 43%;
+    .iconStyle {
+      margin: 2px 0.2rem 0 0;
+    }
+  }
+
+}
+.promoCoupn {
+  width: 100%;
+  flex-wrap: nowrap;
+  margin-bottom: 1rem;
+
+  ::ng-deep {
+    call-center-promotion-box {
+      ibm-tag-filter {
+        .cds--tag__label {
+            white-space: normal;
+            padding: .25rem;
+        }
+      }
+    }
+
+    buc-combobox {
+
+      .cds--list-box,
+      .cds--list-box input {
+        height: 2.31rem;
+        max-height: 2.31rem;
+        width: 9rem;
+      }
+
+      .cds--list-box__menu-icon {
+        display: none;
+      }
+    }
+
+    .cds--col-lg-10 {
+      max-width: 54%;
+    }
+
+    buc-button {
+      .cds--btn {
+        line-height: 0.5;
+        max-width: 5rem;
+        min-height: 2rem;
+      }
+    }
+  }
+}
+
+.margin-top--0_5rem {
+  margin-top: 0.5rem;
+}
+
+.margin-top--1rem {
+  margin-top: 1rem;
+}
+
+.padding-left--1rem {
+  padding-left: 1rem !important;
+}
+
+.margin-left--0 {
+  margin-left: 0;
+}
+
+.padding--0 {
+  padding: 0;
+}
+
+.link-disabled {
+  color: $disable-color;
+  cursor: default;
+}
+
+.iconStyle {
+    fill: var(--cds-icon-primary);
+} 

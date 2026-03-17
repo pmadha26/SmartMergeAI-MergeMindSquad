@@ -1,0 +1,46 @@
+<!--
+* IBM Confidential
+* OCO Source Materials
+* 5737-D18, 5725-D10
+*
+* (C) Copyright International Business Machines Corp. 2022, 2023
+*
+* The source code for this program is not published or otherwise divested
+* of its trade secrets, irrespective of what has been deposited with the
+* U.S. Copyright Office.
+-->
+
+<ibm-modal size="md" [open]="open">
+  <ibm-modal-header (closeSelect)="closeModal()">
+    {{ 'SHARED.NOTES.LABEL_ADD_NOTE' | translate }}
+  </ibm-modal-header>
+
+  <ng-container *ngIf="!isModalInitialized">
+    <div class="loading">
+      <buc-loading [isActive]="!isModalInitialized"></buc-loading>
+    </div>
+  </ng-container>
+  <ng-template bucExtension [componentName]="componentId" [placement]="'top'" [id]="EXTENSION.TOP" [parent]="this">
+  </ng-template>
+
+  <section class="cds--modal-content" *ngIf="isModalInitialized">
+    <div class="width--100p padding-right--1rem">
+      <call-center-notes-form [returnReasons]="noteTypelist" [contactTypeList]="contactTypeList"
+        (changeNote)="changeNote($event)" [toggleValidation]="toggleValidation" [note]="modalData.note" [allowExchangeNotes]="allowExchangeNotes" [categoryType]="categoryType" (setCategoryType)="setCategoryType($event)" [categoryVisible]="modalData.categoryVisible">
+      </call-center-notes-form>
+    </div>
+  </section>
+
+  <ng-template bucExtension [componentName]="componentId" [placement]="'bottom'" [id]="EXTENSION.BOTTOM" [parent]="this">
+  </ng-template>
+
+  <ibm-modal-footer *ngIf="isModalInitialized">
+    <button [attr.tid]="'add-note-cancel'" class="cds--btn cds--btn--secondary" modal-primary-focus
+      (click)="closeModal()">
+      {{ 'SHARED.GENERAL.LABEL_CANCEL' | translate }}
+    </button>
+    <button [attr.tid]="'add-note-save'" class="cds--btn cds--btn--primary" (click)="addNote()" [disabled]="disableSave">
+      {{ 'SHARED.GENERAL.LABEL_SAVE' | translate }}
+    </button>
+  </ibm-modal-footer>
+</ibm-modal>

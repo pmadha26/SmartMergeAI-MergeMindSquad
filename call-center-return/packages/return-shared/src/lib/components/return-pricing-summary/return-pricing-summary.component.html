@@ -1,0 +1,696 @@
+<!--
+* IBM Confidential
+* OCO Source Materials
+* 5737-D18, 5725-D10
+*
+* (C) Copyright International Business Machines Corp. 2022, 2023
+*
+* The source code for this program is not published or otherwise divested
+* of its trade secrets, irrespective of what has been deposited with the
+* U.S. Copyright Office.
+-->
+<ng-template bucExtension [componentName]="componentId" [placement]="'top'" [id]="EXTENSION.TOP" [parent]="this">
+</ng-template>
+
+<div class="charge-payment-container">
+    <div>
+        <ng-container *ngIf="returnDetails && ctxReturn">
+            <ng-container *ngTemplateOutlet="returnReturnAccordian;context:ctxReturn" />
+        </ng-container>
+        <ng-container *ngIf="exchangeOrder && ctxExchange && returnDetails?.isDraft">
+            <ng-container *ngTemplateOutlet="returnExchangeAccordian;context:ctxExchange" />
+        </ng-container>
+    </div>
+    <ng-template #returnReturnAccordian let-data="data">
+        <div class="margin-top--1rem">
+            <div class="row">
+                <div class="col">
+                    <div class="tabs">
+                        <div class="tab">
+                            <input type="checkbox" id="returnSummary" checked >
+                            <div class="d--flex-jc-space-between">
+                                <div class="display-flex align-items-center return-type" [attr.tid]="componentId + 'adjustments'">
+                                    <label class="tab-label" for="returnSummary" #returnSummary>
+                                        <span class="preserve-whitespace">{{ 
+                                            'PAYMENT_SUMMARY.SIDE_PANEL.LABEL_RETURN' | translate }}</span>
+                                    </label>
+                                    <button type="button" class="link" (click)="returnSummary.click()">
+                                        <svg ibmIcon="chevron--down" class="iconStyle" size="16">
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!--CSS Accordion Return-->
+
+                            <div class="tab-content accordian-header">
+                                <div class="tabs">
+                                    <div  class="cds--col cds--no-gutter ">
+                                        <div class="subTotalToTaxes">
+
+                                            <!--SubTotal-->
+                                            <div  class="display-flex justify-content--space-between">
+                                                <div [attr.tid]="componentId + 'sub_total'">
+                                                    <span class="color-text-02">
+                                                        {{'PAYMENT_SUMMARY.SIDE_PANEL.LABEL_SUBTOTAL' | translate }}
+                                                    </span>
+                                                    <span>
+                                                        {{ '(' + returnLinesCount + ' ' }}
+                                                        {{ (returnLinesCount === 1 ? 'PAYMENT_SUMMARY.SIDE_PANEL.LABEL_ITEM' : 'PAYMENT_SUMMARY.SIDE_PANEL.LABEL_ITEMS') | translate }}
+                                                        {{ ')' }}
+                                                    </span>
+                                                </div>
+                                                <div class="priceFont" [attr.tid]="componentId + 'sub_total_val'">
+                                                    {{ overallTotals.lineSubTotal | bucCommonCurrencyFmt: currencyCode: 'symbol'}}
+                                                </div>
+                                            </div>
+                
+                                            <!--CSS Accordion starts -->
+                                    
+                                            <div class="row">
+                                                <div class="col">
+                                                    <div class="tabs">
+                                    
+                                                        <!--CSS Accordion Adjustments-->
+                                                        <div class="row" class="tab">
+                                                        <input class="child" type="checkbox" id="adj1">
+                                                            <div class="d--flex-jc-space-between margin-top--0_5rem">
+                                                                <div class="display-flex align-items-center" [attr.tid]="componentId + 'adjustments'">
+                                                                    <label class="tab-label" for="adj1" #adj1>
+                                                                        <span class="preserve-whitespace">{{ (data.pricingSummaryDetails.headerAdjustmentList?.length === 1 ?
+                                                                            'PAYMENT_SUMMARY.SIDE_PANEL.LABEL_ADJUSTMENT' :
+                                                                            'PAYMENT_SUMMARY.SIDE_PANEL.LABEL_ADJUSTMENTS') | translate }}</span>
+                                                                        <span *ngIf="data.pricingSummaryDetails.headerAdjustmentList?.length">
+                                                                        {{ ' (' + data.pricingSummaryDetails.headerAdjustmentList?.length + ')' }}
+                                                                        </span>
+                                                                    </label>
+                                                                    <button  *ngIf="data.pricingSummaryDetails.headerAdjustmentList?.length" type="button" class="link" (click)="adj1.click()">
+                                                                        <svg ibmIcon="chevron--down" class="iconStyle" size="16">
+                                                                        </svg>
+                                                                    </button>
+                                        
+                                                                </div>
+                                    
+                                                                <div class="accordion-header-amount priceFont" [attr.tid]="componentId + 'adjustments_val'">
+                                                                    <span >
+                                                                        {{ data.headerAmount| bucCommonCurrencyFmt: currencyCode: 'symbol' }}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                    
+                                                            <div class="tab-content">
+                                                                <div  class="cds--col cds--no-gutter">
+                                                                    <ng-container *ngIf="data.pricingSummaryDetails.headerAdjustmentList; else empty">
+                                                                        <div *ngFor="let item of data.pricingSummaryDetails.headerAdjustmentList;  let i = index;"
+                                                                            class="cds--row">
+                                    
+                                                                            <div class="cds--col-lg-10 cds--col-md-4 cds--col-sm-2 cds--label font-size--100 padding-left--1rem" [attr.tid]="componentId + 'hCName'">
+                                                                                {{ item.chargeNameDetails | translate }}
+                                                                                <cds-tooltip *ngIf="item.isOrderlineAdjustments" class="tooltip-pos" [description]="orderlineAdjustmentTooltipTemplate" trigger="hover" [align]="'top'" [autoAlign]="'true'">
+                                                                                    <svg ibmIcon="information" size="16"></svg>
+                                                                                </cds-tooltip>
+                                                                                <ng-template #orderlineAdjustmentTooltipTemplate let-tooltip="$implicit">
+                                                                                    <div class="item-description-tooltip-template">
+                                                                                        {{'PAYMENT_SUMMARY.SIDE_PANEL.LABEL_RETURNLINE_ADJUSTMENTS_TOOLTIP' | translate}}
+                                                                                    </div>
+                                                                                </ng-template>
+                                                                            </div>
+                                                                            <div [attr.tid]="componentId + 'hCAmount'"
+                                                                                class="cds--col-lg-6 cds--col-md-4 cds--col-sm-1 pricing-alignment">
+                                                                                <span class="cds--label font-size--100 priceFont itemPriceFont">
+                                                                                    {{ item.isDiscount && item.chargeAmount > 0 ? '-' : '' }}{{ item.chargeAmount | bucCommonCurrencyFmt: currencyCode: 'symbol' }}
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </ng-container>
+                                                                    <ng-template #empty [attr.tid]="componentId + '-empty-amount'"> - </ng-template>
+                                                                </div>
+                                    
+                                                            </div>
+                                                        </div>
+                                                            <!--CSS Accordion Promotions-->
+                                                            <div class="row" class="tab">
+                                                                <input type="checkbox" id="prom1">
+                                                                <div class="d--flex-jc-space-between margin-top--0_5rem">
+                                                                    <div class="display-flex align-items-center" [attr.tid]="componentId + 'promotions'">
+                                                                        <label class="tab-label" for="prom1" #prom1>
+                                                                            <span class="preserve-whitespace">{{  (data.pricingSummaryDetails.promotionList.length === 1 ?
+                                                                                'PAYMENT_SUMMARY.SIDE_PANEL.LABEL_PROMOTION' :
+                                                                                'PAYMENT_SUMMARY.SIDE_PANEL.LABEL_PROMOTIONS') | translate
+                                                                            }}</span>
+                                                                            <span *ngIf="data.pricingSummaryDetails.promotionList.length"> {{ '('+data.pricingSummaryDetails.promotionList.length+')' }} </span>
+                                                                        </label>
+                                                                        <button *ngIf="data.pricingSummaryDetails.promotionList.length" type="button" class="link" (click)="prom1.click()">
+                                                                        <svg ibmIcon="chevron--down" class="iconStyle" size="16">
+                                                                        </svg>
+                                                                        </button>
+                                    
+                                                                    </div>
+                                    
+                                                                    <div class="accordion-header-amount priceFont" [attr.tid]="componentId + 'promotionValue'" >
+                                                                        <span >
+                                                                            {{ (!data.promotionAmountTotal ? '0.00': data.promotionAmountTotal) | bucCommonCurrencyFmt: currencyCode: 'symbol' }}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                    
+                                                                <div class="tab-content">
+                                                                    <div  class="cds--col cds--no-gutter">
+                                                                        <ng-container *ngIf="data.pricingSummaryDetails.promotionList.length; else empty">
+                                                                            <ng-container *ngFor="let item of data.pricingSummaryDetails.promotionList;  let i = index;">
+                                                                                <div  class="cds--row">
+                                                                                    <div class="cds--col-lg-10 cds--col-md-4 cds--col-sm-2 cds--label font-size--100 padding-left--1rem" [attr.tid]="componentId + 'awardId'">
+                                                                                        {{ item.chargeNameDetails | translate }}
+                                                                                    </div>
+                                                                                    <div
+                                                                                        class="cds--col-lg-6 cds--col-md-4 cds--col-sm-1 pricing-alignment" [attr.tid]="componentId + 'awardAmount'">
+                                                                                        <span class="cds--label font-size--100 priceFont itemPriceFont">
+                                                                                            {{ item.isDiscount && item.chargeAmount > 0 ? '-' : '' }}
+                                                                                            {{ item.chargeAmount | bucCommonCurrencyFmt: currencyCode: 'symbol' }}
+                                                                                        </span>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </ng-container>
+                                                                        </ng-container>
+                                                                        <ng-template #empty> - </ng-template>
+                                                                    </div>
+                                                                </div>
+                                    
+                                                            </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--CSS Accordion ends -->
+                                    
+                                            <!--Shipping-->
+                                    
+                                            <div class="row" class="tab">
+                                                <input type="checkbox" id="shipping1">
+                                                        <div class="d--flex-jc-space-between margin-top--0_5rem">
+                                                            <div class="display-flex align-items-center" [attr.tid]="componentId + 'shipping1'">
+                                                                <label class="tab-label" for="shipping1" #shipping1>
+                                                                    <span class="preserve-whitespace">{{ 'PAYMENT_SUMMARY.SIDE_PANEL.LABEL_SHIPPING' | translate }}</span>
+                                                                    <span *ngIf="data.pricingSummaryDetails.shippingChargesList?.length">
+                                                                        {{ '(' + data.pricingSummaryDetails.shippingChargesList.length + ')' }}
+                                                                    </span>
+                                                                </label>
+                                                                <button *ngIf="data.pricingSummaryDetails.shippingChargesList?.length" type="button" class="link" (click)="shipping1.click()">
+                                                                    <svg ibmIcon="chevron--down" class="iconStyle" size="16">
+                                                                    </svg>
+                                                                </button>
+                                                            </div>
+                                                            <div class="priceFont" [attr.tid]="componentId + 'sAmount'">
+                                                                {{ overallTotals.grandShippingTotal === '0.00' ?
+                                                                    ('PAYMENT_SUMMARY.SIDE_PANEL.LABEL_FREE' | translate) :
+                                                                    overallTotals.grandShippingTotal | bucCommonCurrencyFmt: currencyCode: 'symbol'
+                                                                }}
+                                                            </div>
+                                                        </div>
+                                    
+                                                        <div class="tab-content">
+                                                            <div  class="cds--col cds--no-gutter">
+                                                                <ng-container *ngIf="data.pricingSummaryDetails.shippingChargesList?.length; else empty">
+                                                                    <ng-container *ngFor="let charge of data.pricingSummaryDetails.shippingChargesList;  let i = index;">
+                                                                        <div  class="cds--row">
+                                                                            <div class="cds--col-lg-10 cds--col-md-4 cds--col-sm-2 cds--label font-size--100 padding-left--1rem" [attr.tid]="componentId + 'sCName'">
+                                                                                {{ charge.chargeNameDetails | translate }}
+                                                                            </div>
+                                                                            <div
+                                                                                class="cds--col-lg-6 cds--col-md-4 cds--col-sm-1 pricing-alignment" [attr.tid]="componentId + 'sCAmount'">
+                                                                                <span class="cds--label font-size--100 priceFont itemPriceFont">
+                                                                                    {{ charge.isDiscount && charge.chargeAmount > 0 ? '-' : '' }}
+                                                                                    {{ charge.chargeAmount | bucCommonCurrencyFmt: currencyCode: 'symbol' }}
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </ng-container>
+                                                                </ng-container>
+                                                                <ng-template #empty> - </ng-template>
+                                                            </div>
+
+                                                        </div>
+                                    
+                                            </div>
+                                    
+                                            <!--Taxes-->
+                                    
+                                            <div class="row" class="tab">
+                                                <input type="checkbox" id="tax1">
+                                                    <div class="d--flex-jc-space-between margin-top--0_5rem">
+                                                        <div class="display-flex align-items-center" [attr.tid]="componentId + 'tax1'">
+                                                            <label class="tab-label" for="tax1" #tax1>
+                                                                <span class="preserve-whitespace">{{'PAYMENT_SUMMARY.SIDE_PANEL.LABEL_TAXES' | translate }}</span>
+                                                                <span *ngIf="headerTaxes.length > 0">
+                                                                    {{ '(' + headerTaxes.length + ')' }}
+                                                                </span>
+                                                            </label>
+                                                            <button *ngIf="headerTaxes.length" type="button" class="link" (click)="tax1.click()">
+                                                                <svg ibmIcon="chevron--down" class="iconStyle" size="16">
+                                                                </svg>
+                                                            </button>
+                                                        </div>
+                                                        <div class="priceFont" [attr.tid]="componentId + 'taxAmount'">
+                                                            {{ overallTotals.grandTax | bucCommonCurrencyFmt: currencyCode: 'symbol'}}
+                                                        </div>
+                                                    </div>
+                                    
+                                                    <div class="tab-content">
+                                                        <div  class="cds--col cds--no-gutter">
+                                                            <ng-container *ngIf="headerTaxes.length > 0; else empty">
+                                                                <ng-container *ngFor="let charge of headerTaxes;  let i = index;">
+                                                                    <div  class="cds--row">
+                                                                        <div class="cds--col-lg-10 cds--col-md-4 cds--col-sm-2 cds--label font-size--100 padding-left--1rem" [attr.tid]="componentId + 'tName'">
+                                                                            {{ charge.taxNameDescription ? charge.taxNameDescription : charge.taxName }}
+                                                                        </div>
+                                                                        <div
+                                                                            class="cds--col-lg-6 cds--col-md-4 cds--col-sm-1 pricing-alignment" [attr.tid]="componentId + 'tTax'">
+                                                                            <span class="cds--label font-size--100 priceFont itemPriceFont">
+                                                                                {{ charge.isDiscount && charge.tax > 0 ? '-' : ''}}
+                                                                                {{ charge.tax | bucCommonCurrencyFmt: currencyCode: 'symbol' }}
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </ng-container>
+                                                            </ng-container>
+                                                            <ng-template #empty> - </ng-template>
+                                                        </div>
+                                                    </div>
+                                            </div>
+                                    
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template #returnExchangeAccordian let-data="data" >
+        <div class="margin-top--1rem">
+            <div class="row">
+                <div class="col">
+                    <div class="tabs">
+                        <div class="tab">
+                            <input type="checkbox" id="exchangeSummary">
+                            <div class="d--flex-jc-space-between">
+                                <div class="display-flex align-items-center return-type" [attr.tid]="componentId + 'adjustments'">
+                                    <label class="tab-label" for="exchangeSummary" #exchangeSummary>
+                                        <span class="preserve-whitespace">{{ 
+                                            'PAYMENT_SUMMARY.SIDE_PANEL.LABEL_EXCHANGE' | translate }}</span>
+                                    </label>
+                                    <button type="button" class="link" (click)="exchangeSummary.click()">
+                                        <svg ibmIcon="chevron--down" class="iconStyle" size="16">
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!--CSS Accordion Return-->
+
+                            <div class="tab-content accordian-header">
+                                <div class="tabs">
+                                    <div  class="cds--col cds--no-gutter ">
+                                        <div class="subTotalToTaxes">
+
+                                            <!--SubTotal-->
+                                            <div  class="display-flex justify-content--space-between">
+                                                <div [attr.tid]="componentId + 'sub_total'">
+                                                    <span class="color-text-02">
+                                                        {{'PAYMENT_SUMMARY.SIDE_PANEL.LABEL_SUBTOTAL' | translate }}
+                                                    </span>
+                                                    <span>
+                                                        {{ '(' + data.totalExchangeLines + ' ' }}
+                                                        {{ (data.totalExchangeLines === 1 ? 'PAYMENT_SUMMARY.SIDE_PANEL.LABEL_ITEM' : 'PAYMENT_SUMMARY.SIDE_PANEL.LABEL_ITEMS') | translate }}
+                                                        {{ ')' }}
+                                                    </span>
+                                                </div>
+                                                <div class="priceFont" [attr.tid]="componentId + 'sub_total_val'">
+                                                    {{ overallTotalsExchange.lineSubTotal | bucCommonCurrencyFmt: currencyCode: 'symbol'}}
+                                                </div>
+                                            </div>
+                
+                                            <!--CSS Accordion starts -->
+                                    
+                                            <div class="row">
+                                                <div class="col">
+                                                    <div class="tabs">
+                                    
+                                                        <!--CSS Accordion Adjustments-->
+                                                        <div class="row" class="tab">
+                                                        <input class="child" type="checkbox" id="adj2">
+                                                            <div class="d--flex-jc-space-between margin-top--0_5rem">
+                                                                <div class="display-flex align-items-center" [attr.tid]="componentId + 'adjustments'">
+                                                                    <label class="tab-label" for="adj2" #adj2>
+                                                                        <span class="preserve-whitespace">{{ (data.pricingSummaryDetails.headerAdjustmentList?.length === 1 ?
+                                                                            'PAYMENT_SUMMARY.SIDE_PANEL.LABEL_ADJUSTMENT' :
+                                                                            'PAYMENT_SUMMARY.SIDE_PANEL.LABEL_ADJUSTMENTS') | translate }}</span>
+                                                                        <span *ngIf="data.pricingSummaryDetails.headerAdjustmentList?.length">
+                                                                        {{ ' (' + data.pricingSummaryDetails.headerAdjustmentList?.length + ')' }}
+                                                                        </span>
+                                                                    </label>
+                                                                    <button  *ngIf="data.pricingSummaryDetails.headerAdjustmentList?.length" type="button" class="link" (click)="adj2.click()">
+                                                                        <svg ibmIcon="chevron--down" class="iconStyle" size="16">
+                                                                        </svg>
+                                                                    </button>
+                                        
+                                                                </div>
+                                    
+                                                                <div class="accordion-header-amount priceFont" [attr.tid]="componentId + 'adjustments_val'">
+                                                                    <span >
+                                                                        {{ data.headerAmount| bucCommonCurrencyFmt: currencyCode: 'symbol' }}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                    
+                                                            <div class="tab-content">
+                                                                <div  class="cds--col cds--no-gutter">
+                                                                    <ng-container *ngIf="data.pricingSummaryDetails.headerAdjustmentList; else empty">
+                                                                        <div *ngFor="let item of data.pricingSummaryDetails.headerAdjustmentList;  let i = index;"
+                                                                            class="cds--row">
+                                    
+                                                                            <div class="cds--col-lg-10 cds--col-md-4 cds--col-sm-2 cds--label font-size--100 padding-left--1rem" [attr.tid]="componentId + 'hCName'">
+                                                                                {{ item.chargeNameDetails | translate }}
+                                                                                <cds-tooltip *ngIf="item.isOrderlineAdjustments" class="tooltip-pos" [description]="orderlineAdjustmentTooltipTemplate" trigger="hover" [align]="'top'" [autoAlign]="'true'">
+                                                                                    <svg ibmIcon="information" size="16"></svg>
+                                                                                </cds-tooltip>
+                                                                                <ng-template #orderlineAdjustmentTooltipTemplate let-tooltip="$implicit">
+                                                                                    <div class="item-description-tooltip-template">
+                                                                                        {{'PAYMENT_SUMMARY.SIDE_PANEL.LABEL_RETURNLINE_ADJUSTMENTS_TOOLTIP' | translate}}
+                                                                                    </div>
+                                                                                </ng-template>
+                                                                            </div>
+                                                                            <div [attr.tid]="componentId + 'hCAmount'"
+                                                                                class="cds--col-lg-6 cds--col-md-4 cds--col-sm-1 pricing-alignment">
+                                                                                <span class="cds--label font-size--100 priceFont itemPriceFont">
+                                                                                    {{ item.isDiscount && item.chargeAmount > 0 ? '-' : '' }}{{ item.chargeAmount | bucCommonCurrencyFmt: currencyCode: 'symbol' }}
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </ng-container>
+                                                                    <ng-template #empty [attr.tid]="componentId + '-empty-amount'"> - </ng-template>
+                                                                </div>
+                                    
+                                                            </div>
+                                                        </div>
+                                                            <!--CSS Accordion Promotions-->
+                                                            <div class="row" class="tab">
+                                                                <input type="checkbox" id="prom2">
+                                                                <div class="d--flex-jc-space-between margin-top--0_5rem">
+                                                                    <div class="display-flex align-items-center" [attr.tid]="componentId + 'promotions'">
+                                                                        <label class="tab-label" for="prom2" #prom2>
+                                                                            <span class="preserve-whitespace">{{  (data.pricingSummaryDetails.promotionList.length === 1 ?
+                                                                                'PAYMENT_SUMMARY.SIDE_PANEL.LABEL_PROMOTION' :
+                                                                                'PAYMENT_SUMMARY.SIDE_PANEL.LABEL_PROMOTIONS') | translate
+                                                                            }}</span>
+                                                                            <span *ngIf="data.pricingSummaryDetails.promotionList.length"> {{ '('+data.pricingSummaryDetails.promotionList.length+')' }} </span>
+                                                                        </label>
+                                                                        <button *ngIf="data.pricingSummaryDetails.promotionList.length" type="button" class="link" (click)="prom2.click()">
+                                                                        <svg ibmIcon="chevron--down" class="iconStyle" size="16">
+                                                                        </svg>
+                                                                        </button>
+                                    
+                                                                    </div>
+                                    
+                                                                    <div class="accordion-header-amount priceFont" [attr.tid]="componentId + 'promotionValue'" >
+                                                                        <span >
+                                                                            {{ (!data.promotionAmountTotal ? '0.00': data.promotionAmountTotal) | bucCommonCurrencyFmt: currencyCode: 'symbol' }}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                    
+                                                                <div class="tab-content">
+                                                                    <div  class="cds--col cds--no-gutter">
+                                                                        <ng-container *ngIf="data.pricingSummaryDetails.promotionList.length; else empty">
+                                                                            <ng-container *ngFor="let item of data.pricingSummaryDetails.promotionList;  let i = index;">
+                                                                                <div  class="cds--row">
+                                                                                    <div class="cds--col-lg-10 cds--col-md-4 cds--col-sm-2 cds--label font-size--100 padding-left--1rem" [attr.tid]="componentId + 'awardId'">
+                                                                                        {{ item.chargeNameDetails | translate }}
+                                                                                    </div>
+                                                                                    <div
+                                                                                        class="cds--col-lg-6 cds--col-md-4 cds--col-sm-1 pricing-alignment" [attr.tid]="componentId + 'awardAmount'">
+                                                                                        <span class="cds--label font-size--100 priceFont itemPriceFont">
+                                                                                            {{ item.isDiscount && item.chargeAmount > 0 ? '-' : '' }}
+                                                                                            {{ item.chargeAmount | bucCommonCurrencyFmt: currencyCode: 'symbol' }}
+                                                                                        </span>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </ng-container>
+                                                                        </ng-container>
+                                                                        <ng-template #empty> - </ng-template>
+                                                                    </div>
+                                                                </div>
+                                    
+                                                            </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--CSS Accordion ends -->
+                                    
+                                            <!--Shipping-->
+                                    
+                                            <div class="row" class="tab">
+                                                <input type="checkbox" id="shipping2">
+                                                        <div class="d--flex-jc-space-between margin-top--0_5rem">
+                                                            <div class="display-flex align-items-center" [attr.tid]="componentId + 'shipping1'">
+                                                                <label class="tab-label" for="shipping2" #shipping2>
+                                                                    <span class="preserve-whitespace">{{ 'PAYMENT_SUMMARY.SIDE_PANEL.LABEL_SHIPPING' | translate }}</span>
+                                                                    <span *ngIf="data.pricingSummaryDetails.shippingChargesList?.length">
+                                                                        {{ '(' + data.pricingSummaryDetails.shippingChargesList.length + ')' }}
+                                                                    </span>
+                                                                </label>
+                                                                <button *ngIf="data.pricingSummaryDetails.shippingChargesList?.length" type="button" class="link" (click)="shipping2.click()">
+                                                                    <svg ibmIcon="chevron--down" class="iconStyle" size="16">
+                                                                    </svg>
+                                                                </button>
+                                                            </div>
+                                                            <div class="priceFont" [attr.tid]="componentId + 'sAmount'">
+                                                                {{ overallTotalsExchange.grandShippingTotal === '0.00' ?
+                                                                    ('PAYMENT_SUMMARY.SIDE_PANEL.LABEL_FREE' | translate) :
+                                                                    overallTotalsExchange.grandShippingTotal | bucCommonCurrencyFmt: currencyCode: 'symbol'
+                                                                }}
+                                                            </div>
+                                                        </div>
+                                    
+                                                        <div class="tab-content">
+                                                            <div  class="cds--col cds--no-gutter">
+                                                                <ng-container *ngIf="data.pricingSummaryDetails.shippingChargesList?.length; else empty">
+                                                                    <ng-container *ngFor="let charge of data.pricingSummaryDetails.shippingChargesList;  let i = index;">
+                                                                        <div  class="cds--row">
+                                                                            <div class="cds--col-lg-10 cds--col-md-4 cds--col-sm-2 cds--label font-size--100 padding-left--1rem" [attr.tid]="componentId + 'sCName'">
+                                                                                {{ charge.chargeNameDetails | translate }}
+                                                                            </div>
+                                                                            <div
+                                                                                class="cds--col-lg-6 cds--col-md-4 cds--col-sm-1 pricing-alignment" [attr.tid]="componentId + 'sCAmount'">
+                                                                                <span class="cds--label font-size--100 priceFont itemPriceFont">
+                                                                                    {{ charge.isDiscount && charge.chargeAmount > 0 ? '-' : '' }}
+                                                                                    {{ charge.chargeAmount | bucCommonCurrencyFmt: currencyCode: 'symbol' }}
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </ng-container>
+                                                                </ng-container>
+                                                                <ng-template #empty> - </ng-template>
+                                                            </div>
+
+                                                        </div>
+                                    
+                                            </div>
+                                    
+                                            <!--Taxes-->
+                                    
+                                            <div class="row" class="tab">
+                                                <input type="checkbox" id="tax2">
+                                                    <div class="d--flex-jc-space-between margin-top--0_5rem">
+                                                        <div class="display-flex align-items-center" [attr.tid]="componentId + 'tax1'">
+                                                            <label class="tab-label" for="tax2" #tax2>
+                                                                <span class="preserve-whitespace">{{'PAYMENT_SUMMARY.SIDE_PANEL.LABEL_TAXES' | translate }}</span>
+                                                                <span *ngIf="data.pricingSummaryDetails.headerTaxes?.length > 0">
+                                                                    {{ '(' + data.pricingSummaryDetails.headerTaxes.length + ')' }}
+                                                                </span>
+                                                            </label>
+                                                            <button *ngIf="data.pricingSummaryDetails.headerTaxes?.length" type="button" class="link" (click)="tax2.click()">
+                                                                <svg ibmIcon="chevron--down" class="iconStyle" size="16">
+                                                                </svg>
+                                                            </button>
+                                                        </div>
+                                                        <div class="priceFont" [attr.tid]="componentId + 'taxAmount'">
+                                                            {{overallTotalsExchange.grandTax | bucCommonCurrencyFmt: currencyCode: 'symbol'}}
+                                                        </div>
+                                                    </div>
+                                    
+                                                    <div class="tab-content">
+                                                        <div  class="cds--col cds--no-gutter">
+                                                            <ng-container *ngIf="data.pricingSummaryDetails.headerTaxes?.length > 0; else empty">
+                                                                <ng-container *ngFor="let charge of data.pricingSummaryDetails.headerTaxes;  let i = index;">
+                                                                    <div  class="cds--row">
+                                                                        <div class="cds--col-lg-10 cds--col-md-4 cds--col-sm-2 cds--label font-size--100 padding-left--1rem" [attr.tid]="componentId + 'tName'">
+                                                                            {{ charge.taxNameDescription ? charge.taxNameDescription : charge.taxName }}
+                                                                        </div>
+                                                                        <div
+                                                                            class="cds--col-lg-6 cds--col-md-4 cds--col-sm-1 pricing-alignment" [attr.tid]="componentId + 'tTax'">
+                                                                            <span class="cds--label font-size--100 priceFont itemPriceFont">
+                                                                                {{ charge.isDiscount && charge.tax > 0 ? '-' : ''}}
+                                                                                {{ charge.tax | bucCommonCurrencyFmt: currencyCode: 'symbol' }}
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </ng-container>
+                                                            </ng-container>
+                                                            <ng-template #empty> - </ng-template>
+                                                        </div>
+                                                    </div>
+                                            </div>
+                                    
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+
+            <!-- <hr> -->
+
+            <!--Total-->
+            <div class="margin-top--0_5rem total-amount">
+                <div class="display-flex justify-content--space-between" [ngClass]="{'font-weight--600':  !showRefundDetails}">
+                    <div class="color-text-02" [attr.tid]="componentId + 'total'">
+                        {{ 'PAYMENT_SUMMARY.SIDE_PANEL.LABEL_TOTAL' | translate }}
+                    </div>
+                    <div >
+                        <span class="priceFont" [attr.tid]="componentId + 'GrandTotal'">
+                            {{ overallTotals.grandTotal | bucCommonCurrencyFmt: currencyCode: 'symbol' }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <!--Total Exchange-->
+            <div class="exchange-total-amount" *ngIf="returnDetails?.exchangeOrder?.orderHeaderKey && overallTotalsExchange">
+                <div class="display-flex justify-content--space-between" [ngClass]="{'font-weight--600':  !showRefundDetails}">
+                    <div class="color-text-02" [attr.tid]="componentId + 'total'">
+                        {{ 'PAYMENT_SUMMARY.SIDE_PANEL.LABEL_EXCHANGE_TOTAL' | translate }}
+                    </div>
+                    <div >
+                        <span class="priceFont" [attr.tid]="componentId + 'GrandTotalExchange'">
+                            {{ overallTotalsExchange.grandTotal | bucCommonCurrencyFmt: currencyCode: 'symbol' }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <ng-container *ngIf="showRefundDetails">
+                <!--Total Planned refund amount-->
+                <div class="margin-top--1rem">
+                    <div class="display-flex justify-content--space-between font-weight--600">
+                        <div class="color-text-02" [attr.tid]="componentId + 'total'">
+                            {{ 'PAYMENT_SUMMARY.SIDE_PANEL.LABEL_TOTAL_REFUND_AMOUNT' | translate }}
+                        </div>
+                        <div>
+                            <span class="priceFont" [attr.tid]="componentId + 'GrandTotal'">
+                                {{ totalPlannedRefundAmount | bucCommonCurrencyFmt: currencyCode: 'symbol' }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            
+                <!--Total refunded amount-->
+                <div class="margin-top--1rem amount">
+                    <div class="display-flex justify-content--space-between">
+                        <div class="color-text-02" [attr.tid]="componentId + 'total'">
+                            {{ 'PAYMENT_SUMMARY.SIDE_PANEL.LABEL_TOTAL_AMOUNT_REFUNDED' | translate }}
+                        </div>
+                        <div>
+                            <span class="priceFont" [attr.tid]="componentId + 'GrandTotal'">
+                                {{ totalAmountRefunded | bucCommonCurrencyFmt: currencyCode: 'symbol' }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="margin-top--1rem amount">
+                    <div class="display-flex justify-content--space-between font-weight--600 ">
+                        <div class="font-size--110 color-text-02" [attr.tid]="componentId + 'total'">
+                            {{ 'PAYMENT_SUMMARY.SIDE_PANEL.LABEL_REMAINING_REFUND' | translate }}
+                        </div>
+                        <div>
+                            <span class="font-size--110 priceFont" [attr.tid]="componentId + 'GrandTotal'">
+                                {{ remainingRefundAmount | bucCommonCurrencyFmt: currencyCode: 'symbol' }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+
+            <hr>
+            <ng-content></ng-content>
+            
+            <!--Adjust button-->
+            <div class="margin-top--1rem" *ngIf="showAdjustPricing">
+                <div class="cds--row promoCoupn" *ngIf="exchangeOrder && returnDetails?.isDraft" [attr.tid]="componentId + 'promotion-box'">
+                    <call-center-promotion-box *ngIf="exchangeOrder?.totalNumberOfLines > 0" [appliedCouponPromo]="appliedCouponPromos" [orderHeaderKey]="returnDetails.exchangeOrder.orderHeaderKey"  [recordPendingChangesMode]="false" [isModal]="false"
+                        (callGetOrderDetails)="refreshAfterPromotionApplied()" [isDraftOrder] ="returnDetails.isDraft" [showAdjustPricingWarning]="showAdjustPricingWarning"
+                     [returnOrderHeaderKey]="returnDetails.id">
+                    </call-center-promotion-box>
+                </div>
+    
+                <div [attr.tid]="componentId + 'adjustButton'">
+                    <button type="button" class="link margin-left--0" *ngIf="isCancelled || returnDetails.isHistory" [disabled]="true" [ngClass]="{'link-disabled': true}">
+                        <cds-tooltip class="cds--btn--icon-only padding--0" [description]="viewPricingTooltipTemplate" trigger="hover"
+                            [align]="'top'" [templateContext]="'ADJUST_PRICING_MODAL.CANNOT_BE_ADJUSTED_CURRENT_STATUS' | translate" [autoAlign]="'true'">
+                            {{'PAYMENT_SUMMARY.SIDE_PANEL.BUTTON_ADJUST_RETURN_LABEL' | translate}}</cds-tooltip>
+                    </button>
+                    <ng-container *ngIf="!isCancelled && !returnDetails.isHistory">
+                        <button type="button" class="link margin-left--0" (click)="openAdjustPricingModal()"
+                            *ngIf="isAdjustPricingResourceAllowed">
+                            {{ 'PAYMENT_SUMMARY.SIDE_PANEL.BUTTON_ADJUST_RETURN_LABEL' | translate}}
+                        </button>
+                        <button type="button" class="link margin-left--0" (click)="openAdjustPricingModal()"
+                            *ngIf="!isAdjustPricingResourceAllowed && returnDetails?.rawData.HeaderCharges?.HeaderCharge?.length > 0">
+                            {{ 'PAYMENT_SUMMARY.SIDE_PANEL.BUTTON_VIEW_RETURN_LABEL' | translate}}
+                        </button>
+                        <button type="button" class="link margin-left--0" (click)="openAdjustPricingModal()"
+                            *ngIf="!isAdjustPricingResourceAllowed && !returnDetails?.rawData.HeaderCharges?.HeaderCharge"
+                            [disabled]="!returnDetails?.rawData.HeaderCharges?.HeaderCharge"
+                            [ngClass]="{'link-disabled' : !returnDetails?.rawData.HeaderCharges?.HeaderCharge}">
+                            <cds-tooltip class="cds--btn--icon-only padding--0" [description]="viewPricingTooltipTemplate" trigger="hover"
+                                [align]="'top'" [templateContext]="'ADJUST_PRICING_MODAL.NO_ADJUSTMENTS_RETURN_TOOLTIP' | translate" [autoAlign]="'true'">
+                                {{'PAYMENT_SUMMARY.SIDE_PANEL.BUTTON_VIEW_RETURN_LABEL' | translate}}</cds-tooltip>
+                        </button>
+                    </ng-container>
+                </div>
+                <div [attr.tid]="componentId + 'adjustExchangeButton'" *ngIf="exchangeOrder?.totalNumberOfLines > 0 && returnDetails?.isDraft"
+                    class="margin-top--1rem">
+                    <button type="button" class="link margin-left--0" (click)="openAdjustExchangePricingModal()"
+                        *ngIf="isAdjustPricingExchangeResourceAllowed">
+                        {{ 'PAYMENT_SUMMARY.SIDE_PANEL.BUTTON_ADJUST_EXCHANGE_LABEL' | translate}}
+                    </button>
+                    <button type="button" class="link margin-left--0" (click)="openAdjustExchangePricingModal()"
+                        *ngIf="!isAdjustPricingExchangeResourceAllowed && exchangeOrder?.rawData.HeaderCharges?.HeaderCharge?.length > 0">
+                        {{ 'PAYMENT_SUMMARY.SIDE_PANEL.BUTTON_VIEW_EXCHANGE_LABEL' | translate}}
+                    </button>
+                    <button type="button" class="link margin-left--0" (click)="openAdjustExchangePricingModal()"
+                        *ngIf="!isAdjustPricingExchangeResourceAllowed && !exchangeOrder?.rawData.HeaderCharges?.HeaderCharge"
+                        [disabled]="!exchangeOrder?.rawData.HeaderCharges?.HeaderCharge"
+                        [ngClass]="{'link-disabled' : !exchangeOrder?.rawData.HeaderCharges?.HeaderCharge}">
+                        <cds-tooltip class="cds--btn--icon-only padding--0" [description]="viewPricingTooltipTemplate" trigger="hover"
+                            [align]="'top'" [templateContext]="'ADJUST_PRICING_MODAL.NO_ADJUSTMENTS_EXCHANGE_TOOLTIP' | translate" [autoAlign]="'true'">
+                            {{'PAYMENT_SUMMARY.SIDE_PANEL.BUTTON_VIEW_EXCHANGE_LABEL' | translate}}</cds-tooltip>
+                    </button>
+                </div>
+            </div>
+
+</div>
+
+<ng-template bucExtension [componentName]="componentId" [placement]="'bottom'" [id]="EXTENSION.BOTTOM" [parent]="this">
+</ng-template>
+  
+<ng-template #viewPricingTooltipTemplate let-tooltip="$implicit">
+    <span> {{tooltip}} </span>
+</ng-template>

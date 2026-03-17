@@ -1,0 +1,52 @@
+{
+  "MANAGE_HOLDS": {
+    "LABEL_MANAGE_HOLDS": "Wyświetl lub rozwiąż blokady",
+    "LABEL_MANAGE_HOLDS_COUNT": "Rozstrzygnij wstrzymania z wierszy: {{count}}",
+    "LABEL_MANAGE_HOLDS_COUNTS": "Rozstrzygnij wstrzymania z wierszy: {{count}}",
+    "LABEL_LINE_NOTIFICATION_COUNT": "Wstrzymanie nie zostało zastosowane dla następującej liczby wybranych wierszy: {{ count }}.",
+    "LABEL_LINE_NOTIFICATION_COUNTS": "Wstrzymanie nie zostało zastosowane dla następującej liczby wybranych wierszy: {{ count }}.",
+    "LABEL_BACK_TO_RETURN_SUMMARY": "Powrót do podsumowania zwrotu",
+    "TOOLTIP_MSG_RESOLVE_HOLDS": "Żadne wstrzymania nie zostały jeszcze zastosowane."
+  },
+  "ACTIVE_HOLDS_TABLE": {
+    "LABEL_ACTIVE_HOLDS": "Aktywne wstrzymania",
+    "LABEL_OPEN_ALERTS": "Otwarte alerty",
+    "LABEL_HEADER_LINE": "Wiersz",
+    "LABEL_HEADER_ITEM": "Zwrot lub przedmiot",
+    "LABEL_HEADER_HOLD_TYPE": "Typ wstrzymania",
+    "LABEL_HEADER_DATE": "Data",
+    "LABEL_HEADER_COMMENTS": "Komentarze",
+    "LABEL_RESOLVE": "Rozwiązywanie",
+    "LABEL_addHold": "Dodaj wstrzymanie",
+    "LABEL_NO_ACTIVE_HOLDS": "Brak aktywnych wstrzymań",
+    "LABEL_USER_PERMISSION": "Nie masz uprawnień do rozwiązania blokady.",
+    "LABEL_STATUS_MOD_PERMISSION": "Nie można zastosować wstrzymań dla elementu w jego bieżącym statusie."
+  },
+  "RESOLVED_HOLDS_TABLE": {
+    "LABEL_RESOLVED_HOLDS": "Rozwiązane wstrzymania",
+    "LABEL_HEADER_LINE": "Wiersz",
+    "LABEL_HEADER_ITEM": "Zwrot lub przedmiot",
+    "LABEL_HEADER_HOLD_TYPE": "Typ wstrzymania",
+    "LABEL_HEADER_DATE": "Data",
+    "LABEL_HEADER_COMMENTS": "Komentarze",
+    "LABEL_NO_RESOLVE_HOLDS": "Brak rozstrzygniętych wstrzymań"
+  },
+  "RESOLVE_HOLDS_MODAL": {
+    "LABEL_HEADER_RESOLVE_HOLDS": "Rozstrzygnij wstrzymania",
+    "LABEL_HEADER_RESOLVE_HOLDS_COUNT": "Rozstrzygnij wstrzymania z wierszy: {{count}}",
+    "LABEL_HEADER_RESOLVE_HOLDS_COUNTS": "Rozstrzygnij wstrzymania z wierszy: {{count}}",
+    "LABEL_HEADER_LINE": "Wiersz",
+    "LABEL_HEADER_ITEM": "Towar",
+    "LABEL_HEADER_HOLD_TYPE": "Typ wstrzymania",
+    "LABEL_HEADER_COMMENTS": "Komentarze (opcjonalne)",
+    "LABEL_CANCEL": "Anuluj",
+    "LABEL_RESOLVE": "Rozwiązywanie",
+    "LABEL_RESOLVE_HOLD_MSG_LINE": "Rozstrzygnięte. Wstrzymania usunięte z wierszy: {{count}}.",
+    "LABEL_RESOLVE_HOLD_MSG_LINES": "Rozstrzygnięte. Wstrzymania usunięte z wierszy: {{count}}.",
+    "LABEL_RESOLVE_HOLD_MSG_ORDER": "Rozstrzygnięte wstrzymania dla tego zamówienia: {{ count }} z {{ count1 }}.",
+    "RESOLVE_HOLD_FAILED_ERROR_MSG": "Żądanie rozstrzygnięcia wstrzymań się nie powiodło."
+  },
+  "SIDE_PANEL": {
+    "LABEL_NOTES": "Uwagi ({{count}})"
+  }
+}

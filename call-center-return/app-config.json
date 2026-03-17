@@ -1,0 +1,50 @@
+{
+    "name": "call-center-return",
+    "prodServerConfig": {
+        "hostName": "localhost",
+        "port": 7443
+    },
+    "devServerConfig": {
+        "hostName": "localhost",
+        "port": 6100,
+        "contextRoot": "/call-center-return"
+    },
+    "routes": {
+        "return-search": {
+            "devServerConfig": {
+                "port": 6101,
+                "contextRoot": "/return-search"
+            }
+        },
+        "return-search-result": {
+            "devServerConfig": {
+                "port": 6102,
+                "contextRoot": "/return-search-result"
+            }
+        },
+        "return-details": {
+            "devServerConfig": {
+                "port": 6103,
+                "contextRoot": "/return-details"
+            }
+        },
+        "create-return": {
+            "devServerConfig": {
+                "port": 6104,
+                "contextRoot": "/create-return"
+            }
+        },
+        "return-modification-checkout": {
+            "devServerConfig": {
+                "port": 6105,
+                "contextRoot": "/return-modification-checkout"
+            }
+        },
+        "manage-return-holds": {
+            "devServerConfig": {
+                "port": 6106,
+                "contextRoot": "/manage-return-holds"
+            }
+        }
+    }
+}

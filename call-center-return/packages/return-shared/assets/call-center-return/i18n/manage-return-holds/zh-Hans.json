@@ -1,0 +1,52 @@
+{
+  "MANAGE_HOLDS": {
+    "LABEL_MANAGE_HOLDS": "查看或解决搁置事项",
+    "LABEL_MANAGE_HOLDS_COUNT": "解析行中的暂挂：{{count}} 个",
+    "LABEL_MANAGE_HOLDS_COUNTS": "解析行中的暂挂：{{count}} 个",
+    "LABEL_LINE_NOTIFICATION_COUNT": "不会对 {{ count }} 个选定行应用暂挂。",
+    "LABEL_LINE_NOTIFICATION_COUNTS": "不会对 {{ count }} 个选定行应用暂挂。",
+    "LABEL_BACK_TO_RETURN_SUMMARY": "返回至\"退货汇总\"",
+    "TOOLTIP_MSG_RESOLVE_HOLDS": "目前还未进行暂挂。"
+  },
+  "ACTIVE_HOLDS_TABLE": {
+    "LABEL_ACTIVE_HOLDS": "活动保留",
+    "LABEL_OPEN_ALERTS": "打开的警报",
+    "LABEL_HEADER_LINE": "折线图",
+    "LABEL_HEADER_ITEM": "退货或商品",
+    "LABEL_HEADER_HOLD_TYPE": "暂挂类型",
+    "LABEL_HEADER_DATE": "日期",
+    "LABEL_HEADER_COMMENTS": "注释",
+    "LABEL_RESOLVE": "解析",
+    "LABEL_addHold": "添加暂挂",
+    "LABEL_NO_ACTIVE_HOLDS": "无活动暂挂",
+    "LABEL_USER_PERMISSION": "您没有权限解决搁置事项。",
+    "LABEL_STATUS_MOD_PERMISSION": "无法在商品的当前状态下应用暂挂。"
+  },
+  "RESOLVED_HOLDS_TABLE": {
+    "LABEL_RESOLVED_HOLDS": "已解决的暂挂",
+    "LABEL_HEADER_LINE": "折线图",
+    "LABEL_HEADER_ITEM": "退货或商品",
+    "LABEL_HEADER_HOLD_TYPE": "暂挂类型",
+    "LABEL_HEADER_DATE": "日期",
+    "LABEL_HEADER_COMMENTS": "注释",
+    "LABEL_NO_RESOLVE_HOLDS": "无已解决的保留"
+  },
+  "RESOLVE_HOLDS_MODAL": {
+    "LABEL_HEADER_RESOLVE_HOLDS": "解决保留",
+    "LABEL_HEADER_RESOLVE_HOLDS_COUNT": "解析行中的暂挂：{{count}} 个",
+    "LABEL_HEADER_RESOLVE_HOLDS_COUNTS": "解析行中的暂挂：{{count}} 个",
+    "LABEL_HEADER_LINE": "折线图",
+    "LABEL_HEADER_ITEM": "项目",
+    "LABEL_HEADER_HOLD_TYPE": "暂挂类型",
+    "LABEL_HEADER_COMMENTS": "注释（可选）",
+    "LABEL_CANCEL": "取消",
+    "LABEL_RESOLVE": "解析",
+    "LABEL_RESOLVE_HOLD_MSG_LINE": "已解决。 从行中移除的暂挂数：{{count}}。",
+    "LABEL_RESOLVE_HOLD_MSG_LINES": "已解决。 从行中移除的暂挂数：{{count}}。",
+    "LABEL_RESOLVE_HOLD_MSG_ORDER": "已解决此订单上的 {{ count }} 个暂挂，共 {{ count1 }} 个。",
+    "RESOLVE_HOLD_FAILED_ERROR_MSG": "用于解决暂挂的请求失败。"
+  },
+  "SIDE_PANEL": {
+    "LABEL_NOTES": "注释 ({{count}})"
+  }
+}

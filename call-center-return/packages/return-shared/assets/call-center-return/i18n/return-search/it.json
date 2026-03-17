@@ -1,0 +1,62 @@
+{
+  "RETURN_SEARCH": {
+    "GENERAL": {
+      "LABEL_SHOW_DRAFT_RETURNS": "Mostra bozza dei resi",
+      "LABEL_RETURN_LINE_STATUS": "Stato linea reso",
+      "LABEL_ADVANCED_SEARCH": "Ricerca reso avanzata",
+      "LABEL_RESULTS": "Risultati della ricerca reso",
+      "LABEL_ENTERPRISE": "Azienda",
+      "LABEL_RETURN_NUMBER": "Numero reso",
+      "LABEL_CUSTOMER_PO": "Numero ordine di acquisto del cliente",
+      "LABEL_ORIGINAL_ORDER_NUMBER": "Numero d'ordine originale",
+      "LABEL_RETURN_DATE_RANGE": "Intervallo date di reso",
+      "LABEL_HOLD_TYPE": "Tipo di attesa",
+      "LABEL_RETURN_STATUS": "Stato reso",
+      "LABEL_RETURN_AGE": "Età reso",
+      "LABEL_EMAIL": "Indirizzo email",
+      "LABEL_CUSTOMER_TELEPHONE": "Numero di telefono",
+      "LABEL_FIRST_NAME": "Nome",
+      "LABEL_LAST_NAME": "Cognome",
+      "LABEL_POSTAL_CODE": "Codice postale",
+      "LABEL_ORDER_NAME": "Nome reso",
+      "LABEL_CUSTOMER_CREDIT_CARD_NUMBER": "Ultime 4 cifre della carta di credito",
+      "LABEL_RETURN_SEARCH": "Ricerca",
+      "LABEL_CLEAR": "Cancella",
+      "LABEL_SEARCH_BY_RETURN_INFO": "Ricerca in base ai dettagli del reso",
+      "LABEL_SEARCH_BY_CUSTOMER_INFO": "Ricerca in base ai dettagli del cliente",
+      "LABEL_QUERY_is": "è",
+      "LABEL_QUERY_starts_with": "inizia con",
+      "LABEL_QUERY_contains": "contiene",
+      "MESSAGE_SEARCH_GRP_DIFF": "Uno o più campi specificati in questa ricerca salvata potrebbero non essere più raggruppati o potrebbero essere raggruppati in modo diverso. I risultati della ricerca potrebbero variare.",
+      "CONFIRM_RETURN": "Reso confermato",
+      "DRAFT_RETURN": "Reso in bozza",
+      "RECENT_RETURNS": "Resi recenti",
+      "ARCHIVED_RETURNS": "Resi archiviati",
+      "LABEL_SKU_NUMBER": "Numero SKU",
+      "TOO_MANY_RESULTS": "La ricerca ha dato {{total}} corrispondenze. La ricerca è configurata per restituire un massimo di {{max}} record.",
+      "ALL_ORDERS": "Tutti gli ordini",
+      "CONFIRMED_ORDERS": "Ordini confermati",
+      "DRAFT_ORDERS": "Ordini bozza"
+    },
+    "ORDER_LINE_STATUS_DROPDOWN": {
+      "LABEL_CREATED": "Creato",
+      "LABEL_RECEIVED": "Ricevuto",
+      "LABEL_RECEIPT_CLOSED": "Ricevuta chiusa",
+      "LABEL_CANCELLED": "Annullato",
+      "TOOLTIP_MESSAGE": "Verranno elencati gli ordini che contengono anche una riga con lo stato selezionato.",
+      "MESSAGE_WRONG_COMBOBOX_SEARCH_TEXT": "È richiesto un valore valido"
+    },
+    "RETURN_DATE_RANGE": {
+      "TOOLTIP_MESSAGE": "L'intervallo di date predefinito è {{duration}} {{durationUnit}}",
+      "LABEL_YEARS_PLURAL": "anni",
+      "LABEL_MONTHS_PLURAL": "mesi",
+      "LABEL_DAYS_PLURAL": "giorni",
+      "LABEL_YEARS_SINGULAR": "anno",
+      "LABEL_MONTHS_SINGULAR": "mese",
+      "LABEL_DAYS_SINGULAR": "giorno"
+    },
+    "RETURN_AGE": {
+      "HELPER_TEXT": "Rivedere l'intervallo di date di reso"
+    }
+  }
+}

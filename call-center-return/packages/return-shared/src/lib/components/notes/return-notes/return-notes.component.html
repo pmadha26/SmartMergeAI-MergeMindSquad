@@ -1,0 +1,76 @@
+<!--
+* IBM Confidential
+* OCO Source Materials
+* 5737-D18, 5725-D10
+*
+* (C) Copyright International Business Machines Corp. 2022, 2023
+*
+* The source code for this program is not published or otherwise divested
+* of its trade secrets, irrespective of what has been deposited with the
+* U.S. Copyright Office.
+-->
+
+<ng-template bucExtension [componentName]="componentId" [placement]="'top'" [id]="EXTENSION.TOP" [parent]="this"></ng-template>
+
+<div *ngIf="returnInitialized" class="notes-container">
+  <!-- Adjust padding bottom if Total charges footer exists-->
+  <section class="notes-list-wrapper">
+    <div class="filter-section">
+      <div class="add-note" [attr.tid]="componentId + 'addNotes'">
+        <div>
+          <cds-tooltip class="tooltip-pos" [description]="showTooltip" trigger="hover" [align]="'top'" [autoAlign]="'true'" [disabled]="!returnDetails.isHistory">
+              <buc-button [resourceId]="notesResourcePermission.ADD" type="ghost" btnSize="md" (click)="openAddNoteModal()" [isDisabled]="returnDetails.isHistory">
+                {{'SHARED.NOTES.LABEL_ADD_NOTE' | translate }}
+                 <svg ibmIcon="add" size="16" class="cds--btn__icon"></svg>
+              </buc-button>        
+          </cds-tooltip>
+        </div>
+        <buc-button type="ghost" [iconOnly]="true" btnSize="md" (click)="openViewAllNotesModal()">
+          <svg ibmIcon="popup" size="16" class="cds--btn__icon"></svg>
+        </buc-button>
+         <ng-template #showTooltip let-tooltip="$implicit">
+            <div class="item-description-tooltip-template" [attr.tid]="componentId + '-show-return-notes-tooltip'">
+              {{'RETURN_SUMMARY.RESTORE_ORDER.RESTORE_ORDER_DISABLED_ACTION' | translate}}
+            </div>
+          </ng-template>
+      </div>
+      <div *ngIf="allowExchangeNotes" class="padding-bottom--0_5rem">
+        <buc-combobox  [attr.tid]="'category-type'" [label]="'SHARED.NOTES.LABEL_NOTE_CATEGORY' | translate"
+        [items]="categoryList" placeholder="" (selectItemAction)="onCategorySelected($event)">
+        </buc-combobox>
+      </div>
+      <call-center-notes-filter *ngIf="notesTypeList" [notesTypeList]="notesTypeList"
+        (filterChange)="applyFilter($event)"></call-center-notes-filter>
+    </div>
+    <div class="line-card" *ngIf="this.returnLineNotesList && this.returnLineNotesList.length"
+      [attr.tid]="componentId + 'line-card'">
+      <span class="margin-left-right--1rem margin-top--1rem notes-title">{{'SHARED.GENERAL.LABEL_LINE_NUM' |
+        translate:{num: returnDetails.PrimeLineNo} }}</span>
+      <call-center-return-notes-card *ngFor="let lineNotes of returnLineNotesList; let i=index;" [categoryType]="categoryType"
+        [attr.tid]="componentId + '-line-card-' + i" [note]="lineNotes" [searchKey]="searchKey"
+        (click)="openNoteDetails(lineNotes, 'line')" [partOfList]="true" [isHistoryOrder]="returnDetails.isHistory"></call-center-return-notes-card>
+      <span *ngIf="noReturnLineNotes" class="margin-left-right--1rem margin-top--1rem noRecords">
+        {{'SHARED.NOTES.LABEL_NO_RECORDS' | translate }}
+      </span>
+    </div>
+    <div *ngIf="selectedCategoryNotelist() && selectedCategoryNotelist().length > 0" [attr.tid]="componentId + 'cards'"
+      class="margin-bottom--5rem">
+      <div *ngIf="!emptyNotes && this.returnLineNotesList && this.returnLineNotesList.length"
+        class="margin-left-right--1rem margin-top--1rem">
+        <span class="notes-title">{{ 'SHARED.NOTES.LABEL_RETURN_NOTES' | translate }}</span>
+      </div>
+      <call-center-return-notes-card *ngFor="let note of selectedCategoryNotelist(); let i=index;" [categoryType]="categoryType" [note]="note" [searchKey]="searchKey"
+        [attr.tid]="componentId + '-cards-' + i" (click)="openNoteDetails(note)"
+        [partOfList]="true" [isHistoryOrder]="returnDetails.isHistory"></call-center-return-notes-card>
+    </div>
+    <div class="empty-block margin-left-right--1rem margin-top--1rem" *ngIf="emptyNotes"
+      [attr.tid]="componentId + 'empty-block'">
+      <buc-ai-empty-state [icon]="'default'">
+        <h3 bucAiEmptyStateTitle>{{'SHARED.NOTES.LABEL_NO_RECORDS_FOUND' | translate}}</h3>
+        <p bucAiEmptyStateBody>{{ 'SHARED.NOTES.LABEL_NO_RECORDS' | translate }}</p>
+      </buc-ai-empty-state>
+    </div>
+  </section>
+</div>
+
+<ng-template bucExtension [componentName]="componentId" [placement]="'bottom'" [id]="EXTENSION.BOTTOM" [parent]="this"></ng-template>

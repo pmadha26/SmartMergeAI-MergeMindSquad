@@ -1,0 +1,27 @@
+<!--
+* IBM Confidential
+* OCO Source Materials
+* 5737-D18, 5725-D10
+*
+* (C) Copyright International Business Machines Corp. 2022, 2023
+*
+* The source code for this program is not published or otherwise divested
+* of its trade secrets, irrespective of what has been deposited with the
+* U.S. Copyright Office.
+-->
+
+<ng-container>
+     
+    <ibm-clickable-tile [route]="[routeUrlMap['return-search']]" [ngClass]="{ 'cds--tile--is-selected': 'return-search' === environment.getRouteName() }">
+		{{ 'ROUTE_NAMES.LABEL_RETURN_SEARCH' | translate}}
+    </ibm-clickable-tile>
+     
+    <ibm-clickable-tile [route]="[routeUrlMap['return-search-result']]" [ngClass]="{ 'cds--tile--is-selected': 'return-search-result' === environment.getRouteName() }">
+		{{ 'ROUTE_NAMES.LABEL_RETURN_SEARCH_RESULT' | translate}}
+    </ibm-clickable-tile>
+     
+    <ibm-clickable-tile [route]="[routeUrlMap['return-details']]" [ngClass]="{ 'cds--tile--is-selected': 'return-details' === environment.getRouteName() }">
+		{{ 'ROUTE_NAMES.LABEL_RETURN_DETAILS' | translate}}
+    </ibm-clickable-tile>
+    
+</ng-container>

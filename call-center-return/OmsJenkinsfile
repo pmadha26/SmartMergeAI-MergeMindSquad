@@ -1,0 +1,11 @@
+@Library(['wce-shared-pipeline', 'wce-shared-pipeline-config']) _
+
+wcePipeline {
+  // Apply CC-specific conventions for all CC UI repos
+  // See: https://github.ibm.com/SterlingIntelligentPromising/cicd-offering-config/blob/main/vars/callcenterPlugin.groovy
+  applyClosure(delegate, callcenterPlugin())
+
+  jfrontTrigger = true
+
+  yarnBuildArgs = "--concurrency=2"
+}

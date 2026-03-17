@@ -1,0 +1,21 @@
+{
+  "name": "return-root-config",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "webpack serve --env isLocal --env moduleName=call-center-return --env mode=on-prem",
+    "build": "webpack --mode=production --env moduleName=call-center-return --env baseHref=/call-center-return/ --env mode=on-prem"
+  },
+  "devDependencies": {
+    "@buc/cli": "file:../../../lib/buc/cli/cli-4.1.6.tgz",
+    "copy-webpack-plugin": "^9.0.1",
+    "cross-env": "^7.0.3",
+    "html-webpack-plugin": "^5.3.2",
+    "serve": "^12.0.0",
+    "webpack": "^5.40.0",
+    "webpack-cli": "^4.8.0",
+    "webpack-dev-server": "^4.0.0-rc.0",
+    "webpack-merge": "^5.8.0",
+    "merge-jsons-webpack-plugin": "2.0.1"
+  }
+}

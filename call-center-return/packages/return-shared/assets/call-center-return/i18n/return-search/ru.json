@@ -1,0 +1,50 @@
+{
+  "RETURN_SEARCH": {
+    "GENERAL": {
+      "LABEL_SHOW_DRAFT_RETURNS": "Показать черновик возврата",
+      "LABEL_RETURN_LINE_STATUS": "Состояние строки возврата",
+      "LABEL_ADVANCED_SEARCH": "Расширенный поиск возврата",
+      "LABEL_RESULTS": "Результаты поиска возвратов",
+      "LABEL_ENTERPRISE": "Предприятие",
+      "LABEL_RETURN_NUMBER": "Номер возврата",
+      "LABEL_CUSTOMER_PO": "Номер заказа на закупку заказчика",
+      "LABEL_ORIGINAL_ORDER_NUMBER": "Исходный номер заказа",
+      "LABEL_RETURN_DATE_RANGE": "Диапазон дат возврата",
+      "LABEL_HOLD_TYPE": "Тип блокировки",
+      "LABEL_RETURN_STATUS": "Состояние возврата",
+      "LABEL_RETURN_AGE": "Давность возврата",
+      "LABEL_EMAIL": "Адрес электронной почты",
+      "LABEL_CUSTOMER_TELEPHONE": "Номер телефона",
+      "LABEL_FIRST_NAME": "Имя",
+      "LABEL_LAST_NAME": "Фамилия",
+      "LABEL_POSTAL_CODE": "Почтовый индекс",
+      "LABEL_ORDER_NAME": "Имя возврата",
+      "LABEL_CUSTOMER_CREDIT_CARD_NUMBER": "Последние 4 цифры кредитной карты",
+      "LABEL_RETURN_SEARCH": "Поиск",
+      "LABEL_CLEAR": "Очистить",
+      "LABEL_SEARCH_BY_RETURN_INFO": "Поиск по возврату сведений",
+      "LABEL_SEARCH_BY_CUSTOMER_INFO": "Поиск по подробным данным заказчика",
+      "LABEL_QUERY_is": "-",
+      "LABEL_QUERY_starts_with": "начинается с",
+      "LABEL_QUERY_contains": "содержит",
+      "MESSAGE_SEARCH_GRP_DIFF": "Одно или несколько полей, указанных в этом сохранном поиске, могут быть не сгруппированы или могут быть сгруппированы по-разному. Результаты поиска могут быть разными.",
+      "CONFIRM_RETURN": "Подтвержденный возврат",
+      "DRAFT_RETURN": "Черновой возврат",
+      "RECENT_RETURNS": "Последние возвраты",
+      "ARCHIVED_RETURNS": "Архивные возвраты",
+      "LABEL_SKU_NUMBER": "номер артикула",
+      "TOO_MANY_RESULTS": "Найдено элементов: {{total}}. Поиск настроен на возврат не более {{max}} записей.",
+      "ALL_ORDERS": "Все заказы",
+      "CONFIRMED_ORDERS": "Подтвержденные заказы",
+      "DRAFT_ORDERS": "Черновые заказы"
+    },
+    "ORDER_LINE_STATUS_DROPDOWN": {
+      "LABEL_CREATED": "Создан",
+      "LABEL_RECEIVED": "Получено",
+      "LABEL_RECEIPT_CLOSED": "Поставка закрыта",
+      "LABEL_CANCELLED": "Отменено",
+      "TOOLTIP_MESSAGE": "Будут перечислены заказы, содержащие даже одну строку с выбранным состоянием.",
+      "MESSAGE_WRONG_COMBOBOX_SEARCH_TEXT": "Укажите допустимое значение"
+    }
+  }
+}

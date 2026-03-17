@@ -1,0 +1,40 @@
+<!--
+* IBM Confidential
+* OCO Source Materials
+* 5737-D18, 5725-D10
+*
+* (C) Copyright International Business Machines Corp. 2022, 2023
+*
+* The source code for this program is not published or otherwise divested
+* of its trade secrets, irrespective of what has been deposited with the
+* U.S. Copyright Office.
+-->
+
+<buc-right-panel [expanded]="expanded" [itemList]="itemList">
+    <ng-template bucExtension [componentName]="componentId" [placement]="'top'" [id]="EXTENSION.TOP" [parent]="this">
+    </ng-template>
+    <div class="order-summary-tabs cds--row" [attr.tid]="componentId + '-order-summary-note'">
+        <buc-tabs #summaryNotesRef [tabData]="returnSummaryTabs" [attr.tid]="componentId + '-tabs'"
+            class="cds--col cds--col-lg-16 cds--no-gutter ">
+        </buc-tabs>
+    </div>
+    <ng-template bucExtension [componentName]="componentId" [placement]="'bottom'" [id]="EXTENSION.BOTTOM" [parent]="this">
+    </ng-template>
+</buc-right-panel>
+
+<ng-template #summaryTab>
+    <div class="side-panel-tabs" [attr.tid]="componentId + '-side-panel-summary'">
+        <call-center-return-pricing-summary [returnDetails]="returnDetails" [ruleSetValues]="ruleSetValues"  [showAdjustPricing]="showAdjustPricing"
+        [adjustPricingMode]="adjustPricingMode" [showAdjustPricingWarning]="showAdjustPricingWarning" [isRefund]="isRefund" [refreshActions]="refreshActions">
+            <ng-content select="pricing-summary" ></ng-content>
+        </call-center-return-pricing-summary>
+    </div>
+</ng-template>
+
+<ng-template #notesTab>
+    <div class="side-panel-tabs" [attr.tid]="componentId + '-side-panel-notes'">
+        <call-center-return-notes (setNoteListLength)="setNoteListLength($event)" [returnDetails]="returnDetails">
+            <ng-content select="notes" ></ng-content>
+        </call-center-return-notes>
+    </div>
+</ng-template>

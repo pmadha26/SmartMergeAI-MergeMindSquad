@@ -1,0 +1,52 @@
+{
+  "MANAGE_HOLDS": {
+    "LABEL_MANAGE_HOLDS": "Afficher ou lever les blocages",
+    "LABEL_MANAGE_HOLDS_COUNT": "Résoudre les mises en attente à partir des lignes : {{count}}",
+    "LABEL_MANAGE_HOLDS_COUNTS": "Résoudre les mises en attente à partir des lignes : {{count}}",
+    "LABEL_LINE_NOTIFICATION_COUNT": "Les mises en attente ne sont pas appliquées sur {{ count }} ligne sélectionnée.",
+    "LABEL_LINE_NOTIFICATION_COUNTS": "Les mises en attente ne sont pas appliquées sur {{ count }} lignes sélectionnées.",
+    "LABEL_BACK_TO_RETURN_SUMMARY": "Revenir au récapitulatif du retour",
+    "TOOLTIP_MSG_RESOLVE_HOLDS": "Aucune mise en attente n'est encore appliquée."
+  },
+  "ACTIVE_HOLDS_TABLE": {
+    "LABEL_ACTIVE_HOLDS": "Mises en attente actives",
+    "LABEL_OPEN_ALERTS": "Alertes ouvertes",
+    "LABEL_HEADER_LINE": "Ligne",
+    "LABEL_HEADER_ITEM": "Retour ou article",
+    "LABEL_HEADER_HOLD_TYPE": "Type de mise en suspens",
+    "LABEL_HEADER_DATE": "Date",
+    "LABEL_HEADER_COMMENTS": "Commentaires",
+    "LABEL_RESOLVE": "Résoudre",
+    "LABEL_addHold": "Ajouter mise en attente",
+    "LABEL_NO_ACTIVE_HOLDS": "Aucune mise en attente active",
+    "LABEL_USER_PERMISSION": "Vous n'êtes pas autorisé à lever le blocage.",
+    "LABEL_STATUS_MOD_PERMISSION": "Les mises en attente ne peuvent pas être appliquées dans le statut en cours de l'article."
+  },
+  "RESOLVED_HOLDS_TABLE": {
+    "LABEL_RESOLVED_HOLDS": "Mises en suspens résolues",
+    "LABEL_HEADER_LINE": "Ligne",
+    "LABEL_HEADER_ITEM": "Retour ou article",
+    "LABEL_HEADER_HOLD_TYPE": "Type de mise en suspens",
+    "LABEL_HEADER_DATE": "Date",
+    "LABEL_HEADER_COMMENTS": "Commentaires",
+    "LABEL_NO_RESOLVE_HOLDS": "Aucune mise en attente résolue"
+  },
+  "RESOLVE_HOLDS_MODAL": {
+    "LABEL_HEADER_RESOLVE_HOLDS": "Résoudre les mises en attente",
+    "LABEL_HEADER_RESOLVE_HOLDS_COUNT": "Résoudre les mises en attente à partir des lignes : {{count}}",
+    "LABEL_HEADER_RESOLVE_HOLDS_COUNTS": "Résoudre les mises en attente à partir des lignes : {{count}}",
+    "LABEL_HEADER_LINE": "Ligne",
+    "LABEL_HEADER_ITEM": "Article",
+    "LABEL_HEADER_HOLD_TYPE": "Type de mise en suspens",
+    "LABEL_HEADER_COMMENTS": "Commentaires (facultatif)",
+    "LABEL_CANCEL": "Annuler",
+    "LABEL_RESOLVE": "Résoudre",
+    "LABEL_RESOLVE_HOLD_MSG_LINE": "Résolu. Mises en attente supprimées des lignes : {{count}}.",
+    "LABEL_RESOLVE_HOLD_MSG_LINES": "Résolu. Mises en attente supprimées des lignes : {{count}}.",
+    "LABEL_RESOLVE_HOLD_MSG_ORDER": "{{ count }} mises en attente sur {{ count1 }} résolues pour cette commande.",
+    "RESOLVE_HOLD_FAILED_ERROR_MSG": "La demande de résolution des mises en attente a échoué."
+  },
+  "SIDE_PANEL": {
+    "LABEL_NOTES": "Remarques ({{count}})"
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "RETURN_SEARCH": {
+    "GENERAL": {
+      "LABEL_SHOW_DRAFT_RETURNS": "Entwurfsretouren anzeigen",
+      "LABEL_RETURN_LINE_STATUS": "Positionsstatus für Retoure",
+      "LABEL_ADVANCED_SEARCH": "Erweiterte Suche nach Retouren",
+      "LABEL_RESULTS": "Suchergebnisse für Retouren",
+      "LABEL_ENTERPRISE": "Unternehmen",
+      "LABEL_RETURN_NUMBER": "Retourennummer",
+      "LABEL_CUSTOMER_PO": "Bestellnummer des Kunden",
+      "LABEL_ORIGINAL_ORDER_NUMBER": "Ursprüngliche Auftragsnummer",
+      "LABEL_RETURN_DATE_RANGE": "Datumsbereich für Retoure",
+      "LABEL_HOLD_TYPE": "Rückstellungstyp",
+      "LABEL_RETURN_STATUS": "Rückgabestatus",
+      "LABEL_RETURN_AGE": "Retourenalter",
+      "LABEL_EMAIL": "E-Mail-Adresse",
+      "LABEL_CUSTOMER_TELEPHONE": "Telefonnummer",
+      "LABEL_FIRST_NAME": "Vorname",
+      "LABEL_LAST_NAME": "Familienname",
+      "LABEL_POSTAL_CODE": "Postleitzahl",
+      "LABEL_ORDER_NAME": "Retourenname",
+      "LABEL_CUSTOMER_CREDIT_CARD_NUMBER": "Letzte vier Ziffern der Kreditkarte",
+      "LABEL_RETURN_SEARCH": "Suchen",
+      "LABEL_CLEAR": "Löschen",
+      "LABEL_SEARCH_BY_RETURN_INFO": "Nach Retourendetails suchen",
+      "LABEL_SEARCH_BY_CUSTOMER_INFO": "Nach Kundendetails suchen",
+      "LABEL_QUERY_is": "ist",
+      "LABEL_QUERY_starts_with": "beginnt mit",
+      "LABEL_QUERY_contains": "enthält",
+      "MESSAGE_SEARCH_GRP_DIFF": "Mindestens ein Feld, das in dieser gespeicherten Suche angegeben ist, wird möglicherweise nicht mehr gruppiert oder anders gruppiert. Die Suchergebnisse können variieren.",
+      "CONFIRM_RETURN": "Bestätigte Retoure",
+      "DRAFT_RETURN": "Retourenentwurf",
+      "RECENT_RETURNS": "Kürzlich erfolgte Retouren",
+      "ARCHIVED_RETURNS": "Archivierte Retouren",
+      "LABEL_SKU_NUMBER": "SKU-Nummer",
+      "TOO_MANY_RESULTS": "Ihre Suche ergab {{total}} Übereinstimmungen. Die Suche ist so konfiguriert, dass maximal {{max}} Datensätze zurückgegeben werden.",
+      "ALL_ORDERS": "Alle Aufträge",
+      "CONFIRMED_ORDERS": "Confirmed Orders",
+      "DRAFT_ORDERS": "Auftragsentwürfe"
+    },
+    "ORDER_LINE_STATUS_DROPDOWN": {
+      "LABEL_CREATED": "Erstellt",
+      "LABEL_RECEIVED": "Empfangen",
+      "LABEL_RECEIPT_CLOSED": "Beleg geschlossen",
+      "LABEL_CANCELLED": "Storniert",
+      "TOOLTIP_MESSAGE": "Bestellungen, die nur eine Position mit dem ausgewählten Status enthalten, werden aufgelistet.",
+      "MESSAGE_WRONG_COMBOBOX_SEARCH_TEXT": "Ein gültiger Wert ist erforderlich"
+    },
+    "RETURN_DATE_RANGE": {
+      "TOOLTIP_MESSAGE": "Der Standard-Datumsbereich ist {{duration}} {{durationUnit}}",
+      "LABEL_YEARS_PLURAL": "Jahre",
+      "LABEL_MONTHS_PLURAL": "Monate",
+      "LABEL_DAYS_PLURAL": "Tage",
+      "LABEL_YEARS_SINGULAR": "Jahr",
+      "LABEL_MONTHS_SINGULAR": "Monat",
+      "LABEL_DAYS_SINGULAR": "Tag"
+    },
+    "RETURN_AGE": {
+      "HELPER_TEXT": "Datumsbereich für Retouren überprüfen"
+    }
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "RETURN_SEARCH": {
+    "GENERAL": {
+      "LABEL_SHOW_DRAFT_RETURNS": "Mostrar devoluções de rascunho",
+      "LABEL_RETURN_LINE_STATUS": "Status de linha de devolução",
+      "LABEL_ADVANCED_SEARCH": "Procura avançada de devolução",
+      "LABEL_RESULTS": "Resultados da procura de devolução",
+      "LABEL_ENTERPRISE": "Empreendimento",
+      "LABEL_RETURN_NUMBER": "Número da devolução",
+      "LABEL_CUSTOMER_PO": "Número da ordem de compra do cliente",
+      "LABEL_ORIGINAL_ORDER_NUMBER": "Número original da ordem",
+      "LABEL_RETURN_DATE_RANGE": "Intervalo de data de devolução",
+      "LABEL_HOLD_TYPE": "Tipo de suspensão",
+      "LABEL_RETURN_STATUS": "Status da devolução",
+      "LABEL_RETURN_AGE": "Idade da devolução",
+      "LABEL_EMAIL": "Endereço de e-mail",
+      "LABEL_CUSTOMER_TELEPHONE": "Número do telefone",
+      "LABEL_FIRST_NAME": "Nome",
+      "LABEL_LAST_NAME": "Sobrenome",
+      "LABEL_POSTAL_CODE": "CEP",
+      "LABEL_ORDER_NAME": "Nome da devolução",
+      "LABEL_CUSTOMER_CREDIT_CARD_NUMBER": "Últimos 4 dígitos do cartão de crédito",
+      "LABEL_RETURN_SEARCH": "Procura",
+      "LABEL_CLEAR": "Limpar",
+      "LABEL_SEARCH_BY_RETURN_INFO": "Procurar por detalhes da devolução",
+      "LABEL_SEARCH_BY_CUSTOMER_INFO": "Procurar por detalhes do cliente",
+      "LABEL_QUERY_is": "é",
+      "LABEL_QUERY_starts_with": "inicia com",
+      "LABEL_QUERY_contains": "contém",
+      "MESSAGE_SEARCH_GRP_DIFF": "Um ou mais campos especificados nesta procura salva podem não estar mais agrupados ou podem estar agrupados de maneira diferente. Os resultados da procura podem variar.",
+      "CONFIRM_RETURN": "Devolução confirmada",
+      "DRAFT_RETURN": "Devolução rascunho",
+      "RECENT_RETURNS": "Devoluções recentes",
+      "ARCHIVED_RETURNS": "Devoluções arquivadas",
+      "LABEL_SKU_NUMBER": "Número SKU",
+      "TOO_MANY_RESULTS": "Sua procura resultou em {{total}} correspondências. A procura está configurada para retornar no máximo {{max}} registros.",
+      "ALL_ORDERS": "Todos os pedidos",
+      "CONFIRMED_ORDERS": "Pedidos confirmados",
+      "DRAFT_ORDERS": "Pedidos rascunho"
+    },
+    "ORDER_LINE_STATUS_DROPDOWN": {
+      "LABEL_CREATED": "Criado",
+      "LABEL_RECEIVED": "Recebido",
+      "LABEL_RECEIPT_CLOSED": "Recibo fechado",
+      "LABEL_CANCELLED": "Cancelado(a)",
+      "TOOLTIP_MESSAGE": "Os pedidos que contêm até uma linha com o status selecionado serão listados.",
+      "MESSAGE_WRONG_COMBOBOX_SEARCH_TEXT": "Um valor válido é necessário"
+    },
+    "RETURN_DATE_RANGE": {
+      "TOOLTIP_MESSAGE": "O intervalo de data padrão é {{duration}} {{durationUnit}}",
+      "LABEL_YEARS_PLURAL": "anos",
+      "LABEL_MONTHS_PLURAL": "meses",
+      "LABEL_DAYS_PLURAL": "dias",
+      "LABEL_YEARS_SINGULAR": "ano",
+      "LABEL_MONTHS_SINGULAR": "mês",
+      "LABEL_DAYS_SINGULAR": "dia"
+    },
+    "RETURN_AGE": {
+      "HELPER_TEXT": "Revisar o intervalo de data de devolução"
+    }
+  }
+}

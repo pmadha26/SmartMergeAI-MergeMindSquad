@@ -1,0 +1,11 @@
+{
+  "ROUTE_NAMES": {
+    "LABEL_RETURN_SEARCH": "返品の拡張検索",
+    "LABEL_RETURN_SEARCH_RESULT": "返品検索結果",
+    "LABEL_RETURN_DETAILS": "返品詳細"
+  },
+  "CUSTOMER_SEARCH_MODAL": {
+    "HEADER_CUSTOMER_SEARCH": "顧客の拡張検索",
+    "LABEL_SELECT_CUSTOMER": "顧客の選択"
+  }
+}

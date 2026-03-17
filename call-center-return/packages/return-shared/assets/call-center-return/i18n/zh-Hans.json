@@ -1,0 +1,11 @@
+{
+  "ROUTE_NAMES": {
+    "LABEL_RETURN_SEARCH": "高级退货搜索",
+    "LABEL_RETURN_SEARCH_RESULT": "退货搜索结果",
+    "LABEL_RETURN_DETAILS": "退货详细信息"
+  },
+  "CUSTOMER_SEARCH_MODAL": {
+    "HEADER_CUSTOMER_SEARCH": "高级客户搜索",
+    "LABEL_SELECT_CUSTOMER": "选择客户"
+  }
+}

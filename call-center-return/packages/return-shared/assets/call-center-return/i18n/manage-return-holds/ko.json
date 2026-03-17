@@ -1,0 +1,52 @@
+{
+  "MANAGE_HOLDS": {
+    "LABEL_MANAGE_HOLDS": "보류 보기 또는 해제",
+    "LABEL_MANAGE_HOLDS_COUNT": "라인에서 해결할 보류: {{count}}개",
+    "LABEL_MANAGE_HOLDS_COUNTS": "라인에서 해결할 보류: {{count}}개",
+    "LABEL_LINE_NOTIFICATION_COUNT": "선택한 {{ count }}개 라인에는 보류가 적용되지 않습니다.",
+    "LABEL_LINE_NOTIFICATION_COUNTS": "선택한 {{ count }}개 라인에는 보류가 적용되지 않습니다.",
+    "LABEL_BACK_TO_RETURN_SUMMARY": "반품 요약으로 돌아가기",
+    "TOOLTIP_MSG_RESOLVE_HOLDS": "아직 보류가 적용되지 않았습니다."
+  },
+  "ACTIVE_HOLDS_TABLE": {
+    "LABEL_ACTIVE_HOLDS": "활성 보류",
+    "LABEL_OPEN_ALERTS": "열린 경보",
+    "LABEL_HEADER_LINE": "선",
+    "LABEL_HEADER_ITEM": "반품 또는 품목",
+    "LABEL_HEADER_HOLD_TYPE": "보류 유형",
+    "LABEL_HEADER_DATE": "날짜",
+    "LABEL_HEADER_COMMENTS": "주석",
+    "LABEL_RESOLVE": "해결",
+    "LABEL_addHold": "보류 추가",
+    "LABEL_NO_ACTIVE_HOLDS": "활성 보류 없음",
+    "LABEL_USER_PERMISSION": "보류를 해제할 수 있는 권한이 없습니다.",
+    "LABEL_STATUS_MOD_PERMISSION": "항목의 현재 상태에는 보류를 적용할 수 없습니다."
+  },
+  "RESOLVED_HOLDS_TABLE": {
+    "LABEL_RESOLVED_HOLDS": "해결된 보류 항목",
+    "LABEL_HEADER_LINE": "선",
+    "LABEL_HEADER_ITEM": "반품 또는 품목",
+    "LABEL_HEADER_HOLD_TYPE": "보류 유형",
+    "LABEL_HEADER_DATE": "날짜",
+    "LABEL_HEADER_COMMENTS": "주석",
+    "LABEL_NO_RESOLVE_HOLDS": "해결된 보류가 없음"
+  },
+  "RESOLVE_HOLDS_MODAL": {
+    "LABEL_HEADER_RESOLVE_HOLDS": "보류 해결",
+    "LABEL_HEADER_RESOLVE_HOLDS_COUNT": "라인에서 해결할 보류: {{count}}개",
+    "LABEL_HEADER_RESOLVE_HOLDS_COUNTS": "라인에서 해결할 보류: {{count}}개",
+    "LABEL_HEADER_LINE": "선",
+    "LABEL_HEADER_ITEM": "항목",
+    "LABEL_HEADER_HOLD_TYPE": "보류 유형",
+    "LABEL_HEADER_COMMENTS": "주석(선택사항)",
+    "LABEL_CANCEL": "취소",
+    "LABEL_RESOLVE": "해결",
+    "LABEL_RESOLVE_HOLD_MSG_LINE": "해결되었습니다. 라인에서 제거된 보류: {{count}}개.",
+    "LABEL_RESOLVE_HOLD_MSG_LINES": "해결되었습니다. 라인에서 제거된 보류: {{count}}개.",
+    "LABEL_RESOLVE_HOLD_MSG_ORDER": "이 주문의 {{ count1 }}개 중 {{ count }}개의 보류가 해결되었습니다.",
+    "RESOLVE_HOLD_FAILED_ERROR_MSG": "보류 해결 요청이 실패했습니다."
+  },
+  "SIDE_PANEL": {
+    "LABEL_NOTES": "참고({{count}})"
+  }
+}

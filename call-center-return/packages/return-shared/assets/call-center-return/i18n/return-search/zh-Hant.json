@@ -1,0 +1,62 @@
+{
+  "RETURN_SEARCH": {
+    "GENERAL": {
+      "LABEL_SHOW_DRAFT_RETURNS": "顯示草稿退貨",
+      "LABEL_RETURN_LINE_STATUS": "退貨明細行狀態",
+      "LABEL_ADVANCED_SEARCH": "進階退貨搜尋",
+      "LABEL_RESULTS": "傳回搜尋結果",
+      "LABEL_ENTERPRISE": "企業",
+      "LABEL_RETURN_NUMBER": "退貨號碼",
+      "LABEL_CUSTOMER_PO": "客戶採購單號碼",
+      "LABEL_ORIGINAL_ORDER_NUMBER": "原始訂單號碼",
+      "LABEL_RETURN_DATE_RANGE": "退貨日期範圍",
+      "LABEL_HOLD_TYPE": "保留類型",
+      "LABEL_RETURN_STATUS": "退貨狀態",
+      "LABEL_RETURN_AGE": "退貨經歷時間",
+      "LABEL_EMAIL": "電子郵件位址",
+      "LABEL_CUSTOMER_TELEPHONE": "電話號碼",
+      "LABEL_FIRST_NAME": "名字",
+      "LABEL_LAST_NAME": "姓氏",
+      "LABEL_POSTAL_CODE": "郵遞區號",
+      "LABEL_ORDER_NAME": "退貨名稱",
+      "LABEL_CUSTOMER_CREDIT_CARD_NUMBER": "信用卡的後四位數字",
+      "LABEL_RETURN_SEARCH": "搜尋",
+      "LABEL_CLEAR": "清除",
+      "LABEL_SEARCH_BY_RETURN_INFO": "依退貨詳細資料搜尋",
+      "LABEL_SEARCH_BY_CUSTOMER_INFO": "依客戶詳細資料搜尋",
+      "LABEL_QUERY_is": "是",
+      "LABEL_QUERY_starts_with": "開頭是",
+      "LABEL_QUERY_contains": "包含",
+      "MESSAGE_SEARCH_GRP_DIFF": "在此已儲存的搜尋中指定的一個以上欄位可能不再分組或可能以不同方式分組。 搜尋結果可能不同。",
+      "CONFIRM_RETURN": "已確認退貨",
+      "DRAFT_RETURN": "草稿退貨",
+      "RECENT_RETURNS": "最近的退貨",
+      "ARCHIVED_RETURNS": "保存的退貨",
+      "LABEL_SKU_NUMBER": "SKU 號碼",
+      "TOO_MANY_RESULTS": "您的搜尋已產生 {{total}} 個相符項。 搜尋已配置為傳回最多 {{max}} 筆記錄。",
+      "ALL_ORDERS": "所有訂單",
+      "CONFIRMED_ORDERS": "已確認訂單",
+      "DRAFT_ORDERS": "草稿訂單"
+    },
+    "ORDER_LINE_STATUS_DROPDOWN": {
+      "LABEL_CREATED": "已建立",
+      "LABEL_RECEIVED": "已接收",
+      "LABEL_RECEIPT_CLOSED": "已關閉收據",
+      "LABEL_CANCELLED": "已取消",
+      "TOOLTIP_MESSAGE": "將會列出甚至包含一個具有所選取狀態之明細行的訂單。",
+      "MESSAGE_WRONG_COMBOBOX_SEARCH_TEXT": "需要有效值"
+    },
+    "RETURN_DATE_RANGE": {
+      "TOOLTIP_MESSAGE": "預設日期範圍為 {{duration}} {{durationUnit}}",
+      "LABEL_YEARS_PLURAL": "年",
+      "LABEL_MONTHS_PLURAL": "月",
+      "LABEL_DAYS_PLURAL": "天",
+      "LABEL_YEARS_SINGULAR": "年",
+      "LABEL_MONTHS_SINGULAR": "月",
+      "LABEL_DAYS_SINGULAR": "日"
+    },
+    "RETURN_AGE": {
+      "HELPER_TEXT": "檢視退貨日期範圍"
+    }
+  }
+}

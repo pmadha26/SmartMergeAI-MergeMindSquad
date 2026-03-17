@@ -1,0 +1,36 @@
+<!--
+* IBM Confidential
+* OCO Source Materials
+* 5737-D18, 5725-D10
+*
+* (C) Copyright International Business Machines Corp. 2022, 2023
+*
+* The source code for this program is not published or otherwise divested
+* of its trade secrets, irrespective of what has been deposited with the
+* U.S. Copyright Office.
+-->
+
+<ng-template bucExtension [componentName]="componentId" [placement]="'top'" [id]="EXTENSION.TOP" [parent]="this">
+</ng-template>
+
+<ibm-modal size="md" [open]="open">
+  <ibm-modal-header (closeSelect)="closeModal()">
+    {{ note.reasonText}}
+  </ibm-modal-header>
+
+  <call-center-return-notes-card
+    [note]="note"
+    [showControls]="true"
+    [showNoteReasonText]="false"
+    tagPosition="top"
+    [searchKey]="searchKey"
+    (editNote)="modalData.initiateEdit($event)"
+    (deleteNote)="modalData.initiateDelete($event)"
+    [isModal]="isModal"
+    [categoryType]="categoryType"
+    [isHistoryOrder]="isHistoryOrder">
+  </call-center-return-notes-card>
+</ibm-modal>
+
+<ng-template bucExtension [componentName]="componentId" [placement]="'bottom'" [id]="EXTENSION.BOTTOM" [parent]="this">
+</ng-template>

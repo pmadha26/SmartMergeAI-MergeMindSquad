@@ -1,0 +1,52 @@
+{
+  "MANAGE_HOLDS": {
+    "LABEL_MANAGE_HOLDS": "保留の表示または解決",
+    "LABEL_MANAGE_HOLDS_COUNT": "明細から保留を解決するには: {{count}}",
+    "LABEL_MANAGE_HOLDS_COUNTS": "明細から保留を解決するには: {{count}}",
+    "LABEL_LINE_NOTIFICATION_COUNT": "保留は、{{ count }} 選択した行には適用されません。",
+    "LABEL_LINE_NOTIFICATION_COUNTS": "保留は、{{ count }} で選択した行には適用されません。",
+    "LABEL_BACK_TO_RETURN_SUMMARY": "帰国概要に戻る",
+    "TOOLTIP_MSG_RESOLVE_HOLDS": "保留はまだ適用されていません。"
+  },
+  "ACTIVE_HOLDS_TABLE": {
+    "LABEL_ACTIVE_HOLDS": "アクティブな保留",
+    "LABEL_OPEN_ALERTS": "未解決の警告",
+    "LABEL_HEADER_LINE": "ライン",
+    "LABEL_HEADER_ITEM": "返品または商品",
+    "LABEL_HEADER_HOLD_TYPE": "保留タイプ",
+    "LABEL_HEADER_DATE": "日付",
+    "LABEL_HEADER_COMMENTS": "備考",
+    "LABEL_RESOLVE": "解決",
+    "LABEL_addHold": "保留の追加",
+    "LABEL_NO_ACTIVE_HOLDS": "アクティブな保留がありません",
+    "LABEL_USER_PERMISSION": "保留を解決する権限がありません。",
+    "LABEL_STATUS_MOD_PERMISSION": "アイテムの現在のステータスで保留を適用することはできません。"
+  },
+  "RESOLVED_HOLDS_TABLE": {
+    "LABEL_RESOLVED_HOLDS": "解決済み保留",
+    "LABEL_HEADER_LINE": "ライン",
+    "LABEL_HEADER_ITEM": "返品または商品",
+    "LABEL_HEADER_HOLD_TYPE": "保留タイプ",
+    "LABEL_HEADER_DATE": "日付",
+    "LABEL_HEADER_COMMENTS": "備考",
+    "LABEL_NO_RESOLVE_HOLDS": "解決済み保留なし"
+  },
+  "RESOLVE_HOLDS_MODAL": {
+    "LABEL_HEADER_RESOLVE_HOLDS": "保留の解決",
+    "LABEL_HEADER_RESOLVE_HOLDS_COUNT": "明細から保留を解決するには: {{count}}",
+    "LABEL_HEADER_RESOLVE_HOLDS_COUNTS": "明細から保留を解決するには: {{count}}",
+    "LABEL_HEADER_LINE": "ライン",
+    "LABEL_HEADER_ITEM": "アイテム",
+    "LABEL_HEADER_HOLD_TYPE": "保留タイプ",
+    "LABEL_HEADER_COMMENTS": "コメント (オプション)",
+    "LABEL_CANCEL": "キャンセル",
+    "LABEL_RESOLVE": "解決",
+    "LABEL_RESOLVE_HOLD_MSG_LINE": "解決されました。 行から削除されたホールド: {{count}}。",
+    "LABEL_RESOLVE_HOLD_MSG_LINES": "解決されました。 行から削除されたホールド: {{count}}。",
+    "LABEL_RESOLVE_HOLD_MSG_ORDER": "この順序は {{ count1 }} の解決済み {{ count }} で保留されます。",
+    "RESOLVE_HOLD_FAILED_ERROR_MSG": "保留を解決する要求が失敗しました。"
+  },
+  "SIDE_PANEL": {
+    "LABEL_NOTES": "注記 ({{count}})"
+  }
+}

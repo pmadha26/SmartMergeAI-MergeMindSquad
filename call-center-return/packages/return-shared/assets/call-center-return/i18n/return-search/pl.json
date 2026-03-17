@@ -1,0 +1,62 @@
+{
+  "RETURN_SEARCH": {
+    "GENERAL": {
+      "LABEL_SHOW_DRAFT_RETURNS": "Pokaż zwroty robocze",
+      "LABEL_RETURN_LINE_STATUS": "Status wiersza zwrotu",
+      "LABEL_ADVANCED_SEARCH": "Zaawansowane wyszukiwanie zwrotu",
+      "LABEL_RESULTS": "Wyniki wyszukiwania zwrotu",
+      "LABEL_ENTERPRISE": "Przedsiębiorstwo",
+      "LABEL_RETURN_NUMBER": "Numer zwrotu",
+      "LABEL_CUSTOMER_PO": "Numer zamówienia klienta",
+      "LABEL_ORIGINAL_ORDER_NUMBER": "Numer oryginalnego zamówienia",
+      "LABEL_RETURN_DATE_RANGE": "Zakres dat zwrotu",
+      "LABEL_HOLD_TYPE": "Typ wstrzymania",
+      "LABEL_RETURN_STATUS": "Status zwrotu",
+      "LABEL_RETURN_AGE": "Wiek zwrotu",
+      "LABEL_EMAIL": "Adres e-mail",
+      "LABEL_CUSTOMER_TELEPHONE": "Numer telefonu",
+      "LABEL_FIRST_NAME": "Imię",
+      "LABEL_LAST_NAME": "Nazwisko",
+      "LABEL_POSTAL_CODE": "Kod pocztowy",
+      "LABEL_ORDER_NAME": "Nazwa zwrotu",
+      "LABEL_CUSTOMER_CREDIT_CARD_NUMBER": "Ostatnie 4 cyfry numeru karty kredytowej",
+      "LABEL_RETURN_SEARCH": "Wyszukiwanie",
+      "LABEL_CLEAR": "Wyczyść",
+      "LABEL_SEARCH_BY_RETURN_INFO": "Szukaj wg szczegółów zwrotu",
+      "LABEL_SEARCH_BY_CUSTOMER_INFO": "Szukaj według szczegółów klienta",
+      "LABEL_QUERY_is": "ma wartość",
+      "LABEL_QUERY_starts_with": "rozpoczyna się od",
+      "LABEL_QUERY_contains": "zawiera",
+      "MESSAGE_SEARCH_GRP_DIFF": "Przynajmniej jedno pole określone w tym zapisanym wyszukiwaniu może nie być już pogrupowane lub może być pogrupowane w inny sposób. Wyniki wyszukiwania mogą być inne.",
+      "CONFIRM_RETURN": "Potwierdzony zwrot",
+      "DRAFT_RETURN": "Zwrot roboczy",
+      "RECENT_RETURNS": "Ostatnie zwroty",
+      "ARCHIVED_RETURNS": "Zarchiwizowane zwroty",
+      "LABEL_SKU_NUMBER": "Numer SKU",
+      "TOO_MANY_RESULTS": "W wyniku wyszukiwania znaleziono następującą liczbę dopasowań: {{total}}. Funkcja wyszukiwania jest skonfigurowana tak, aby zwracała maksymalnie następującą liczbę rekordów: {{max}}.",
+      "ALL_ORDERS": "Wszystkie zamówienia",
+      "CONFIRMED_ORDERS": "Potwierdzone zamówienia",
+      "DRAFT_ORDERS": "Zlecenia robocze"
+    },
+    "ORDER_LINE_STATUS_DROPDOWN": {
+      "LABEL_CREATED": "Utworzono",
+      "LABEL_RECEIVED": "Odebrane",
+      "LABEL_RECEIPT_CLOSED": "Zamknięto przyjęcie",
+      "LABEL_CANCELLED": "Anulowano",
+      "TOOLTIP_MESSAGE": "Zostaną wyświetlone zamówienia, które zawierają nawet jeden wiersz z wybranym statusem.",
+      "MESSAGE_WRONG_COMBOBOX_SEARCH_TEXT": "Wymagana jest poprawna wartość"
+    },
+    "RETURN_DATE_RANGE": {
+      "TOOLTIP_MESSAGE": "Domyślny zakres dat: {{duration}} {{durationUnit}}",
+      "LABEL_YEARS_PLURAL": "lata",
+      "LABEL_MONTHS_PLURAL": "mies.",
+      "LABEL_DAYS_PLURAL": "dni",
+      "LABEL_YEARS_SINGULAR": "rok",
+      "LABEL_MONTHS_SINGULAR": "miesiąc",
+      "LABEL_DAYS_SINGULAR": "dzień"
+    },
+    "RETURN_AGE": {
+      "HELPER_TEXT": "Sprawdź zakres dat zwrotu"
+    }
+  }
+}

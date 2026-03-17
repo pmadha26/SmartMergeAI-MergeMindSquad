@@ -1,0 +1,52 @@
+{
+  "MANAGE_HOLDS": {
+    "LABEL_MANAGE_HOLDS": "Visualizzare o risolvere le trattenute",
+    "LABEL_MANAGE_HOLDS_COUNT": "Risolvere le attese dalle linee: {{count}}",
+    "LABEL_MANAGE_HOLDS_COUNTS": "Risolvere le attese dalle linee: {{count}}",
+    "LABEL_LINE_NOTIFICATION_COUNT": "Le trattenute non vengono applicate alla linea {{ count }} selezionata.",
+    "LABEL_LINE_NOTIFICATION_COUNTS": "Le trattenute non vengono applicate alle linee selezionate {{ count }}.",
+    "LABEL_BACK_TO_RETURN_SUMMARY": "Torna al riepilogo dei rresi",
+    "TOOLTIP_MSG_RESOLVE_HOLDS": "Non è ancora stata applicata nessuna trattenuta."
+  },
+  "ACTIVE_HOLDS_TABLE": {
+    "LABEL_ACTIVE_HOLDS": "Blocchi attivi",
+    "LABEL_OPEN_ALERTS": "Avvisi aperti",
+    "LABEL_HEADER_LINE": "Riga",
+    "LABEL_HEADER_ITEM": "Reso o articolo",
+    "LABEL_HEADER_HOLD_TYPE": "Tipo di attesa",
+    "LABEL_HEADER_DATE": "Data",
+    "LABEL_HEADER_COMMENTS": "Commenti",
+    "LABEL_RESOLVE": "Risolvi",
+    "LABEL_addHold": "Aggiungi attesa",
+    "LABEL_NO_ACTIVE_HOLDS": "Nessuna attesa attiva",
+    "LABEL_USER_PERMISSION": "Non si dispone dell'autorizzazione per risolvere il blocco.",
+    "LABEL_STATUS_MOD_PERMISSION": "Le attese non possono essere applicate nello stato corrente dell'elemento."
+  },
+  "RESOLVED_HOLDS_TABLE": {
+    "LABEL_RESOLVED_HOLDS": "Attese risolte",
+    "LABEL_HEADER_LINE": "Riga",
+    "LABEL_HEADER_ITEM": "Reso o articolo",
+    "LABEL_HEADER_HOLD_TYPE": "Tipo di attesa",
+    "LABEL_HEADER_DATE": "Data",
+    "LABEL_HEADER_COMMENTS": "Commenti",
+    "LABEL_NO_RESOLVE_HOLDS": "Nessun blocco risolto"
+  },
+  "RESOLVE_HOLDS_MODAL": {
+    "LABEL_HEADER_RESOLVE_HOLDS": "Risolvi blocchi",
+    "LABEL_HEADER_RESOLVE_HOLDS_COUNT": "Risolvere le attese dalle linee: {{count}}",
+    "LABEL_HEADER_RESOLVE_HOLDS_COUNTS": "Risolvere le attese dalle linee: {{count}}",
+    "LABEL_HEADER_LINE": "Riga",
+    "LABEL_HEADER_ITEM": "Articolo",
+    "LABEL_HEADER_HOLD_TYPE": "Tipo di attesa",
+    "LABEL_HEADER_COMMENTS": "Commenti (facoltativi)",
+    "LABEL_CANCEL": "Annulla",
+    "LABEL_RESOLVE": "Risolvi",
+    "LABEL_RESOLVE_HOLD_MSG_LINE": "Risolto. Trattenute rimosse dalle linee: {{count}}.",
+    "LABEL_RESOLVE_HOLD_MSG_LINES": "Risolto. Trattenute rimosse dalle linee: {{count}}.",
+    "LABEL_RESOLVE_HOLD_MSG_ORDER": "Risolto {{ count }} di {{ count1 }} tiene su questo ordine.",
+    "RESOLVE_HOLD_FAILED_ERROR_MSG": "Richiesta di risoluzione delle attese non riuscita."
+  },
+  "SIDE_PANEL": {
+    "LABEL_NOTES": "Note ({{count}})"
+  }
+}

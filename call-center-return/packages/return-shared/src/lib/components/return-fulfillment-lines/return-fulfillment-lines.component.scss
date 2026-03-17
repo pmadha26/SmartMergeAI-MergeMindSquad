@@ -1,0 +1,143 @@
+/*
+ * IBM Confidential
+ * OCO Source Materials
+ * 5737-D18, 5725-D10
+ *
+ * (C) Copyright International Business Machines Corp. 2022, 2023
+ *
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
+ * U.S. Copyright Office.
+ */
+
+@use 'variables' as *;
+
+:host {
+
+  .title {
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 1rem 1rem 0;
+  }
+
+  .line-data {
+    float: left;
+  }
+
+  .icons {
+    overflow: inherit;
+    flex-wrap: wrap;
+    width: 2rem;
+  }
+  .max-icons-width {
+    width: 4.5rem;
+  }
+
+  .min-icons-width {
+    width: 3rem;
+  }
+  ibm-icon-launch {
+    fill: #0f62fe;
+    margin-left: 0.5rem;
+  }
+
+  ibm-icon-delete {
+    cursor: pointer;
+  }
+
+  .price-tag-icon {
+    background-image: url('/call-center-return/assets/call-center-return/images/edit-price-tag.svg');
+    display: inline-block;
+    background-repeat: no-repeat;
+    width: 1.0rem;
+    height: 1.0rem;
+  }
+
+  @media (max-width: 60rem) {
+    // Target 400x zoom issues on Order Summary Page Items
+    ::ng-deep {
+      // Table - Scroll Fix
+      .return-shipment-lines-component {
+        td,
+        th {
+          position: sticky !important;
+        }
+      }
+    }
+  }
+
+  .itemImage-thumbnails {
+    width:100%;
+    background: $white-0;
+    padding: 0.3rem 0.8rem;
+    display: flex;
+    flex-wrap: wrap;
+    .image-container {
+        margin: 0.2rem;
+        display: inline-block;
+        border: 1px solid #979797;
+        position: relative;
+        img{
+            width: 3rem;
+            height: 3rem;
+            outline: none;
+        }
+        .items-qty{
+            background: $white-0;
+            position:absolute;
+            right:0;
+            bottom: 0;
+            border-radius:99px;
+            border:1px solid #A8A8A8;
+            min-height:0.75rem;
+            min-width:0.75rem;
+            text-align:center;
+            font-size: 10px;
+            line-height: 9px;
+            font-weight: 400;
+            padding: 3px;
+        }
+    }
+    .more-items{
+        margin: 0.2rem 0.5rem;
+        display: flex;
+        align-items: end;
+    }
+  }
+
+  ::ng-deep {
+    .buc-table-container cds-table>table>thead th[cdstableheadcell]:has(.cds--popover--open):hover {
+      z-index: 102!important
+    }
+    .cds--data-table--tall td.freeze-overflow-menu-data {
+      padding-top: 0 !important;
+    }
+
+    svg[ibmIcon="pause--outline--filled"] {
+      fill: #da1e28 !important;
+    }
+
+    button.cds--table-sort {
+      display: flex !important;
+    }
+
+    .return-fulfillment-lines-table {
+      .cds--data-table-header{
+        padding: 0.25rem !important;
+      }
+      tr.disabled td,
+      tr:hover.disabled td {
+        color: $gray-50;
+        a,
+        buc-link {
+          color: $gray-50;
+          pointer-events: none;
+          cursor: default;
+        }
+      }
+    }
+    .table-head-cell-text{
+      width: max-content;
+    } 
+  }
+}

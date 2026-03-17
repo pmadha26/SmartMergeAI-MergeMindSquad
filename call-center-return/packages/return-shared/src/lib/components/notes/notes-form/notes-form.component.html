@@ -1,0 +1,61 @@
+<!--
+* IBM Confidential
+* OCO Source Materials
+* 5737-D18, 5725-D10
+*
+* (C) Copyright International Business Machines Corp. 2022, 2023
+*
+* The source code for this program is not published or otherwise divested
+* of its trade secrets, irrespective of what has been deposited with the
+* U.S. Copyright Office.
+-->
+
+<ng-template bucExtension [componentName]="componentId" [placement]="'top'" [id]="EXTENSION.TOP" [parent]="this">
+</ng-template>
+
+<div class="notes-division">
+  <div class="equal-width left">
+    <buc-combobox [attr.tid]="'note-type'" [label]="'SHARED.NOTES.LABEL_NOTE_TYPE' | translate" [items]="reasonList"
+      placeholder="" (selectItemAction)="onDropdownSelected('noteType',$event)">
+    </buc-combobox>
+  </div>
+  <div class="equal-width"> 
+      <buc-combobox *ngIf="allowExchangeNotes && categoryVisible" [attr.tid]="'note-category'" [label]="'SHARED.NOTES.LABEL_NOTE_CATEGORY' | translate" [items]="categoryList"
+      placeholder="" (selectItemAction)="onCategorySelected($event)" [disabled]="!categoryEditable">
+    </buc-combobox>
+  </div>
+</div>
+
+<div class="contact-division">
+  <div class="equal-width left">
+    <buc-combobox [attr.tid]="'contact-type'" [label]="'SHARED.NOTES.LABEL_CONTACT_TYPE' | translate"
+      [items]="contactList" placeholder="" (selectItemAction)="onDropdownSelected('contactType',$event)">
+    </buc-combobox>
+  </div>
+  <div class="equal-width right">
+    <buc-label [attr.tid]="'contact-reference'" [label]="'SHARED.NOTES.LABEL_CONTACT_REFERENCE' | translate"
+      placeholder="" [(inputValue)]="notesData.contactReference" (keyup)="inputChanged()">
+    </buc-label>
+  </div>
+</div>
+<div class="note-description">
+  <buc-textarea [attr.tid]="'note-description'" [(inputValue)]="notesData.notesDescription" rows="5" maxlength="800"
+    (keyup)="inputChanged()" [class.invalid]="toggleValidation" [label]="'SHARED.NOTES.LABEL_NOTE' | translate"
+    placeholder="">
+  </buc-textarea>
+</div>
+
+<div class="checkbox-wrapper">
+  <p class="instructions">{{'SHARED.NOTES.LABEL_LABEL' | translate}}</p>
+  <buc-checkbox [attr.tid]="'high-priority-checkbox'" class="padding-bottom--1rem" [disabled]=""
+    [checked]="notesData.priority" (change)="onCheckbox('priority',$event)">
+    {{'SHARED.NOTES.LABEL_HIGH_PRIORITY' | translate}}
+  </buc-checkbox>
+  <buc-checkbox [attr.tid]="'internal-checkbox'" class="padding-bottom--1rem" [disabled]=""
+    [checked]="notesData.internal" (change)="onCheckbox('internal',$event)">
+    {{'SHARED.NOTES.LABEL_INTERNAL' | translate}}
+  </buc-checkbox>
+</div>
+
+<ng-template bucExtension [componentName]="componentId" [placement]="'bottom'" [id]="EXTENSION.BOTTOM" [parent]="this">
+</ng-template>

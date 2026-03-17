@@ -1,0 +1,11 @@
+{
+  "ROUTE_NAMES": {
+    "LABEL_RETURN_SEARCH": "Расширенный поиск возврата",
+    "LABEL_RETURN_SEARCH_RESULT": "return-поиск-результат",
+    "LABEL_RETURN_DETAILS": "сведения о возврате"
+  },
+  "CUSTOMER_SEARCH_MODAL": {
+    "HEADER_CUSTOMER_SEARCH": "Расширенный поиск клиентов",
+    "LABEL_SELECT_CUSTOMER": "Выбрать клиента"
+  }
+}

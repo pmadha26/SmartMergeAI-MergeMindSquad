@@ -1,0 +1,62 @@
+{
+  "RETURN_SEARCH": {
+    "GENERAL": {
+      "LABEL_SHOW_DRAFT_RETURNS": "Conceptretouren afbeelden",
+      "LABEL_RETURN_LINE_STATUS": "Status retourregel",
+      "LABEL_ADVANCED_SEARCH": "Geavanceerd zoeken naar retour",
+      "LABEL_RESULTS": "Zoekresultaten voor retour",
+      "LABEL_ENTERPRISE": "Bedrijf",
+      "LABEL_RETURN_NUMBER": "Retournummer",
+      "LABEL_CUSTOMER_PO": "Nummer inkooporder klant",
+      "LABEL_ORIGINAL_ORDER_NUMBER": "Oorspronkelijk bestelnummer",
+      "LABEL_RETURN_DATE_RANGE": "Bereik retourdatum",
+      "LABEL_HOLD_TYPE": "Type aanhouding",
+      "LABEL_RETURN_STATUS": "Retourstatus",
+      "LABEL_RETURN_AGE": "Leeftijd retour",
+      "LABEL_EMAIL": "E-mailadres",
+      "LABEL_CUSTOMER_TELEPHONE": "Telefoonnummer",
+      "LABEL_FIRST_NAME": "Voornaam",
+      "LABEL_LAST_NAME": "Achternaam",
+      "LABEL_POSTAL_CODE": "Postcode",
+      "LABEL_ORDER_NAME": "Retournaam",
+      "LABEL_CUSTOMER_CREDIT_CARD_NUMBER": "Laatste 4 cijfers van creditcard",
+      "LABEL_RETURN_SEARCH": "Zoeken",
+      "LABEL_CLEAR": "Verwijderen",
+      "LABEL_SEARCH_BY_RETURN_INFO": "Zoeken op retourgegevens",
+      "LABEL_SEARCH_BY_CUSTOMER_INFO": "Zoeken op klantgegevens",
+      "LABEL_QUERY_is": "is",
+      "LABEL_QUERY_starts_with": "begint met",
+      "LABEL_QUERY_contains": "bevat",
+      "MESSAGE_SEARCH_GRP_DIFF": "Een of meer velden die in deze opgeslagen zoekopdracht zijn gespecificeerd, zijn mogelijk niet meer gegroepeerd of zijn op een andere manier gegroepeerd. Zoekresultaten kunnen variëren.",
+      "CONFIRM_RETURN": "Bevestigde retour",
+      "DRAFT_RETURN": "Conceptretour",
+      "RECENT_RETURNS": "Recente retouren",
+      "ARCHIVED_RETURNS": "Gearchiveerde retours",
+      "LABEL_SKU_NUMBER": "SKU-nummer",
+      "TOO_MANY_RESULTS": "Uw zoekopdracht leverde {{total}} overeenkomsten op. Zoeken is geconfigureerd om maximaal {{max}} records te retourneren.",
+      "ALL_ORDERS": "Alle bestellingen",
+      "CONFIRMED_ORDERS": "Bevestigde bestellingen",
+      "DRAFT_ORDERS": "Conceptbestellingen"
+    },
+    "ORDER_LINE_STATUS_DROPDOWN": {
+      "LABEL_CREATED": "Gemaakt",
+      "LABEL_RECEIVED": "Ontvangen",
+      "LABEL_RECEIPT_CLOSED": "Ontvangst gesloten",
+      "LABEL_CANCELLED": "Geannuleerd",
+      "TOOLTIP_MESSAGE": "Orders die ook maar één regel met de geselecteerde status bevatten, worden weergegeven.",
+      "MESSAGE_WRONG_COMBOBOX_SEARCH_TEXT": "Er is een geldige waarde vereist"
+    },
+    "RETURN_DATE_RANGE": {
+      "TOOLTIP_MESSAGE": "Het standaarddatumbereik is {{duration}} {{durationUnit}}",
+      "LABEL_YEARS_PLURAL": "jaar",
+      "LABEL_MONTHS_PLURAL": "maanden",
+      "LABEL_DAYS_PLURAL": "dagen",
+      "LABEL_YEARS_SINGULAR": "jaar",
+      "LABEL_MONTHS_SINGULAR": "maand",
+      "LABEL_DAYS_SINGULAR": "dag"
+    },
+    "RETURN_AGE": {
+      "HELPER_TEXT": "Controleer het datumbereik van de retour"
+    }
+  }
+}

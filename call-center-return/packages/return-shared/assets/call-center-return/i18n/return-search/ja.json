@@ -1,0 +1,62 @@
+{
+  "RETURN_SEARCH": {
+    "GENERAL": {
+      "LABEL_SHOW_DRAFT_RETURNS": "ドラフト返品の表示",
+      "LABEL_RETURN_LINE_STATUS": "返品明細状況",
+      "LABEL_ADVANCED_SEARCH": "返品の拡張検索",
+      "LABEL_RESULTS": "検索結果を返す",
+      "LABEL_ENTERPRISE": "エンタープライズ",
+      "LABEL_RETURN_NUMBER": "返品番号",
+      "LABEL_CUSTOMER_PO": "顧客購入オーダー番号",
+      "LABEL_ORIGINAL_ORDER_NUMBER": "元のオーダー番号",
+      "LABEL_RETURN_DATE_RANGE": "返品日付範囲",
+      "LABEL_HOLD_TYPE": "保留タイプ",
+      "LABEL_RETURN_STATUS": "返品状況",
+      "LABEL_RETURN_AGE": "返品経過日数",
+      "LABEL_EMAIL": "E メール・アドレス",
+      "LABEL_CUSTOMER_TELEPHONE": "電話番号",
+      "LABEL_FIRST_NAME": "名",
+      "LABEL_LAST_NAME": "姓",
+      "LABEL_POSTAL_CODE": "郵便番号",
+      "LABEL_ORDER_NAME": "返品名",
+      "LABEL_CUSTOMER_CREDIT_CARD_NUMBER": "クレジット・カードの最後の 4 桁の数字",
+      "LABEL_RETURN_SEARCH": "検索",
+      "LABEL_CLEAR": "クリア",
+      "LABEL_SEARCH_BY_RETURN_INFO": "返品詳細による検索",
+      "LABEL_SEARCH_BY_CUSTOMER_INFO": "顧客詳細情報で検索",
+      "LABEL_QUERY_is": "次と同一である",
+      "LABEL_QUERY_starts_with": "次で始まる",
+      "LABEL_QUERY_contains": "次を含む",
+      "MESSAGE_SEARCH_GRP_DIFF": "この保存済み検索で指定されている 1 つ以上のフィールドは、グループ化されなくなったか、別の方法でグループ化されている可能性があります。 検索結果は異なる場合があります。",
+      "CONFIRM_RETURN": "確認された返品",
+      "DRAFT_RETURN": "ドラフト返品",
+      "RECENT_RETURNS": "最近の返品",
+      "ARCHIVED_RETURNS": "保存された返品",
+      "LABEL_SKU_NUMBER": "SKU 番号",
+      "TOO_MANY_RESULTS": "検索の結果、{{total}} 件の一致が見つかりました。 最大 {{max}} 個のレコードを返すように検索が構成されています。",
+      "ALL_ORDERS": "すべてのオーダー",
+      "CONFIRMED_ORDERS": "確認済み注文",
+      "DRAFT_ORDERS": "ドラフト注文"
+    },
+    "ORDER_LINE_STATUS_DROPDOWN": {
+      "LABEL_CREATED": "作成済み",
+      "LABEL_RECEIVED": "受入済み",
+      "LABEL_RECEIPT_CLOSED": "受け取り終了",
+      "LABEL_CANCELLED": "キャンセル済み",
+      "TOOLTIP_MESSAGE": "選択した状況の行が 1 つでも含まれているオーダーがリストされます。",
+      "MESSAGE_WRONG_COMBOBOX_SEARCH_TEXT": "有効な値が必要です"
+    },
+    "RETURN_DATE_RANGE": {
+      "TOOLTIP_MESSAGE": "デフォルトの日付範囲は {{duration}} {{durationUnit}} です",
+      "LABEL_YEARS_PLURAL": "年",
+      "LABEL_MONTHS_PLURAL": "月",
+      "LABEL_DAYS_PLURAL": "日",
+      "LABEL_YEARS_SINGULAR": "年",
+      "LABEL_MONTHS_SINGULAR": "月",
+      "LABEL_DAYS_SINGULAR": "日"
+    },
+    "RETURN_AGE": {
+      "HELPER_TEXT": "返品日の範囲のレビュー"
+    }
+  }
+}

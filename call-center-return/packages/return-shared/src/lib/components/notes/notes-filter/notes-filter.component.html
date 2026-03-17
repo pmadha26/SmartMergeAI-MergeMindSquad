@@ -1,0 +1,144 @@
+<!--
+* IBM Confidential
+* OCO Source Materials
+* 5737-D18, 5725-D10
+*
+* (C) Copyright International Business Machines Corp. 2022, 2023
+*
+* The source code for this program is not published or otherwise divested
+* of its trade secrets, irrespective of what has been deposited with the
+* U.S. Copyright Office.
+-->
+
+<ng-template bucExtension [componentName]="componentId" [placement]="'top'" [id]="EXTENSION.TOP" [parent]="this">
+</ng-template>
+
+<div class="search-panel" [attr.tid]="componentId + 'notesSearch'">
+  <div class="filter">
+    <ibm-search theme="dark" (valueChange)="onSearch($event)" (clear)="clearSearch()" size="lg" [disabled]="disabled"
+      [placeholder]="'SHARED.NOTES.SEARCH_PLACEHOLDER' | translate" [autocomplete]="true"></ibm-search>
+
+    <!--
+      ai-flyout-menu is missing `size` & `disabled` property. For the time being, I've changed the size of search to be `xl` to
+      properly align flyout button & search
+      For disabled, I'm hiding the flyout.
+    -->
+    <!-- <ai-flyout-menu *ngIf="!disabled" [(isOpen)]="isOpen" [flip]="true" size="sm" placement="bottom">
+      <div class="title" [attr.tid]="componentId + 'notesFilter'">
+        {{ 'SHARED.NOTES.LABEL_FILTER_BY' | translate }}
+        <a ibmLink (click)="clearFilterClicked($event)" class="clear-flyout" href="#">
+          {{'SHARED.NOTES.LABEL_CLEAR_FILTER' | translate }}
+        </a>
+      </div>
+      <div>
+        <div class="margin-top--1rem" *ngIf="notesTypeList.length" [attr.tid]="componentId + 'notesTypes'">
+          <buc-combobox type="multi" [label]="'SHARED.NOTES.FILTER_BY_TYPE' | translate"
+            [items]="notesTypeList" theme="light"
+            [placeholder]="'SHARED.NOTES.PLACEHOLDER_CHOOSE_AN_OPTION' | translate"
+            (selectItemAction)="onComboSelected($event)" (clear)="onClear($event)">
+          </buc-combobox>
+        </div>
+        <div class="margin-top--1rem" *ngIf="categoryList && allowExchangeNotes" [attr.tid]="componentId + 'notesCategory'">
+          <buc-combobox [label]="'SHARED.NOTES.FILTER_BY_CATEGORY' | translate"
+            [items]="categoryList" theme="light"
+            [placeholder]="'SHARED.NOTES.PLACEHOLDER_CHOOSE_AN_OPTION' | translate"
+            (selectItemAction)="onCategoryChange($event)" (clear)="onClear($event)">
+          </buc-combobox>
+        </div>
+        <div class="checkbox-wrapper margin-top--1rem">
+          <div class="cds--label">
+            {{ 'SHARED.NOTES.LABEL_NOTE_TYPE' | translate}}
+          </div>
+          <buc-checkbox [checked]="filtersInView.system" [attr.tid]="componentId + 'checkboxSystem'"
+            (change)="onCheckbox('system', $event.checked)">
+            {{ 'SHARED.NOTES.LABEL_SYSTEM' | translate }}
+          </buc-checkbox>
+          <buc-checkbox [checked]="filtersInView.user" [attr.tid]="componentId + 'checkboxUser'"
+            (change)="onCheckbox('user', $event.checked)">
+            {{ 'SHARED.NOTES.LABEL_USER' | translate }}
+          </buc-checkbox>
+        </div>
+        <div class="priority-box" [attr.tid]="componentId + 'checkboxPriorty'">
+          <buc-checkbox [checked]="filtersInView.highPriority" (change)="onCheckbox('highPriority', $event.checked)">
+            {{'SHARED.NOTES.LABEL_HIGH_PRIORITY' | translate}}
+          </buc-checkbox>
+        </div>
+      </div>
+      <ai-flyout-menu-footer>
+        <button ibmButton="secondary" (click)="closeFlyout()">
+          {{'SHARED.NOTES.LABEL_DISMISS' | translate}}
+        </button>
+        <button ibmButton (click)="applyFilter()">
+          {{'SHARED.NOTES.LABEL_APPLY' | translate}}
+        </button>
+      </ai-flyout-menu-footer>
+    </ai-flyout-menu> -->
+    <buc-flyout-menu [align]="'bottom-right'" [(isOpen)]="isOpen">
+      <!-- Content for the toggle tip -->
+      <ng-template #content>
+        <div class="title" [attr.tid]="componentId + 'notesFilter'">
+          {{ 'SHARED.NOTES.LABEL_FILTER_BY' | translate }}
+          <a ibmLink (click)="clearFilterClicked($event)" class="clear-flyout" href="#">
+            {{'SHARED.NOTES.LABEL_CLEAR_FILTER' | translate }}
+          </a>
+        </div>
+        <div>
+          <div class="margin-top--1rem" *ngIf="notesTypeList.length" [attr.tid]="componentId + 'notesTypes'">
+            <buc-combobox type="multi" [label]="'SHARED.NOTES.FILTER_BY_TYPE' | translate"
+              [items]="notesTypeList" theme="light"
+              [placeholder]="'SHARED.NOTES.PLACEHOLDER_CHOOSE_AN_OPTION' | translate"
+              (selectItemAction)="onComboSelected($event)" (clear)="onClear($event)">
+            </buc-combobox>
+          </div>
+          <div class="margin-top--1rem" *ngIf="categoryList && allowExchangeNotes" [attr.tid]="componentId + 'notesCategory'">
+            <buc-combobox [label]="'SHARED.NOTES.FILTER_BY_CATEGORY' | translate"
+              [items]="categoryList" theme="light"
+              [placeholder]="'SHARED.NOTES.PLACEHOLDER_CHOOSE_AN_OPTION' | translate"
+              (selectItemAction)="onCategoryChange($event)" (clear)="onClear($event)">
+            </buc-combobox>
+          </div>
+          <div class="checkbox-wrapper margin-top--1rem">
+            <div class="cds--label">
+              {{ 'SHARED.NOTES.LABEL_NOTE_TYPE' | translate}}
+            </div>
+            <buc-checkbox [checked]="filtersInView.system" [attr.tid]="componentId + 'checkboxSystem'"
+              (change)="onCheckbox('system', $event.checked)">
+              {{ 'SHARED.NOTES.LABEL_SYSTEM' | translate }}
+            </buc-checkbox>
+            <buc-checkbox [checked]="filtersInView.user" [attr.tid]="componentId + 'checkboxUser'"
+              (change)="onCheckbox('user', $event.checked)">
+              {{ 'SHARED.NOTES.LABEL_USER' | translate }}
+            </buc-checkbox>
+            <buc-checkbox [checked]="filtersInView.highPriority" (change)="onCheckbox('highPriority', $event.checked)" [attr.tid]="componentId + 'checkboxPriorty'">
+              {{'SHARED.NOTES.LABEL_HIGH_PRIORITY' | translate}}
+            </buc-checkbox>
+          </div>
+        </div>
+      </ng-template>
+    
+      <!-- Action for the toggle tip -->
+      <ng-template #action>
+        <button ibmButton="secondary" (click)="closeFlyout()">
+          {{'SHARED.NOTES.LABEL_DISMISS' | translate}}
+        </button>
+        <button ibmButton (click)="applyFilter()">
+          {{'SHARED.NOTES.LABEL_APPLY' | translate}}
+        </button>
+      </ng-template>
+  </buc-flyout-menu>
+  </div>
+
+  <!-- tags -->
+  <ibm-tag-filter type="blue" *ngIf="filters.system" (close)="onCheckbox('system', false, true)">
+    {{ 'SHARED.NOTES.LABEL_SYSTEM' | translate }}
+  </ibm-tag-filter>
+  <ibm-tag-filter type="blue" *ngIf="filters.user" (close)="onCheckbox('user', false, true)">
+    {{ 'SHARED.NOTES.LABEL_USER' | translate }}
+  </ibm-tag-filter>
+  <ibm-tag-filter type="blue" *ngIf="filters.highPriority" (close)="onCheckbox('highPriority', false, true)">
+    {{'SHARED.NOTES.LABEL_HIGH_PRIORITY' | translate}}
+  </ibm-tag-filter>
+</div>
+
+<ng-template bucExtension [componentName]="componentId" [placement]="'bottom'" [id]="EXTENSION.BOTTOM" [parent]="this">
+</ng-template>

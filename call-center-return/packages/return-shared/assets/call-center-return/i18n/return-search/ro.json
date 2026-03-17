@@ -1,0 +1,48 @@
+{
+  "RETURN_SEARCH": {
+    "GENERAL": {
+      "LABEL_SHOW_DRAFT_RETURNS": "$17b2985d#Show draft returns]}",
+      "LABEL_DRAFT_RETURNS": "$d8c42bf7#Draft returns]}",
+      "LABEL_RETURN_LINE_STATUS": "$c5bc3aaf#Return line status]}",
+      "LABEL_ADVANCED_SEARCH": "$2f2f4522#Advanced return search]}",
+      "LABEL_RESULTS": "$55cb3a3b#Return search results]}",
+      "LABEL_ENTERPRISE": "$48d72865#Enterprise]}",
+      "LABEL_RETURN_NUMBER": "$4f9dc130#Return number]}",
+      "LABEL_CUSTOMER_PO": "$384c7564#Customer purchase order number]}",
+      "LABEL_ORIGINAL_ORDER_NUMBER": "$bc167d19#Original  order number]}",
+      "LABEL_RETURN_DATE_RANGE": "$61bc3614#Return date range]}",
+      "LABEL_HOLD_TYPE": "$dc8f184f#Hold type]}",
+      "LABEL_RETURN_STATUS": "$a20dbb78#Return status]}",
+      "LABEL_RETURN_AGE": "$6529c734#Return age]}",
+      "LABEL_EMAIL": "$f6b25072#Email address]}",
+      "LABEL_CUSTOMER_TELEPHONE": "$74cd259a#Phone number]}",
+      "LABEL_FIRST_NAME": "$9174ac50#Given name]}",
+      "LABEL_LAST_NAME": "$d4549ce2#Surname]}",
+      "LABEL_POSTAL_CODE": "$b41f4c95#Postal code]}",
+      "LABEL_ORDER_NAME": "$2b772973#Return name]}",
+      "LABEL_CUSTOMER_CREDIT_CARD_NUMBER": "$72e9fe98#Last 4 digits of credit card]}",
+      "LABEL_RETURN_SEARCH": "$6dfd05c3#Search]}",
+      "LABEL_CLEAR": "$f491dd00#Clear]}",
+      "LABEL_SEARCH_BY_RETURN_INFO": "$16c1058f#Search by return details]}",
+      "LABEL_SEARCH_BY_CUSTOMER_INFO": "$13067be7#Search by customer details]}",
+      "LABEL_QUERY_is": "$6a95dd9b#is]}",
+      "LABEL_QUERY_starts_with": "$baa0b444#starts with]}",
+      "LABEL_QUERY_contains": "$8124679a#contains]}",
+      "MESSAGE_SEARCH_GRP_DIFF": "$f18df933#One or more fields that are specified in this saved search might no longer be grouped or might be grouped differently. Search results might vary.]}",
+      "CONFIRM_RETURN": "$95399ef7#Confirmed return]}",
+      "DRAFT_RETURN": "$397ee3b2#Draft return]}",
+      "RECENT_RETURNS": "$e6c8bb34#Recent returns]}",
+      "ARCHIVED_RETURNS": "$2a3d5a99#Archived returns]}",
+      "LABEL_SKU_NUMBER": "$648a33#SKU number]}",
+      "TOO_MANY_RESULTS": "$d8bf79aa#Your search resulted in {{total}} matches. Search is configured to return a maximum of {{max}} records.]}"
+    },
+    "ORDER_LINE_STATUS_DROPDOWN": {
+      "LABEL_CREATED": "$57bcfabb#Created]}",
+      "LABEL_RECEIVED": "$6beec9f8#Received]}",
+      "LABEL_RECEIPT_CLOSED": "$3d0b097d#Receipt closed]}",
+      "LABEL_CANCELLED": "$745f74c2#Cancelled]}",
+      "TOOLTIP_MESSAGE": "$61d1bcc5#Orders that contain even one line with the selected status will be listed.]}",
+      "MESSAGE_WRONG_COMBOBOX_SEARCH_TEXT": "$b69add18#A valid value is required]}"
+    }
+  }
+}

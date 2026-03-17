@@ -1,0 +1,52 @@
+{
+  "MANAGE_HOLDS": {
+    "LABEL_MANAGE_HOLDS": "Aanhoudingen bekijken of oplossen",
+    "LABEL_MANAGE_HOLDS_COUNT": "Aanhoudingen van regels oplossen: {{count}}",
+    "LABEL_MANAGE_HOLDS_COUNTS": "Aanhoudingen van regels oplossen: {{count}}",
+    "LABEL_LINE_NOTIFICATION_COUNT": "Aanhoudingen worden niet toegepast op {{ count }} geselecteerde regel.",
+    "LABEL_LINE_NOTIFICATION_COUNTS": "Aanhoudingen worden niet toegepast op {{ count }} geselecteerde regels.",
+    "LABEL_BACK_TO_RETURN_SUMMARY": "Terug naar het retouroverzicht",
+    "TOOLTIP_MSG_RESOLVE_HOLDS": "Er zijn nog geen aanhoudingen toegepast."
+  },
+  "ACTIVE_HOLDS_TABLE": {
+    "LABEL_ACTIVE_HOLDS": "Actieve aanhoudingen",
+    "LABEL_OPEN_ALERTS": "Waarschuwingen openen",
+    "LABEL_HEADER_LINE": "Regel",
+    "LABEL_HEADER_ITEM": "Retourneren van item",
+    "LABEL_HEADER_HOLD_TYPE": "Type aanhouding",
+    "LABEL_HEADER_DATE": "Datum",
+    "LABEL_HEADER_COMMENTS": "Commentaar",
+    "LABEL_RESOLVE": "Omzetten",
+    "LABEL_addHold": "Aanhouding toevoegen",
+    "LABEL_NO_ACTIVE_HOLDS": "Geen actieve aanhoudingen",
+    "LABEL_USER_PERMISSION": "U hebt geen toestemming om de aanhoudingen op te heffen.",
+    "LABEL_STATUS_MOD_PERMISSION": "Bij de huidige status van het item kunnen er geen aanhoudingen worden toegepast."
+  },
+  "RESOLVED_HOLDS_TABLE": {
+    "LABEL_RESOLVED_HOLDS": "Opgeloste aanhoudingen",
+    "LABEL_HEADER_LINE": "Regel",
+    "LABEL_HEADER_ITEM": "Retourneren van item",
+    "LABEL_HEADER_HOLD_TYPE": "Type aanhouding",
+    "LABEL_HEADER_DATE": "Datum",
+    "LABEL_HEADER_COMMENTS": "Commentaar",
+    "LABEL_NO_RESOLVE_HOLDS": "Geen opgeloste aanhoudingen"
+  },
+  "RESOLVE_HOLDS_MODAL": {
+    "LABEL_HEADER_RESOLVE_HOLDS": "Aanhoudingen oplossen",
+    "LABEL_HEADER_RESOLVE_HOLDS_COUNT": "Aanhoudingen van regels oplossen: {{count}}",
+    "LABEL_HEADER_RESOLVE_HOLDS_COUNTS": "Aanhoudingen van regels oplossen: {{count}}",
+    "LABEL_HEADER_LINE": "Regel",
+    "LABEL_HEADER_ITEM": "Item",
+    "LABEL_HEADER_HOLD_TYPE": "Type aanhouding",
+    "LABEL_HEADER_COMMENTS": "Opmerkingen (optioneel)",
+    "LABEL_CANCEL": "Annuleren",
+    "LABEL_RESOLVE": "Omzetten",
+    "LABEL_RESOLVE_HOLD_MSG_LINE": "Opgelost. Aanhoudingen verwijderd uit regels: {{count}}.",
+    "LABEL_RESOLVE_HOLD_MSG_LINES": "Opgelost. Aanhoudingen verwijderd uit regels: {{count}}.",
+    "LABEL_RESOLVE_HOLD_MSG_ORDER": "{{ count }} van {{ count1 }} aanhoudingen van deze bestelling zijn opgelost.",
+    "RESOLVE_HOLD_FAILED_ERROR_MSG": "Verzoek om aanhoudingen op te lossen is mislukt."
+  },
+  "SIDE_PANEL": {
+    "LABEL_NOTES": "Opmerkingen ({{count}})"
+  }
+}

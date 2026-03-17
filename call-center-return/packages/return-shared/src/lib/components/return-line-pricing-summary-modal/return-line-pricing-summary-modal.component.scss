@@ -1,0 +1,49 @@
+/*
+ * IBM Confidential
+ * OCO Source Materials
+ * 5737-D18, 5725-D10
+ *
+ * (C) Copyright International Business Machines Corp. 2022, 2023
+ *
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
+ * U.S. Copyright Office.
+ */
+ 
+
+.quantity{
+   padding-bottom: 1rem;
+   border-bottom: 1px solid #8e8c8c;
+}
+
+.iconStyle {
+   fill: var(--cds-icon-primary);
+ } 
+
+:host ::ng-deep{
+   .adjButton{
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+
+      .cds--btn--primary{
+         max-width: none;
+         flex: 0 1 50%;
+      }
+   }
+
+   .width--50p {
+      width: 50%;
+   }
+   cds-tooltip {
+      float: right;
+
+      buc-button {
+         display: flex;
+         
+         .cds--btn--primary {
+           flex: 1;
+         }
+      }
+   }
+}

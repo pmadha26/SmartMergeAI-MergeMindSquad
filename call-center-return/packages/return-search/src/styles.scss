@@ -1,0 +1,176 @@
+/*
+ * IBM Confidential
+ * OCO Source Materials
+ * 5737-D18, 5725-D10
+ *
+ * (C) Copyright International Business Machines Corp. 2022, 2023
+ *
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
+ * U.S. Copyright Office.
+ */
+
+/* You can add global styles to this file, and also import other style files */
+// $feature-flags: (
+//   grid-columns-16: true,
+// );
+
+@use '@carbon/styles/scss/config' with (
+	// Use flexbox for grid - stick to CSS Grid or Flexbox
+	// CSS Grid has become the default grid system in v11
+	$use-flexbox-grid: true
+);
+
+@use '@carbon/styles' as *;
+
+html {
+  @include theme($g10);
+}
+
+
+// Colors definitions
+$section-bg-color: $white-0;
+$bg-white: $white-0;
+
+.bg-white {
+  background-color: $bg-white;
+}
+
+.notification-overlay {
+  position: fixed;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  top: 1.75rem;
+
+  // general notification attributes
+  ibm-notification.cds--inline-notification {
+    max-width: unset;
+    margin: auto 2rem 0.1rem 2rem;
+    color: $black-100;
+
+    div.cds--inline-notification__details {
+      div.cds--inline-notification__text-wrapper {
+        p.cds--inline-notification__subtitle {
+          font-weight: 600;
+        }
+      }
+    }
+
+    button.cds--inline-notification__close-button {
+      ibm-icon-close.cds--inline-notification__close-icon {
+        fill: $black-100;
+      }
+    }
+
+    button.cds--inline-notification__close-button:focus {
+      outline: 2px solid $gray-30;
+    }
+  }
+
+  // success notification colors
+  ibm-notification.cds--inline-notification--success {
+    background: $green-10;
+    border-top: 1px solid $green-40;
+    border-right: 1px solid $green-40;
+    border-bottom: 1px solid $green-40;
+  }
+
+  // error notification colors
+  ibm-notification.cds--inline-notification--error {
+    background: $red-10;
+    border-top: 1px solid $red-50;
+    border-right: 1px solid $red-50;
+    border-bottom: 1px solid $red-50;
+  }
+}
+
+.screen-loading {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  height: 100%;
+}
+
+// icon colors should be applied globally
+ibm-icon-warning-alt-filled {
+  fill: $yellow-30;
+  opacity: 1;
+
+  &.danger {
+    svg path {
+      fill: $red-60;
+      opacity: 1;
+
+      &[data-icon-path="inner-path"] {
+        fill: $white-0;
+        opacity: 1;
+      }
+    }
+  }
+}
+
+ibm-icon-warning-filled {
+  fill: $yellow-30;
+  opacity: 1;
+}
+
+// modals
+ibm-modal {
+  cds-overlay {
+    section.cds--modal {
+      div.cds--modal-container {
+        ibm-modal-header {
+          header {
+            font-size: 1.25rem;
+          }
+        }
+
+        .cds--select-input {
+          background-color: transparent;
+        }
+      }
+
+      .cds--modal-content--overflow-indicator {
+        background: transparent;
+      }
+    }
+  }
+}
+
+// tabs (container-type)
+.cds--tabs--container .cds--tabs__nav-item--selected:not(.cds--tabs__nav-item--disabled),
+.cds--tabs--container .cds--tabs__nav-item--selected:hover:not(.cds--tabs__nav-item--disabled) {
+  background-color: $layer-02;
+}
+
+html,
+body,
+.app-root-buc-app-order,
+buc-root,
+.app-region-body,
+.app-body-content {
+  display: flex;
+  background-color: $layer-01;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100%;
+  flex: 1;
+
+  a:hover {
+    cursor: pointer;
+  }
+}
+.iot--date-time-picker__box{
+  background-color: $layer-02 !important;
+}
+
+call-center-return-search .iot--date-time-picker__wrapper .iot--date-time-picker__box .iot--date-time-picker__field>span:first-of-type {
+  max-width: 22rem;
+}
+
+call-center-return-search buc-date-time-relative {
+  .cds--select-input__wrapper .cds--select-input, .cds--text-input {
+    height: 2.5rem;
+  }
+}

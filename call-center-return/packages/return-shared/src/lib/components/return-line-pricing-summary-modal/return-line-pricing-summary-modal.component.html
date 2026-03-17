@@ -1,0 +1,332 @@
+<!--
+* IBM Confidential
+* OCO Source Materials
+* 5737-D18, 5725-D10
+*
+* (C) Copyright International Business Machines Corp. 2022, 2023
+*
+* The source code for this program is not published or otherwise divested
+* of its trade secrets, irrespective of what has been deposited with the
+* U.S. Copyright Office.
+-->
+
+<ng-template bucExtension [componentName]="componentId" [placement]="'top'" [id]="EXTENSION.TOP" [parent]="this">
+</ng-template>
+
+<ibm-modal [size]="'sm'" [open]="open">
+  <ibm-modal-header (closeSelect)="onCloseModalClick()" [attr.tid]="componentId + '-header'">
+      <span [attr.tid]="componentId + '-header-title'"> {{ 'PAYMENT_SUMMARY.SIDE_PANEL.LABEL_PRICING_SUMMARY' | translate }}</span>
+      <div class="itemDesc" [attr.tid]="componentId + '-header-desc'" [innerHTML]="itemDesc"></div>
+  </ibm-modal-header>
+
+  <section class="cds--modal-content" [attr.tid]="componentId + '-modal-content'">
+  <div class="pricing-summary-container">
+    <div class="cds--col pricing-summary-section__charges">
+
+        <div class="charge-payment-container">
+            <div class="subTotalToTaxes">
+                <div class="margin-top--1rem">
+                    <div class="margin-top--1rem">
+                        <!--UnitPrice-->
+                        <div  class="display-flex justify-content--space-between">
+                            <div>
+                                <span class="color-text-02" [attr.tid]="componentId + '-unitPrice-title'">
+                                    {{'PAYMENT_SUMMARY.SIDE_PANEL.LABEL_UNIT_PRICE' | translate }}
+                                </span>
+                            </div>
+                            <div [attr.tid]="componentId + '-unitPrice-value'">
+                                {{returnLineDetails.LineOverallTotals.UnitPrice | bucCommonCurrencyFmt:
+                                currency: 'symbol'}}
+                            </div>
+                        </div>
+                    </div>
+                    <!--Quantity-->
+                    <div class="margin-top--1rem quantity">
+                        <div  class="display-flex justify-content--space-between">
+                            <div>
+                                <span class="color-text-02" [attr.tid]="componentId + '-quantity-title'">
+                                    {{'PAYMENT_SUMMARY.SIDE_PANEL.LABEL_QUANTITY' | translate }}
+                                </span>
+                            </div>
+                            <div [attr.tid]="componentId + '-quantity-value'">
+                                {{returnLineDetails.OrderedQty }}
+                            </div>
+                        </div>
+                    </div>
+                    <!--SubTotal-->
+                    <div class="margin-top--1rem">
+                        <div  class="display-flex justify-content--space-between">
+                            <div>
+                                <span class="color-text-02" [attr.tid]="componentId + '-subtotal-title'">
+                                    {{'PAYMENT_SUMMARY.SIDE_PANEL.LABEL_SUBTOTAL' | translate }}
+                                </span>
+                            </div>
+                            <div [attr.tid]="componentId + '-subtotal-value'">
+                                {{returnLineDetails.LineOverallTotals.ExtendedPrice | bucCommonCurrencyFmt:
+                                currency: 'symbol'}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--CSS Accordion starts -->
+
+                <div class="row">
+                    <div class="col">
+                        <div class="tabs">
+
+                            <!--CSS Accordion Adjustments-->
+                            <div class="row" class="tab">
+                                <input type="checkbox" id="lpChck1">
+                                <div class="d--flex-jc-space-between margin-top--1rem">
+                                    <div class="display-flex">
+                                        <label class="tab-label" [attr.tid]="componentId + '-adjustment-tab-label'" for="lpChck1" #lpChck1>
+                                            <span class="preserve-whitespace">{{(summaryInfo?.headerAdjustmentList?.length !== 1 ? 'PAYMENT_SUMMARY.SIDE_PANEL.LABEL_ADJUSTMENTS' :
+                                  'PAYMENT_SUMMARY.SIDE_PANEL.LABEL_ADJUSTMENT') | translate }}</span>
+                                            <span *ngIf="summaryInfo?.headerAdjustmentList?.length > 0">
+                                              {{ '('+summaryInfo?.headerAdjustmentList?.length+')'}}
+                                            </span>
+
+                                        </label>
+                                        <button type="button" class="link" (click)="lpChck1.click()" *ngIf="summaryInfo?.headerAdjustmentList?.length > 0">
+                                            <svg ibmIcon="chevron--down" class="iconStyle" size="16">
+                                            </svg>
+                                        </button>
+                                    </div>
+
+                                    <div class="accordion-header-amount">
+                                        <span [attr.tid]="componentId + '-header-amount'">
+                                            {{headerAmount| bucCommonCurrencyFmt:
+                                            currency: 'symbol'}}
+                                        </span>
+
+                                    </div>
+                                </div>
+
+                                <div class="tab-content">
+                                    <div  class="cds--col cds--no-gutter">
+                                        <ng-container *ngIf="summaryInfo?.headerAdjustmentList.length >0 ; else empty">
+                                            <div *ngFor="let item of summaryInfo?.headerAdjustmentList;  let i = index;"
+                                                class="cds--row justify-content--space-between">
+                                                <div class="cds--label padding-left--1rem font-size--100" [attr.tid]="componentId + '-' + i + '-adjustment-description'">
+                                                    {{ item.ChargeNameDetails?.Description || item.ChargeName  }}
+                                                </div>
+                                                <div
+                                                    class="d--flex-jc-flex-end padding-right--0">
+                                                    <span class="cds--label font-size--100" [attr.tid]="componentId + '-' + i + '-adjustment-amount'">
+                                                        {{ item.IsDiscount === 'Y' && item.ChargeAmount > 0 ? '-' : ''}}{{ item.ChargeAmount | bucCommonCurrencyFmt:
+                                                        currency: 'symbol' }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                        <ng-template #empty> - </ng-template>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                                <!--CSS Accordion Promotions-->
+                            <div class="row" class="tab">
+                                    <input type="checkbox" id="lpChck2">
+                                    <div class="d--flex-jc-space-between margin-top--1rem">
+                                        <div class="display-flex">
+                                            <label class="tab-label" for="lpChck2" #lpChck2>
+                                                <span class="preserve-whitespace">{{(summaryInfo?.promotionList.length !== 1 ?'PAYMENT_SUMMARY.SIDE_PANEL.LABEL_PROMOTIONS' :
+                                              'PAYMENT_SUMMARY.SIDE_PANEL.LABEL_PROMOTION') | translate }}</span>
+                                                <span *ngIf= "summaryInfo?.promotionList.length  > 0" [attr.tid]="componentId + '-promotion'"> {{ '('+summaryInfo?.promotionList.length +')' }} </span>
+
+                                            </label>
+                                            <button type="button" class="link" [attr.tid]="componentId + '-promotion-button'" *ngIf="summaryInfo?.promotionList.length > 0 || returnLineDetails?.Promotions?.Promotion?.length > 0" (click)="lpChck2.click()">
+                                                <svg ibmIcon="chevron--down" class="iconStyle" size="16">
+                                                </svg>
+                                            </button>
+                                        </div>
+
+                                        <div class="accordion-header-amount">
+                                            <span [attr.tid]="componentId + '-promotion-amount'">
+                                                {{(!promotionAmountTotal ? '0.00': promotionAmountTotal) | bucCommonCurrencyFmt: currency: 'symbol'}}
+                                            </span>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="tab-content">
+                                        <div  class="cds--col cds--no-gutter">
+                                            <ng-container *ngIf="summaryInfo?.promotionList.length > 0; else empty">
+                                                <ng-container *ngFor="let item of summaryInfo?.promotionList;  let i = index;">
+                                                    <div class="cds--row justify-content--space-between">
+                                                        <div class="cds--label padding-left--1rem font-size--100" [attr.tid]="componentId + '-' + i + '-award-id'">
+                                                            {{ item.ChargeNameDetails?.Description || item.ChargeName}}
+                                                        </div>
+                                                        <div class="d--flex-jc-flex-end padding-right--0">
+                                                            <span class="cds--label font-size--100 " [attr.tid]="componentId + '-' + i + '-award-amount'">
+                                                                {{ item.IsDiscount === 'Y' && item.ChargeAmount > 0 ? '-' : ''}}{{ item.ChargeAmount |
+                                                                bucCommonCurrencyFmt:
+                                                                currency: 'symbol' }}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </ng-container>
+                                            </ng-container>
+                                            <ng-template #empty [attr.tid]="componentId + '-empty-amount'"> - </ng-template>
+                                        </div>
+                                    </div>
+
+                            </div>
+                            <!--Shipping-->
+
+                            <div class="row" class="tab" >
+                                      <input type="checkbox" id="lpShipping3">
+                                      <div class="d--flex-jc-space-between margin-top--1rem">
+                                          <div class="display-flex align-items-center">
+                                              <label class="tab-label" for="lpShipping3" #lpShipping3 [attr.tid]="componentId + '-shipping-label'">
+                                                  <span class="preserve-whitespace">{{'PAYMENT_SUMMARY.SIDE_PANEL.LABEL_SHIPPING' | translate}}</span>
+                                                  <span *ngIf="summaryInfo?.shippingChargesList?.length > 0" [attr.tid]="componentId + '-shipping-charges'"> {{ '('+summaryInfo?.shippingChargesList?.length+')' }} </span>
+                                              </label>
+                                              <button *ngIf="summaryInfo?.shippingChargesList?.length > 0" type="button" [attr.tid]="componentId + '-shipping-charges-button'" class="link" (click)="lpShipping3.click()">
+                                                <svg ibmIcon="chevron--down" class="iconStyle" size="16">
+                                                </svg>
+                                              </button>
+
+                                          </div>
+
+                                          <div class="accordion-header-amount" [attr.tid]="componentId + '-shipping-total'">
+                                            {{returnLineDetails.LineOverallTotals.ShippingTotal === '0.00' ? ('PAYMENT_SUMMARY.SIDE_PANEL.LABEL_FREE' | translate) : returnLineDetails.LineOverallTotals.ShippingTotal | bucCommonCurrencyFmt:
+                                            currency: 'symbol'}}
+                                          </div>
+                                      </div>
+                                      <div class="tab-content">
+                                          <div  class="cds--col cds--no-gutter">
+                                              <ng-container *ngIf="summaryInfo?.shippingChargesList?.length > 0; else empty">
+                                                  <ng-container *ngFor="let olCharge of summaryInfo?.shippingChargesList;  let i = index;">
+                                                      <div  class="cds--row justify-content--space-between">
+                                                          <div class="cds--label padding-left--1rem font-size--100" [attr.tid]="componentId + '-' + i + '-charge-name'">
+                                                              {{ olCharge.ChargeNameDetails?.Description || olCharge.ChargeName }}
+                                                          </div>
+                                                          <div
+                                                              class="d--flex-jc-flex-end padding-right--0">
+                                                              <span class="cds--label font-size--100 accordion-header-amount" [attr.tid]="componentId + '-' + i + '-charge-amount'">
+                                                                {{ olCharge.IsDiscount === 'Y' && olCharge.ChargeAmount > 0 ? '-' : ''}} {{ olCharge.ChargeAmount | bucCommonCurrencyFmt:
+                                                                  currency: 'symbol' }}
+                                                              </span>
+                                                          </div>
+                                                      </div>
+                                                  </ng-container>
+                                              </ng-container>
+                                              <ng-template #empty> - </ng-template>
+                                          </div>
+
+                                      </div>
+                            </div>
+                            <!--Taxes-->
+                            <div class="row" class="tab" >
+                                  <input type="checkbox" id="lpTax3">
+                                  <div class="d--flex-jc-space-between margin-top--1rem">
+                                      <div class="display-flex align-items-center">
+                                          <label class="tab-label" for="lpTax3" #lpTax3 [attr.tid]="componentId + '-taxes-label'">
+                                            <span class="preserve-whitespace">{{'PAYMENT_SUMMARY.SIDE_PANEL.LABEL_TAXES' | translate}}</span>
+                                              <span *ngIf="lineTaxes?.length > 0"> {{ '('+lineTaxes.length+')' }} </span>
+                                          </label>
+                                          <button *ngIf="lineTaxes?.length > 0" type="button" class="link" (click)="lpTax3.click()" [attr.tid]="componentId + '-taxes-button'">
+                                            <svg ibmIcon="chevron--down" class="iconStyle" size="16">
+                                            </svg>
+                                          </button>
+
+                                      </div>
+
+                                      <div class="accordion-header-amount" [attr.tid]="componentId + '-taxes-amount'">
+                                        {{returnLineDetails.LineOverallTotals.Tax | bucCommonCurrencyFmt: currency: 'symbol'}}
+                                      </div>
+                                  </div>
+                                  <div class="tab-content">
+                                      <div  class="cds--col cds--no-gutter">
+                                          <ng-container *ngIf="lineTaxes?.length > 0; else empty">
+                                              <ng-container *ngFor="let olCharge of lineTaxes;  let i = index;">
+                                                  <div  class="cds--row justify-content--space-between">
+                                                      <div class="cds--label padding-left--1rem font-size--100" [attr.tid]="componentId + '-' + i + '-taxes-desc'">
+                                                          {{ olCharge.TaxNameDescription ? olCharge.TaxNameDescription : olCharge.TaxName }}
+                                                      </div>
+                                                      <div
+                                                          class="d--flex-jc-flex-end padding-right--0">
+                                                          <span class="cds--label font-size--100 accordion-header-amount" [attr.tid]="componentId + '-' + i + '-taxes-amount'">
+                                                            {{ olCharge.IsDiscount === 'Y' && olCharge.Tax > 0 ? '-' : ''}}
+                                                            {{ olCharge.Tax | bucCommonCurrencyFmt:
+                                                              currency: 'symbol' }}
+                                                          </span>
+                                                      </div>
+                                                  </div>
+                                              </ng-container>
+                                          </ng-container>
+                                          <ng-template #empty> - </ng-template>
+                                      </div>
+
+                                  </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+
+            <!--Total-->
+            <div class="margin-top--2rem total-amount">
+                <div class="display-flex justify-content--space-between">
+
+                    <div class="font-weight--600 color-text-02" [attr.tid]="componentId + '-total-title'">
+                      {{'PAYMENT_SUMMARY.SIDE_PANEL.LINE_TOTAL' | translate }}
+                  </div>
+
+                    <div >
+                        <span class="font-size--125" [attr.tid]="componentId + '-total-amount'">
+                            {{returnLineDetails?.LineOverallTotals.LineTotal | bucCommonCurrencyFmt:currency: 'symbol'}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!--Adjust button-->
+
+
+        </div>
+    </div>
+  </div>
+  </section>
+
+  <ibm-modal-footer>
+    <div *ngIf="showAdjustPricing" class="width--100p">
+        <cds-tooltip class="width--50p" [description]="showDisaledTooltip" trigger="hover" [align]="'top'" [autoAlign]="'true'" [disabled]="!(modalData.summaryDetails.isHistory || modalData.summaryDetails.isHistory ==='Y')">
+           <buc-button  (click)="openAdjustPricingModal()" [attr.tid]="componentId + '-adjust-button'"
+              *ngIf="isAdjustPricingResourceAllowed" [isDisabled]="(modalData.summaryDetails.isHistory || modalData.summaryDetails.isHistory ==='Y')">
+              {{ 'PAYMENT_SUMMARY.SIDE_PANEL.BUTTON_ADJUST_LABEL' | translate}}
+          </buc-button>
+        </cds-tooltip>
+        <buc-button class="adjButton" (click)="openAdjustPricingModal()" *ngIf="!isAdjustPricingResourceAllowed && returnLineDetails.LineCharges?.LineCharge?.length > 0"
+            [attr.tid]="componentId + '-adjust-button'">
+            {{ 'PAYMENT_SUMMARY.SIDE_PANEL.BUTTON_VIEW_LABEL' | translate}}
+        </buc-button>
+        <cds-tooltip [description]="viewPricingTooltipTemplate" trigger="hover" [align]="'top'" [autoAlign]="'true'" *ngIf="!isAdjustPricingResourceAllowed && !returnLineDetails.LineCharges?.LineCharge">
+            <buc-button class="adjButton" (click)="openAdjustPricingModal()" [attr.tid]="componentId + '-adjust-button'"
+                *ngIf="!isAdjustPricingResourceAllowed && !returnLineDetails.LineCharges?.LineCharge"
+                [isDisabled]="!returnLineDetails.LineCharges?.LineCharge">
+                {{ 'PAYMENT_SUMMARY.SIDE_PANEL.BUTTON_VIEW_LABEL' | translate}}
+            </buc-button>
+        </cds-tooltip>
+    </div>
+  </ibm-modal-footer>
+
+    <ng-template #viewPricingTooltipTemplate>
+        <div>
+            {{'ADJUST_PRICING_MODAL.NO_ADJUSTMENTS_TOOLTIP' | translate}}
+        </div>
+    </ng-template>
+    <ng-template #showDisaledTooltip >
+       <span>{{'RETURN_SUMMARY.RESTORE_ORDER.RESTORE_ORDER_DISABLED_ACTION' | translate}}</span>
+    </ng-template>
+</ibm-modal>
+
+<ng-template bucExtension [componentName]="componentId" [placement]="'bottom'" [id]="EXTENSION.BOTTOM" [parent]="this">
+</ng-template>

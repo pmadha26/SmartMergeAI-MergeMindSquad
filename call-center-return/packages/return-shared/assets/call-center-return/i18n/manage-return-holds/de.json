@@ -1,0 +1,52 @@
+{
+  "MANAGE_HOLDS": {
+    "LABEL_MANAGE_HOLDS": "Sperrungen anzeigen oder aufheben",
+    "LABEL_MANAGE_HOLDS_COUNT": "Rückstellungen aus Positionen auflösen: {{count}}",
+    "LABEL_MANAGE_HOLDS_COUNTS": "Rückstellungen aus Positionen auflösen: {{count}}",
+    "LABEL_LINE_NOTIFICATION_COUNT": "Auf {{ count }} ausgewählte Zeile werden keine Rückstellungen angewendet.",
+    "LABEL_LINE_NOTIFICATION_COUNTS": "Auf {{ count }} ausgewählte Zeilen werden keine Rückstellungen angewendet.",
+    "LABEL_BACK_TO_RETURN_SUMMARY": "Zurück zur Retourenzusammenfassung",
+    "TOOLTIP_MSG_RESOLVE_HOLDS": "Es wurden noch keine Rückstellungen angewendet."
+  },
+  "ACTIVE_HOLDS_TABLE": {
+    "LABEL_ACTIVE_HOLDS": "Aktive Rückstellungen",
+    "LABEL_OPEN_ALERTS": "Offene Alerts",
+    "LABEL_HEADER_LINE": "Linie",
+    "LABEL_HEADER_ITEM": "Retoure oder Position",
+    "LABEL_HEADER_HOLD_TYPE": "Rückstellungstyp",
+    "LABEL_HEADER_DATE": "Datum",
+    "LABEL_HEADER_COMMENTS": "Kommentare",
+    "LABEL_RESOLVE": "Auflösen",
+    "LABEL_addHold": "Rückstellung hinzufügen",
+    "LABEL_NO_ACTIVE_HOLDS": "Keine aktiven Rückstellungen",
+    "LABEL_USER_PERMISSION": "Sie haben keine Berechtigung, die Sperre aufzuheben.",
+    "LABEL_STATUS_MOD_PERMISSION": "Rückstellungen können im aktuellen Status des Artikels nicht angewendet werden."
+  },
+  "RESOLVED_HOLDS_TABLE": {
+    "LABEL_RESOLVED_HOLDS": "Aufgelöste Rückstellungen",
+    "LABEL_HEADER_LINE": "Linie",
+    "LABEL_HEADER_ITEM": "Retoure oder Position",
+    "LABEL_HEADER_HOLD_TYPE": "Rückstellungstyp",
+    "LABEL_HEADER_DATE": "Datum",
+    "LABEL_HEADER_COMMENTS": "Kommentare",
+    "LABEL_NO_RESOLVE_HOLDS": "Keine aufgelösten Rückstellungen"
+  },
+  "RESOLVE_HOLDS_MODAL": {
+    "LABEL_HEADER_RESOLVE_HOLDS": "Rückstellungen auflösen",
+    "LABEL_HEADER_RESOLVE_HOLDS_COUNT": "Rückstellungen aus Positionen auflösen: {{count}}",
+    "LABEL_HEADER_RESOLVE_HOLDS_COUNTS": "Rückstellungen aus Positionen auflösen: {{count}}",
+    "LABEL_HEADER_LINE": "Linie",
+    "LABEL_HEADER_ITEM": "Element",
+    "LABEL_HEADER_HOLD_TYPE": "Rückstellungstyp",
+    "LABEL_HEADER_COMMENTS": "Kommentare (optional)",
+    "LABEL_CANCEL": "Abbrechen",
+    "LABEL_RESOLVE": "Auflösen",
+    "LABEL_RESOLVE_HOLD_MSG_LINE": "Aufgelöst. Rückstellungen aus Positionen entfernt: {{count}}.",
+    "LABEL_RESOLVE_HOLD_MSG_LINES": "Aufgelöst. Rückstellungen aus Positionen entfernt: {{count}}.",
+    "LABEL_RESOLVE_HOLD_MSG_ORDER": "{{ count }} von {{ count1 }} Rückstellungen für diesen Vertrag wurden aufgelöst.",
+    "RESOLVE_HOLD_FAILED_ERROR_MSG": "Anforderung zum Auflösen von Rückstellungen fehlgeschlagen."
+  },
+  "SIDE_PANEL": {
+    "LABEL_NOTES": "Hinweise ({{count}})"
+  }
+}

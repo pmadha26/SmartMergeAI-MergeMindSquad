@@ -1,0 +1,62 @@
+{
+  "RETURN_SEARCH": {
+    "GENERAL": {
+      "LABEL_SHOW_DRAFT_RETURNS": "Afficher les retours provisoires",
+      "LABEL_RETURN_LINE_STATUS": "Statut de la ligne de retour",
+      "LABEL_ADVANCED_SEARCH": "Recherche de retour avancée",
+      "LABEL_RESULTS": "Renvoyer les résultats de la recherche",
+      "LABEL_ENTERPRISE": "Entreprise",
+      "LABEL_RETURN_NUMBER": "Numéro de retour",
+      "LABEL_CUSTOMER_PO": "Numéro de bon de commande client",
+      "LABEL_ORIGINAL_ORDER_NUMBER": "Numéro de commande original",
+      "LABEL_RETURN_DATE_RANGE": "Plage de dates de retour",
+      "LABEL_HOLD_TYPE": "Type de mise en suspens",
+      "LABEL_RETURN_STATUS": "Statut du retour",
+      "LABEL_RETURN_AGE": "Ancienneté du retour",
+      "LABEL_EMAIL": "Adresse e-mail",
+      "LABEL_CUSTOMER_TELEPHONE": "Numéro de téléphone",
+      "LABEL_FIRST_NAME": "Prénom",
+      "LABEL_LAST_NAME": "Nom de famille",
+      "LABEL_POSTAL_CODE": "Code postal",
+      "LABEL_ORDER_NAME": "Nom du retour",
+      "LABEL_CUSTOMER_CREDIT_CARD_NUMBER": "4 derniers chiffres de la carte de crédit",
+      "LABEL_RETURN_SEARCH": "Rechercher",
+      "LABEL_CLEAR": "Désélectionner",
+      "LABEL_SEARCH_BY_RETURN_INFO": "Rechercher par détails de retour",
+      "LABEL_SEARCH_BY_CUSTOMER_INFO": "Recherche par détails client",
+      "LABEL_QUERY_is": "est",
+      "LABEL_QUERY_starts_with": "commence par",
+      "LABEL_QUERY_contains": "contient",
+      "MESSAGE_SEARCH_GRP_DIFF": "Il se peut qu'une ou plusieurs zones spécifiées dans cette recherche sauvegardée ne soient plus regroupées ou qu'elles soient regroupées différemment. Les résultats de la recherche peuvent varier.",
+      "CONFIRM_RETURN": "Retour confirmé",
+      "DRAFT_RETURN": "Retour provisoire",
+      "RECENT_RETURNS": "Retours récents",
+      "ARCHIVED_RETURNS": "Retours archivés",
+      "LABEL_SKU_NUMBER": "Numéro d'UGS",
+      "TOO_MANY_RESULTS": "Votre recherche a généré {{total}} correspondances. La recherche est configurée pour renvoyer un maximum de {{max}} enregistrements.",
+      "ALL_ORDERS": "Toutes les commandes",
+      "CONFIRMED_ORDERS": "Commandes confirmées",
+      "DRAFT_ORDERS": "Versions provisoires de commande"
+    },
+    "ORDER_LINE_STATUS_DROPDOWN": {
+      "LABEL_CREATED": "Créé",
+      "LABEL_RECEIVED": "Reçu",
+      "LABEL_RECEIPT_CLOSED": "Avis de réception fermé",
+      "LABEL_CANCELLED": "Annulé",
+      "TOOLTIP_MESSAGE": "Les commandes qui contiennent ne serait-ce qu'une ligne avec le statut sélectionné seront répertoriées.",
+      "MESSAGE_WRONG_COMBOBOX_SEARCH_TEXT": "Une valeur valide est requise"
+    },
+    "RETURN_DATE_RANGE": {
+      "TOOLTIP_MESSAGE": "La plage de dates par défaut est {{duration}} {{durationUnit}}",
+      "LABEL_YEARS_PLURAL": "années",
+      "LABEL_MONTHS_PLURAL": "mois",
+      "LABEL_DAYS_PLURAL": "jours",
+      "LABEL_YEARS_SINGULAR": "année",
+      "LABEL_MONTHS_SINGULAR": "mois",
+      "LABEL_DAYS_SINGULAR": "jour"
+    },
+    "RETURN_AGE": {
+      "HELPER_TEXT": "Vérifier la plage des dates de retour"
+    }
+  }
+}

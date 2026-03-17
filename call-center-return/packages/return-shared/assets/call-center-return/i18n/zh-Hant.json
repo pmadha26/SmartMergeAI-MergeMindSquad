@@ -1,0 +1,11 @@
+{
+  "ROUTE_NAMES": {
+    "LABEL_RETURN_SEARCH": "進階退貨搜尋",
+    "LABEL_RETURN_SEARCH_RESULT": "return-search-result",
+    "LABEL_RETURN_DETAILS": "return-details"
+  },
+  "CUSTOMER_SEARCH_MODAL": {
+    "HEADER_CUSTOMER_SEARCH": "進階客戶搜尋",
+    "LABEL_SELECT_CUSTOMER": "選取客戶"
+  }
+}

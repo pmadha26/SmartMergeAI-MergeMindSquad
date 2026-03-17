@@ -1,0 +1,167 @@
+<!--
+* IBM Confidential
+* OCO Source Materials
+* 5737-D18, 5725-D10
+*
+* (C) Copyright International Business Machines Corp. 2022, 2023
+*
+* The source code for this program is not published or otherwise divested
+* of its trade secrets, irrespective of what has been deposited with the
+* U.S. Copyright Office.
+-->
+<ng-template bucExtension [componentName]="componentId" [placement]="'top'" [id]="EXTENSION.TOP" [parent]="this"></ng-template>
+
+<section *ngIf="!thumbnailView; else thumbnailViewTemplate"
+  class="return-fulfillment-lines-component bg-white" 
+  [attr.tid]="componentId + '-container'">
+  <buc-table
+    class="return-fulfillment-lines-table cds--col cds--col-lg-16 cds--no-gutter" [attr.tid]="'cc-return-fulfillment-lines.table'" size="sm"
+    [isFlyoutFilterOpen]="false" [hasFlyoutFilter]="false"
+    [showActions]="showActions" [showSelectionColumn]="showSelectionColumn" [hasSearch]="hasSearch" 
+    [defaultPageLen]="tableModel.defaultPageLength" [model]="tableModel" [tableHeaderModel]="tableHeaderModel"
+    [tableToolbarModel]="toolbarModel"
+    [isSearchActive]="isSearchActive"
+    [gotoPageEnabled]="false"
+    [skeleton]="tableModel.isLoading"
+    [cancelText]="cancelText"
+    [batchText]="'SHARED.TABLE.BATCH_TEXT_MULTIPLE' | translate"
+    [searchPlaceholderText]="'RETURN_SUMMARY.RETURN_METHODS.FULFILLMENT_LINES_SEARCH_PLACEHOLDER_TEXT' | translate"
+    [paginationTranslations]="paginationTranslations" [showEmptyState]="true" [size]="'lg'"
+    (sort)="onColSort($event)" (selectPage)="selectPage($event)"
+    (selectedItemsChange)="onSelectRow($event)"
+    (searchValueChange)="onSearch($event)" (clear)="onSearch('')">
+  </buc-table>
+</section>
+
+
+<ng-template bucExtension [componentName]="componentId" [placement]="'bottom'" [id]="EXTENSION.BOTTOM" [parent]="this"></ng-template>
+
+<buc-icon-templates #iconTemplates id="iconTemplates"></buc-icon-templates>
+<buc-content-templates #contentTemplates id="contentTemplates" [placement]="'bottom,top'"></buc-content-templates>
+
+<ng-template #customerKeepHeaderTpl let-lineCount="lineCount">
+  <span>
+    {{ (lineCount > 1
+      ? 'RETURN_SUMMARY.RETURN_METHODS.MSG_CUSTOMER_CAN_KEEP_TABLE_HEADER_PLURAL'
+      : 'RETURN_SUMMARY.RETURN_METHODS.MSG_CUSTOMER_CAN_KEEP_TABLE_HEADER_SINGULAR'
+      ) | translate
+    }}
+  </span>
+</ng-template>
+
+<ng-template #pickupHeaderTpl let-lineCount="lineCount">
+  <span>
+    {{ (lineCount > 1
+      ? 'RETURN_SUMMARY.RETURN_METHODS.MSG_PICK_UP_TABLE_HEADER_PLURAL'
+      : 'RETURN_SUMMARY.RETURN_METHODS.MSG_PICK_UP_TABLE_HEADER_SINGULAR'
+      ) | translate
+    }}
+  </span>
+</ng-template>
+
+<ng-template #thumbnailViewTemplate>
+  <div class="itemImage-thumbnails">
+    <ng-container *ngFor="let orderLine of orderLines; let i=index">
+      <div class="image-container" *ngIf="i <= 4">
+        <!-- <img [ibmTooltip]="tooltipTemplate" trigger="hover" [placement]="'right'" 
+          [data]="orderLine.DisplayDescription"
+          [src]="orderLine.ImageUrl" [attr.data-defaultImageUrl]="defaultImageUrl"
+          onerror="this.src=event.target.getAttribute('data-defaultImageUrl')"/> -->
+          <cds-tooltip [align]="'right'" [autoAlign]="'true'"
+           [description]="tooltipTemplate" [templateContext]="orderLine.DisplayDescription">
+           <img [src]="orderLine.ImageUrl" [attr.data-defaultImageUrl]="defaultImageUrl" onerror="this.src=event.target.getAttribute('data-defaultImageUrl')"/>
+           </cds-tooltip>
+        <span *ngIf="orderLine.OrderedQty > 1" class="items-qty">{{orderLine.OrderedQty}}</span>
+      </div>
+    </ng-container>
+    <div class="more-items" *ngIf="orderLines.length > 5">
+      <span>
+        {{'RETURN_SUMMARY.RETURN_METHODS.LABEL_MORE_ITEMS' | translate : { itemsCount: orderLines.length - 5 } }}
+      </span>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template bucId="itemDetails" let-data="data">
+  <div class="padding-left--0_25rem">
+    <call-center-return-item-image 
+      [imageUrl]="data.itemImageUrl"
+      [itemDescription]="data.itemDescription"
+      [itemId]="data.itemId"
+      [isBundleParent]="data.isBundleParent"
+      [isBundleComponent]="data.isBundleComponent"
+      [kitCode]="data.kitCode">
+    </call-center-return-item-image>
+  </div>
+</ng-template>
+
+<ng-template #tooltipTemplate let-tooltip="$implicit">
+  <span class="item-description-tooltip-template" [innerHTML]="tooltip"></span>
+</ng-template>
+
+<ng-template bucId="overflowMenu" let-data="data">
+  <buc-overflow-menu [menuOptions]="overflowMenu" (click)="onOverflowMenuClicked(data.data)" placement="left"></buc-overflow-menu>
+</ng-template>
+
+<ng-template bucId="lineTotal" let-data="data">
+  <div class="padding-left--0_25rem padding-right--0_5rem display-flex">
+    <span *ngIf="data.priceIncluded">
+      {{ 'CREATE_RETURN.PRODUCTS_TO_RETURN.LABEL_INCLUDED' | translate }}
+    </span>
+    <span *ngIf="!data.priceIncluded">
+      <buc-link (click)="openPricingSummary(data)">
+        <span class="cds--btn__icon padding-right--1rem width-link">
+          {{ data.value }}
+        </span>
+      </buc-link>
+    </span>
+    <cds-tooltip *ngIf="data.priceAdjusted" [attr.tid]="componentId + '-modify-icon'" class="price-tag-icon hoverOnly"
+      [description]="lineIconTooltipTemplate" trigger="hover" [align]="'top'" [autoAlign]="'true'"
+      [templateContext]="'CREATE_RETURN.RETURN_LINES_TABLE.LABEL_PRICE_ADJUSTED' | translate">
+    </cds-tooltip>
+  </div>
+</ng-template>
+
+<ng-template bucId="lineKeyIcon" let-data="data">
+  <div class="line-wrapper display-flex">
+    <div class="line-data display-flex padding-left--0_25rem padding-right--0_5rem">
+      <span class="cds--btn__icon padding-right--1rem width-link">{{data.lineNo}}</span>
+    </div>
+    <div *ngIf="data.hasNotes">
+      <cds-tooltip class="margin-right--0_5rem" [attr.tid]="componentId + 'notes-icon'" [description]="lineIconTooltipTemplate"
+        trigger="hover" [align]="'top'" [templateContext]="'CREATE_RETURN.PRODUCTS_TO_RETURN.LABEL_NOTES' | translate"
+        (click)="openNotesModal(data.item)" [autoAlign]="'true'">
+        <svg ibmIcon="document" size="16" class="cds--btn__icon">
+        </svg>
+      </cds-tooltip>
+    </div>
+    <div *ngIf="data.isOverridden">
+      <cds-tooltip class="margin-right--0_5rem" [attr.tid]="componentId + 'notes-icon'" [description]="lineIconTooltipTemplate"
+        trigger="hover" [align]="'top'" [templateContext]="'CREATE_RETURN.RETURN_LINES_TABLE.RETURN_POLICY_OVERRIDDEN' | translate" [autoAlign]="'true'">
+        <svg ibmIcon="information" size="16" class="cds--btn__icon"></svg>
+      </cds-tooltip>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #lineIconTooltipTemplate let-tooltip="$implicit">
+  <span>{{tooltip}}</span>
+</ng-template>
+
+<ng-template bucId="deleteIcon" let-data="data">
+  <div class="padding-left--0_25rem padding-right--0_5rem" *ngIf="(!data.data?.BundleParentLine?.OrderLineKey)">
+    <svg ibmIcon="trash-can" size="16" [attr.tid]="componentId + '-delete-icon'"
+      (click)="onDeleteActionClicked(data.data)">
+    </svg>
+  </div>
+</ng-template>
+
+<ng-template #LineTotalHeaderTemplate let-data="data">
+  {{ data }}
+    <cds-tooltip *ngIf="!initialLoad" trigger="hover" [align]="'bottom'" [autoAlign]="'true'" [description]="'RETURN_SUMMARY.RETURN_LINES.ADJUST_PRICING_TOOLTIP'  | translate : { headerName: data?.toLowerCase() }" >
+      <svg ibmIcon="information" size="16" class="modified-note"></svg>
+    </cds-tooltip>
+</ng-template>
+
+
+

@@ -1,0 +1,331 @@
+{
+  "returns": {
+    "groups": {
+      "paths": {
+        "default": "CustomerInfo",
+        "searchBy": [
+          {
+            "content": "RETURN_SEARCH.GENERAL.LABEL_SEARCH_BY_RETURN_INFO",
+            "oob": true,
+            "value": "ReturnInfo"
+          },
+          {
+            "content": "RETURN_SEARCH.GENERAL.LABEL_SEARCH_BY_CUSTOMER_INFO",
+            "oob": true,
+            "value": "CustomerInfo"
+          }
+        ]
+      }
+    },
+    "fields": [
+      {
+        "id": "searchByReturnInfo",
+        "locked": true,
+        "placementOnly": true,
+        "internalConfig": {
+          "id": "searchByReturnInfo",
+          "title": "RETURN_SEARCH.GENERAL.LABEL_SEARCH_BY_RETURN_INFO",
+          "type": "label",
+          "filterId": "ReturnInfo"
+        }
+      },
+      {
+        "id": "enterprise",
+        "locked": true,
+        "internalConfig": {
+          "id": "enterprise",
+          "title": "RETURN_SEARCH.GENERAL.LABEL_ENTERPRISE",
+          "type": "enterprise",
+          "canReset": true,
+          "filterId": "ReturnInfo"
+        },
+        "oobSeq": 0
+      },
+      {
+        "id": "returnNumber",
+        "locked": true,
+        "internalConfig": {
+          "id": "returnNumber",
+          "title": "RETURN_SEARCH.GENERAL.LABEL_RETURN_NUMBER",
+          "type": "input",
+          "filterId": "ReturnInfo"
+        },
+        "oobSeq": 1
+      },
+      {
+        "id": "originalOrderNo",
+        "locked": true,
+        "internalConfig": {
+          "id": "originalOrderNo",
+          "title": "RETURN_SEARCH.GENERAL.LABEL_ORIGINAL_ORDER_NUMBER",
+          "type": "input",
+          "filterId": "ReturnInfo"
+        },
+        "oobSeq": 2
+      },
+      {
+        "id": "returnDateRange",
+        "locked": true,
+        "internalConfig": {
+          "id": "returnDateRange",
+          "title": "RETURN_SEARCH.GENERAL.LABEL_RETURN_DATE_RANGE",
+          "type": "dateRange",
+          "filterId": "ReturnInfo",
+          "tooltipText": "RETURN_SEARCH.RETURN_DATE_RANGE.TOOLTIP_MESSAGE",
+          "tooltipPlacement": "right",
+          "canReset": false
+        },
+        "oobSeq": 3
+      },
+      {
+        "id": "skuNumber",
+        "locked": true,
+        "internalConfig": {
+          "id": "skuNumber",
+          "title": "RETURN_SEARCH.GENERAL.LABEL_SKU_NUMBER",
+          "type": "input",
+          "filterId": "ReturnInfo"
+        },
+        "oobSeq": 4
+      },
+      {
+        "id": "isDraftReturn",
+        "locked": true,
+        "internalConfig": {
+          "id": "isDraftReturn",
+          "title": "RETURN_SEARCH.GENERAL.LABEL_RETURN_STATUS",
+          "type": "radioFieldGroup",
+          "orientation": "horizontal",
+          "filterId": "ReturnInfo",
+          "items": [
+            {
+              "id": "confirmed",
+              "content": "RETURN_SEARCH.GENERAL.CONFIRMED_ORDERS",
+              "value": "N",
+              "checked": true,
+              "default": true
+            },
+            {
+              "id": "draft",
+              "value": "Y",
+              "content": "RETURN_SEARCH.GENERAL.DRAFT_ORDERS"
+            },
+            {
+              "id": "all",
+              "value": "",
+              "content": "RETURN_SEARCH.GENERAL.ALL_ORDERS"
+            }
+          ]
+        },
+        "oobSeq": 5
+      },
+      {
+        "id": "returnLineStatus",
+        "locked": true,
+        "internalConfig": {
+          "id": "returnLineStatus",
+          "title": "RETURN_SEARCH.GENERAL.LABEL_RETURN_LINE_STATUS",
+          "type": "custom",
+          "tooltipMsg": "RETURN_SEARCH.ORDER_LINE_STATUS_DROPDOWN.TOOLTIP_MESSAGE",
+          "placeholder": "",
+          "filterId": "ReturnInfo",
+          "options": [
+            {
+              "Status": "1100",
+              "Description": "RETURN_SEARCH.ORDER_LINE_STATUS_DROPDOWN.LABEL_CREATED",
+              "hidden": false
+            },
+            {
+              "Status": "3900",
+              "Description": "RETURN_SEARCH.ORDER_LINE_STATUS_DROPDOWN.LABEL_RECEIVED",
+              "hidden": false
+            },
+            {
+              "Status": "3950",
+              "Description": "RETURN_SEARCH.ORDER_LINE_STATUS_DROPDOWN.LABEL_RECEIPT_CLOSED",
+              "hidden": false
+            },
+            {
+              "Status": "9000",
+              "Description": "RETURN_SEARCH.ORDER_LINE_STATUS_DROPDOWN.LABEL_CANCELLED",
+              "hidden": false
+            }
+          ]
+        },
+        "oobSeq": 6
+      },
+      {
+        "id": "returnAge",
+        "locked": true,
+        "internalConfig": {
+          "id": "returnAge",
+          "title": "RETURN_SEARCH.GENERAL.LABEL_RETURN_AGE",
+          "type": "dropdown",
+          "default": "",
+          "filterId": "ReturnInfo"
+        },
+        "oobSeq": 7
+      },
+      {
+        "id": "searchByCustomerInfo",
+        "locked": true,
+        "placementOnly": true,
+        "internalConfig": {
+          "id": "searchByCustomerInfo",
+          "title": "RETURN_SEARCH.GENERAL.LABEL_SEARCH_BY_CUSTOMER_INFO",
+          "type": "label",
+          "filterId": "CustomerInfo"
+        },
+        "oobSeq": 8
+      },
+      {
+        "id": "email",
+        "locked": false,
+        "internalConfig": {
+          "id": "emailID",
+          "title": "RETURN_SEARCH.GENERAL.LABEL_EMAIL",
+          "type": "input",
+          "filterId": "CustomerInfo"
+        },
+        "oobSeq": 9
+      },
+      {
+        "id": "customerTelephone",
+        "locked": false,
+        "internalConfig": {
+          "id": "customerTelephoneNo",
+          "title": "RETURN_SEARCH.GENERAL.LABEL_CUSTOMER_TELEPHONE",
+          "type": "input",
+          "filterId": "CustomerInfo"
+        },
+        "oobSeq": 10
+      },
+      {
+        "id": "firstName",
+        "locked": false,
+        "internalConfig": {
+          "id": "firstName",
+          "title": "RETURN_SEARCH.GENERAL.LABEL_FIRST_NAME",
+          "type": "input",
+          "filterId": "CustomerInfo"
+        },
+        "oobSeq": 11
+      },
+      {
+        "id": "lastName",
+        "locked": false,
+        "internalConfig": {
+          "id": "lastName",
+          "title": "RETURN_SEARCH.GENERAL.LABEL_LAST_NAME",
+          "type": "input",
+          "filterId": "CustomerInfo"
+        },
+        "oobSeq": 12
+      },
+      {
+        "id": "postalCode",
+        "locked": false,
+        "internalConfig": {
+          "id": "postalCode",
+          "title": "RETURN_SEARCH.GENERAL.LABEL_POSTAL_CODE",
+          "type": "input",
+          "filterId": "CustomerInfo"
+        },
+        "oobSeq": 13
+      },
+      {
+        "id": "creditCardNum",
+        "locked": false,
+        "internalConfig": {
+          "id": "creditCardNum",
+          "title": "RETURN_SEARCH.GENERAL.LABEL_CUSTOMER_CREDIT_CARD_NUMBER",
+          "type": "input",
+          "filterId": "CustomerInfo"
+        },
+        "oobSeq": 14
+      }
+    ]
+  },
+  "select-order-search": {
+    "groups": {
+      "default": "OrderLineInfo",
+      "paths": {
+        "searchBy": [
+          {
+            "content": "SELECT_ORDER_SEARCH.SEARCH_CRITERIA.LABEL_SEARCH_BY_ORDER_DETAILS",
+            "oob": true,
+            "value": "OrderLineInfo"
+          }
+        ]
+      }
+    },
+    "fields": [
+      {
+        "id": "orderNo",
+        "locked": true,
+        "internalConfig": {
+          "id": "orderNo",
+          "title": "SELECT_ORDER_SEARCH.SEARCH_CRITERIA.LABEL_ORDER_NUMBER",
+          "type": "input",
+          "filterId": "OrderLineInfo"
+        },
+        "oobSeq": 0
+      },
+      {
+        "id": "emailID",
+        "locked": false,
+        "internalConfig": {
+          "id": "emailID",
+          "title": "SELECT_ORDER_SEARCH.SEARCH_CRITERIA.LABEL_EMAIL",
+          "type": "input",
+          "filterId": "OrderLineInfo"
+        },
+        "oobSeq": 1
+      },
+      {
+        "id": "phoneNo",
+        "locked": false,
+        "internalConfig": {
+          "id": "phoneNo",
+          "title": "SELECT_ORDER_SEARCH.SEARCH_CRITERIA.LABEL_PHONE",
+          "type": "input",
+          "filterId": "OrderLineInfo"
+        },
+        "oobSeq": 2
+      },
+      {
+        "id": "creditCardNum",
+        "locked": false,
+        "internalConfig": {
+          "id": "creditCardNum",
+          "title": "SELECT_ORDER_SEARCH.SEARCH_CRITERIA.LABEL_CREDIT_CARD_NUMBER",
+          "type": "input",
+          "filterId": "OrderLineInfo"
+        },
+        "oobSeq": 3
+      },
+      {
+        "id": "orderDateRange",
+        "locked": true,
+        "internalConfig": {
+          "id": "orderDateRange",
+          "title": "SELECT_ORDER_SEARCH.SEARCH_CRITERIA.LABEL_DATE_RANGE",
+          "type": "dateRange",
+          "filterId": "OrderLineInfo"
+        },
+        "oobSeq": 4
+      },
+      {
+        "id": "itemID",
+        "locked": true,
+        "internalConfig": {
+          "id": "itemID",
+          "title": "SELECT_ORDER_SEARCH.SEARCH_CRITERIA.LABEL_ITEM_ID",
+          "type": "input",
+          "filterId": "OrderLineInfo"
+        },
+        "oobSeq": 5
+      }
+    ]
+  }
+}

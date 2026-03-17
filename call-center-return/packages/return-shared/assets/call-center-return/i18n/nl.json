@@ -1,0 +1,11 @@
+{
+  "ROUTE_NAMES": {
+    "LABEL_RETURN_SEARCH": "Geavanceerd zoeken naar retour",
+    "LABEL_RETURN_SEARCH_RESULT": "retour-zoekresultaat",
+    "LABEL_RETURN_DETAILS": "retour-details"
+  },
+  "CUSTOMER_SEARCH_MODAL": {
+    "HEADER_CUSTOMER_SEARCH": "Geavanceerd zoeken naar klanten",
+    "LABEL_SELECT_CUSTOMER": "Klant selecteren"
+  }
+}

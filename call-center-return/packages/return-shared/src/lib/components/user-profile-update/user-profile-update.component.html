@@ -1,0 +1,200 @@
+<div class="user-profile-update-container">
+  <h2>Update User Profile</h2>
+  
+  <!-- Loading Indicator -->
+  <div *ngIf="isLoading" class="loading-spinner">
+    <p>Loading profile...</p>
+  </div>
+
+  <!-- Success Message -->
+  <div *ngIf="successMessage" class="alert alert-success">
+    {{ successMessage }}
+  </div>
+
+  <!-- Validation Errors -->
+  <div *ngIf="validationErrors.length > 0" class="alert alert-danger">
+    <h4>Validation Errors:</h4>
+    <ul>
+      <li *ngFor="let error of validationErrors">{{ error }}</li>
+    </ul>
+  </div>
+
+  <!-- Profile Form -->
+  <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" *ngIf="!isLoading">
+    
+    <!-- Personal Information Section -->
+    <div class="form-section">
+      <h3>Personal Information</h3>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="firstName">First Name *</label>
+          <input 
+            type="text" 
+            id="firstName" 
+            formControlName="firstName"
+            class="form-control"
+            [class.is-invalid]="isFieldInvalid('firstName')"
+            placeholder="Enter first name">
+          <div class="invalid-feedback" *ngIf="isFieldInvalid('firstName')">
+            {{ getFieldError('firstName') }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="lastName">Last Name *</label>
+          <input 
+            type="text" 
+            id="lastName" 
+            formControlName="lastName"
+            class="form-control"
+            [class.is-invalid]="isFieldInvalid('lastName')"
+            placeholder="Enter last name">
+          <div class="invalid-feedback" *ngIf="isFieldInvalid('lastName')">
+            {{ getFieldError('lastName') }}
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="email">Email *</label>
+          <input 
+            type="email" 
+            id="email" 
+            formControlName="email"
+            class="form-control"
+            [class.is-invalid]="isFieldInvalid('email')"
+            placeholder="Enter email address">
+          <div class="invalid-feedback" *ngIf="isFieldInvalid('email')">
+            {{ getFieldError('email') }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Phone Number *</label>
+          <input 
+            type="tel" 
+            id="phone" 
+            formControlName="phone"
+            class="form-control"
+            [class.is-invalid]="isFieldInvalid('phone')"
+            placeholder="+1234567890">
+          <div class="invalid-feedback" *ngIf="isFieldInvalid('phone')">
+            {{ getFieldError('phone') }}
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="dateOfBirth">Date of Birth *</label>
+        <input 
+          type="date" 
+          id="dateOfBirth" 
+          formControlName="dateOfBirth"
+          class="form-control"
+          [class.is-invalid]="isFieldInvalid('dateOfBirth')">
+        <div class="invalid-feedback" *ngIf="isFieldInvalid('dateOfBirth')">
+          {{ getFieldError('dateOfBirth') }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Address Section -->
+    <div class="form-section" formGroupName="address">
+      <h3>Address Information</h3>
+      
+      <div class="form-group">
+        <label for="street">Street Address</label>
+        <input 
+          type="text" 
+          id="street" 
+          formControlName="street"
+          class="form-control"
+          placeholder="Enter street address">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="city">City *</label>
+          <input 
+            type="text" 
+            id="city" 
+            formControlName="city"
+            class="form-control"
+            [class.is-invalid]="isFieldInvalid('address.city')"
+            placeholder="Enter city">
+          <div class="invalid-feedback" *ngIf="isFieldInvalid('address.city')">
+            {{ getFieldError('address.city') }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="state">State</label>
+          <input 
+            type="text" 
+            id="state" 
+            formControlName="state"
+            class="form-control"
+            placeholder="Enter state">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="zipCode">Zip Code *</label>
+          <input 
+            type="text" 
+            id="zipCode" 
+            formControlName="zipCode"
+            class="form-control"
+            [class.is-invalid]="isFieldInvalid('address.zipCode')"
+            placeholder="Enter zip code">
+          <div class="invalid-feedback" *ngIf="isFieldInvalid('address.zipCode')">
+            {{ getFieldError('address.zipCode') }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="country">Country *</label>
+          <select 
+            id="country" 
+            formControlName="country"
+            class="form-control">
+            <option value="US">United States</option>
+            <option value="CA">Canada</option>
+            <option value="UK">United Kingdom</option>
+            <option value="OTHER">Other</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+      <button 
+        type="submit" 
+        class="btn btn-primary"
+        [disabled]="isSaving">
+        <span *ngIf="!isSaving">Update Profile</span>
+        <span *ngIf="isSaving">Saving...</span>
+      </button>
+      
+      <button 
+        type="button" 
+        class="btn btn-secondary"
+        (click)="onValidateOnly()"
+        [disabled]="isSaving">
+        Validate Only
+      </button>
+      
+      <button 
+        type="button" 
+        class="btn btn-outline"
+        (click)="onReset()"
+        [disabled]="isSaving">
+        Reset
+      </button>
+    </div>
+  </form>
+</div>

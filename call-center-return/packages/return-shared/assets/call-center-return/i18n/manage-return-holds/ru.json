@@ -1,0 +1,50 @@
+{
+  "MANAGE_HOLDS": {
+    "LABEL_MANAGE_HOLDS": "Обработать блокировки",
+    "LABEL_MANAGE_HOLDS_COUNT": "Разрешить удержания из строк: {{count}}",
+    "LABEL_MANAGE_HOLDS_COUNTS": "Разрешить удержания из строк: {{count}}",
+    "LABEL_LINE_NOTIFICATION_COUNT": "Удержания не применяются к {{ count }} выбранной строке.",
+    "LABEL_LINE_NOTIFICATION_COUNTS": "Удержания не применяются к {{ count }} выбранным строкам.",
+    "LABEL_BACK_TO_RETURN_SUMMARY": "Вернуться к резюме возврата",
+    "TOOLTIP_MSG_RESOLVE_HOLDS": "Пока никаких удержаний не применялось."
+  },
+  "ACTIVE_HOLDS_TABLE": {
+    "LABEL_ACTIVE_HOLDS": "Активные блокировки",
+    "LABEL_OPEN_ALERTS": "Открытые предупреждения",
+    "LABEL_HEADER_LINE": "Строка",
+    "LABEL_HEADER_ITEM": "Возврат товара",
+    "LABEL_HEADER_HOLD_TYPE": "Тип блокировки",
+    "LABEL_HEADER_DATE": "Дата",
+    "LABEL_HEADER_COMMENTS": "Комментарии",
+    "LABEL_RESOLVE": "Снять",
+    "LABEL_addHold": "Добавить блокировку",
+    "LABEL_NO_ACTIVE_HOLDS": "Нет активных удержаний"
+  },
+  "RESOLVED_HOLDS_TABLE": {
+    "LABEL_RESOLVED_HOLDS": "Обработанные блокировки",
+    "LABEL_HEADER_LINE": "Строка",
+    "LABEL_HEADER_ITEM": "Возврат товара",
+    "LABEL_HEADER_HOLD_TYPE": "Тип блокировки",
+    "LABEL_HEADER_DATE": "Дата",
+    "LABEL_HEADER_COMMENTS": "Комментарии",
+    "LABEL_NO_RESOLVE_HOLDS": "Нет решенных удержаний"
+  },
+  "RESOLVE_HOLDS_MODAL": {
+    "LABEL_HEADER_RESOLVE_HOLDS": "Обработать блокировки",
+    "LABEL_HEADER_RESOLVE_HOLDS_COUNT": "Разрешить удержания из строк: {{count}}",
+    "LABEL_HEADER_RESOLVE_HOLDS_COUNTS": "Разрешить удержания из строк: {{count}}",
+    "LABEL_HEADER_LINE": "Строка",
+    "LABEL_HEADER_ITEM": "Товар",
+    "LABEL_HEADER_HOLD_TYPE": "Тип блокировки",
+    "LABEL_HEADER_COMMENTS": "Комментарии (необязательно)",
+    "LABEL_CANCEL": "Отмена",
+    "LABEL_RESOLVE": "Снять",
+    "LABEL_RESOLVE_HOLD_MSG_LINE": "Решено. Удержания сняты со строк: {{count}} .",
+    "LABEL_RESOLVE_HOLD_MSG_LINES": "Решено. Удержания сняты со строк: {{count}} .",
+    "LABEL_RESOLVE_HOLD_MSG_ORDER": "Устранено {{ count }} из {{ count1 }} удержаний по этому заказу.",
+    "RESOLVE_HOLD_FAILED_ERROR_MSG": "Запрос на разрешение удержаний не удался."
+  },
+  "SIDE_PANEL": {
+    "LABEL_NOTES": "Примечания ({{count}})"
+  }
+}

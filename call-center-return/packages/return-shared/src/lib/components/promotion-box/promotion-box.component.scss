@@ -1,0 +1,92 @@
+/*
+ * IBM Confidential
+ * OCO Source Materials
+ * 5737-D18, 5725-D10
+ *
+ * (C) Copyright International Business Machines Corp. 2022, 2023
+ *
+ * The source code for this program is not published or otherwise divested
+ * of its trade secrets, irrespective of what has been deposited with the
+ * U.S. Copyright Office.
+ */
+
+
+ @use 'variables' as *;
+:host {
+  ::ng-deep {
+    buc-combobox {
+      .cds--list-box,
+      .cds--list-box input {
+        height: 3rem;
+        max-height: 3rem;
+      }
+
+      .cds--list-box__menu-icon {
+        display: none;
+      }
+      .cds--list-box__selection {
+        margin-right: -1rem;
+      }
+      .cds--list-box__invalid-icon {
+        margin-right: -1rem;
+      }
+      .cds--list-box[data-invalid] .cds--list-box__field .cds--text-input {
+        padding-right: 5.125rem;
+      }
+    }
+    buc-tag {
+      margin-left: 0.7rem;
+    }
+    .promotion-block {
+      margin-left: 1rem;
+    }
+    .promotion-text {
+      margin-left: 0.25rem;
+    }
+    .shortTag {
+      max-width: 13rem;
+      display: inline-block;
+    }
+    .promotion-block{
+      .cds--btn--primary{
+        padding-right: 20px;
+      }
+    }
+  }
+}
+
+::ng-deep {
+  .cds--tooltip {
+    .promotion-box-tooltip {
+      .cds--label {
+        color: $white-0;
+      }
+    }
+  }
+}
+
+.item-description-tooltip-template {
+  max-width: 30rem;
+}
+
+.tooltip-pos{
+  margin-left:0.2rem;
+  vertical-align: middle;
+}
+
+.tooltip-btn {
+  opacity: 0;
+}
+
+.info-disable1 {
+  margin-left: -12px;
+  position: inherit;
+  margin-top: 7px;
+}
+
+.info-disable2 {
+  margin-left: 15px;
+  position: inherit;
+  margin-top: -7px;
+}
+
