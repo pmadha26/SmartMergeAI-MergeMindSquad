@@ -1,7 +1,10 @@
+
 export class AppCustomizationImpl {
     static readonly components = [];
 
-    static readonly providers = [];
+    static readonly providers = [
+        IbmIccReturnService
+    ];
 
     static readonly imports = [];
 
