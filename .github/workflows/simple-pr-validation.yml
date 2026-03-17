@@ -187,7 +187,7 @@ jobs:
             comment += '---\n';
             comment += '*Automated by SmartMergeAI Validation System*\n';
             
-            // Remove old labels
+            // Remove old validation labels (only those set by this workflow)
             try {
               const labels = await github.rest.issues.listLabelsOnIssue({
                 owner: context.repo.owner,
@@ -195,6 +195,7 @@ jobs:
                 issue_number: context.issue.number,
               });
               
+              // Only remove labels that this workflow manages
               const labelsToRemove = ['validation-passed', 'validation-failed', 'has-critical-issues'];
               for (const label of labels.data) {
                 if (labelsToRemove.includes(label.name)) {
@@ -210,48 +211,53 @@ jobs:
               console.log('Error removing labels:', error.message);
             }
             
-            // Add appropriate label
+            // Add appropriate label based on validation results
             try {
+              let labelsToAdd = [];
               if (hasCriticalIssues) {
-                await github.rest.issues.addLabels({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: context.issue.number,
-                  labels: ['validation-failed', 'has-critical-issues']
-                });
+                labelsToAdd = ['validation-failed', 'has-critical-issues'];
               } else if (hasIssues) {
-                await github.rest.issues.addLabels({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: context.issue.number,
-                  labels: ['validation-failed']
-                });
+                labelsToAdd = ['validation-failed'];
               } else {
+                labelsToAdd = ['validation-passed'];
+              }
+              
+              // Only add labels if they don't already exist
+              const currentLabels = await github.rest.issues.listLabelsOnIssue({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+              });
+              const currentLabelNames = currentLabels.data.map(l => l.name);
+              const newLabels = labelsToAdd.filter(l => !currentLabelNames.includes(l));
+              
+              if (newLabels.length > 0) {
                 await github.rest.issues.addLabels({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   issue_number: context.issue.number,
-                  labels: ['validation-passed']
+                  labels: newLabels
                 });
               }
             } catch (error) {
               console.log('Error adding labels:', error.message);
             }
             
-            // Set commit status
+            // Set commit status - use unique context to avoid conflicts
             try {
               let state, description;
               if (hasCriticalIssues) {
                 state = 'failure';
                 description = '🚫 Critical issues found - merge blocked';
               } else if (hasIssues) {
-                state = 'pending';
+                state = 'failure';  // Changed from 'pending' to 'failure' to block merge
                 description = '⚠️ Issues found - review required';
               } else {
                 state = 'success';
                 description = '✅ All validations passed';
               }
               
+              // Use a unique context name to avoid conflicts with other workflows
               await github.rest.repos.createCommitStatus({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
@@ -259,7 +265,7 @@ jobs:
                 state: state,
                 target_url: `${context.payload.pull_request.html_url}/checks`,
                 description: description,
-                context: 'SmartMergeAI / Validation'
+                context: 'SmartMergeAI / Simple Validation'
               });
             } catch (error) {
               console.log('Error setting commit status:', error.message);

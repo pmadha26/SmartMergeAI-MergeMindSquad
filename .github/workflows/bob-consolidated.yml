@@ -27,6 +27,7 @@ jobs:
   assign-reviewers:
     name: Auto-Assign Reviewers
     runs-on: ubuntu-latest
+    # Only run on opened, not on synchronize to prevent resetting assignees
     if: github.event_name == 'pull_request' && github.event.action == 'opened'
     
     steps:
@@ -53,6 +54,11 @@ jobs:
           PR_NUMBER: ${{ github.event.pull_request.number }}
         run: node pr-reviewer-assigner.js
         continue-on-error: true
+      
+      - name: Prevent assignee reset on subsequent runs
+        if: always()
+        run: |
+          echo "✅ Reviewers assigned on PR open - will not reset on synchronize events"
 
   consolidated-analysis:
     name: Consolidated PR Analysis
@@ -173,10 +179,11 @@ jobs:
           script: |
             const blocking = '${{ steps.check_blockers.outputs.blocking }}' === 'true';
             const state = blocking ? 'failure' : 'success';
-            const description = blocking 
+            const description = blocking
               ? '❌ Merge blocked: Fix conflicts and validation issues first'
               : '✅ Ready to merge';
             
+            // Set commit status with unique context
             await github.rest.repos.createCommitStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -186,6 +193,56 @@ jobs:
               description: description,
               context: 'Bob / Merge Blocker'
             });
+            
+            // Also update labels to reflect merge status
+            if (blocking) {
+              try {
+                await github.rest.issues.addLabels({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.payload.pull_request.number,
+                  labels: ['merge-blocked']
+                });
+              } catch (error) {
+                console.log('Error adding merge-blocked label:', error.message);
+              }
+            } else {
+              try {
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.payload.pull_request.number,
+                  name: 'merge-blocked'
+                }).catch(() => {}); // Ignore if label doesn't exist
+              } catch (error) {
+                console.log('Error removing merge-blocked label:', error.message);
+              }
+            }
+            
+            // Also update labels to reflect merge status
+            if (blocking) {
+              try {
+                await github.rest.issues.addLabels({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.payload.pull_request.number,
+                  labels: ['merge-blocked']
+                });
+              } catch (error) {
+                console.log('Error adding merge-blocked label:', error.message);
+              }
+            } else {
+              try {
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.payload.pull_request.number,
+                  name: 'merge-blocked'
+                }).catch(() => {}); // Ignore if label doesn't exist
+              } catch (error) {
+                console.log('Error removing merge-blocked label:', error.message);
+              }
+            }
 
   auto-resolve-conflicts:
     name: Auto-Resolve Simple Conflicts
