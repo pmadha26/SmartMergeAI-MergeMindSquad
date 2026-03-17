@@ -32,7 +32,6 @@ jobs:
       - name: Run Comprehensive Validator
         id: validate
         working-directory: ./scripts
-        continue-on-error: true
         run: |
           echo "Running comprehensive validator..."
           node comprehensive-validator.js \
@@ -41,15 +40,29 @@ jobs:
             --cwd=".." \
             --output="../validation-report.json" 2>&1 | tee ../validation.log
           
-          echo "Validator completed with exit code: $?"
+          VALIDATOR_EXIT_CODE=$?
+          echo "Validator completed with exit code: $VALIDATOR_EXIT_CODE"
           
           # Check if report was created
           if [ -f ../validation-report.json ]; then
             echo "✅ Validation report created"
             cat ../validation-report.json
+            
+            # Check for critical issues in the report
+            CRITICAL_COUNT=$(cat ../validation-report.json | grep -o '"severity":"critical"' | wc -l)
+            echo "Critical issues found: $CRITICAL_COUNT"
+            
+            if [ "$CRITICAL_COUNT" -gt 0 ]; then
+              echo "❌ CRITICAL ISSUES DETECTED - FAILING BUILD TO BLOCK MERGE"
+              echo "has_critical_issues=true" >> $GITHUB_OUTPUT
+              exit 1
+            fi
           else
             echo "❌ Validation report not found"
           fi
+          
+          echo "has_critical_issues=false" >> $GITHUB_OUTPUT
+          exit $VALIDATOR_EXIT_CODE
       
       - name: Post Results and Set Status
         if: always()

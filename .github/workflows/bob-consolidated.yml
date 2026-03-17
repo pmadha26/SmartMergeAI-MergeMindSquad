@@ -163,11 +163,12 @@ jobs:
           
           if [ "$HAS_CONFLICTS" = "true" ] || [ "$HAS_ISSUES" = "true" ]; then
             echo "blocking=true" >> $GITHUB_OUTPUT
-            echo "❌ Merge blocked due to conflicts or validation issues"
+            echo "❌ MERGE BLOCKED - Critical issues or conflicts detected"
+            echo "This job will fail to prevent merge"
             exit 1
           else
             echo "blocking=false" >> $GITHUB_OUTPUT
-            echo "✅ No blocking issues found"
+            echo "✅ No blocking issues found - safe to merge"
             exit 0
           fi
       
