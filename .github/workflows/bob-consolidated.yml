@@ -63,7 +63,7 @@ jobs:
   consolidated-analysis:
     name: Consolidated PR Analysis
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' || github.event_name == 'pull_request_review'
     outputs:
       has_issues: ${{ steps.analysis.outputs.has_issues }}
     
