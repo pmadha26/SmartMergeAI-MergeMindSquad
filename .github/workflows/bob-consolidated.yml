@@ -306,10 +306,11 @@ jobs:
     if: github.event_name == 'pull_request_review' && github.event.review.state == 'approved'
     
     steps:
-      - name: Checkout code
+      - name: Checkout PR branch
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }}
           token: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Setup Node.js

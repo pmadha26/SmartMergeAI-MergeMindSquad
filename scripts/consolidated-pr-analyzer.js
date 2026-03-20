@@ -764,9 +764,12 @@ class ConsolidatedAnalyzer {
         issue_number: prNumber
       });
 
-      const bobComment = comments.find(comment => 
-        comment.user.type === 'Bot' && 
-        comment.body.includes('Bob\'s Comprehensive PR Analysis')
+      // Look for EITHER Bob's comment OR the Simple Validation comment
+      // This ensures we update the same comment instead of creating multiple
+      const bobComment = comments.find(comment =>
+        comment.user.type === 'Bot' &&
+        (comment.body.includes('Bob\'s Comprehensive PR Analysis') ||
+         comment.body.includes('PR Validation Results'))
       );
 
       if (bobComment) {
