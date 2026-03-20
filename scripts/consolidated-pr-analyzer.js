@@ -533,12 +533,18 @@ class ConsolidatedAnalyzer {
           // Only process TypeScript/JavaScript files
           if (/\.(ts|tsx|js|jsx)$/.test(currentFile)) {
             try {
-              const fullPath = path.join(process.cwd(), currentFile);
+              // Go up one directory from scripts to repository root
+              const fullPath = path.join(process.cwd(), '..', currentFile);
+              console.log(`Trying to read file: ${fullPath}, exists: ${fs.existsSync(fullPath)}`);
               if (fs.existsSync(fullPath)) {
-                fileContents.set(currentFile, fs.readFileSync(fullPath, 'utf8'));
+                const content = fs.readFileSync(fullPath, 'utf8');
+                fileContents.set(currentFile, content);
+                console.log(`Successfully read ${currentFile}, length: ${content.length}`);
+              } else {
+                console.log(`File not found: ${fullPath}`);
               }
             } catch (error) {
-              // File might not exist yet, skip
+              console.log(`Error reading ${currentFile}: ${error.message}`);
             }
           }
         }
