@@ -1,20 +1,10 @@
-name: Simple PR Validation (DISABLED - Use Bob Consolidated)
+name: Simple PR Validation
 
-# DISABLED: This workflow has been replaced by bob-consolidated.yml
-# which now includes all validation checks including import detection
 on:
-  workflow_dispatch:
-    inputs:
-      manual_trigger:
-        description: 'Manual trigger only - workflow is disabled'
-        required: false
-
-# Disabled to prevent conflicts with bob-consolidated.yml
-# on:
-#   pull_request:
-#     types: [opened, reopened, synchronize, edited]
-#   pull_request_target:
-#     types: [opened, reopened, synchronize, edited]
+  pull_request:
+    types: [opened, reopened, synchronize, edited]
+  pull_request_target:
+    types: [opened, reopened, synchronize, edited]
 
 permissions:
   contents: read
@@ -213,7 +203,8 @@ jobs:
             comment += '---\n';
             comment += '*Automated by SmartMergeAI Validation System*\n';
             
-            // Remove old validation labels (only those set by this workflow)
+            // Remove ONLY validation labels managed by this workflow
+            // Do NOT touch merge-blocked or other workflow labels
             try {
               const labels = await github.rest.issues.listLabelsOnIssue({
                 owner: context.repo.owner,
@@ -221,7 +212,7 @@ jobs:
                 issue_number: context.issue.number,
               });
               
-              // Only remove labels that this workflow manages
+              // Only remove validation labels, not merge-blocked
               const labelsToRemove = ['validation-passed', 'validation-failed', 'has-critical-issues'];
               for (const label of labels.data) {
                 if (labelsToRemove.includes(label.name)) {
