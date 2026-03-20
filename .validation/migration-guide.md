@@ -1,6 +1,6 @@
 # Migration Guide for PR #8
 
-Generated: 2026-03-20T11:20:34.811Z
+Generated: 2026-03-20T11:24:13.128Z
 
 ## No Breaking Changes
 
