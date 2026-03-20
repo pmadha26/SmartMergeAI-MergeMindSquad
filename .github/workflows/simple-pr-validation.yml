@@ -203,62 +203,9 @@ jobs:
             comment += '---\n';
             comment += '*Automated by SmartMergeAI Validation System*\n';
             
-            // Remove ONLY validation labels managed by this workflow
-            // Do NOT touch merge-blocked or other workflow labels
-            try {
-              const labels = await github.rest.issues.listLabelsOnIssue({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: context.issue.number,
-              });
-              
-              // Only remove validation labels, not merge-blocked
-              const labelsToRemove = ['validation-passed', 'validation-failed', 'has-critical-issues'];
-              for (const label of labels.data) {
-                if (labelsToRemove.includes(label.name)) {
-                  await github.rest.issues.removeLabel({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    issue_number: context.issue.number,
-                    name: label.name
-                  }).catch(() => {}); // Ignore if label doesn't exist
-                }
-              }
-            } catch (error) {
-              console.log('Error removing labels:', error.message);
-            }
-            
-            // Add appropriate label based on validation results
-            try {
-              let labelsToAdd = [];
-              if (hasCriticalIssues) {
-                labelsToAdd = ['validation-failed', 'has-critical-issues'];
-              } else if (hasIssues) {
-                labelsToAdd = ['validation-failed'];
-              } else {
-                labelsToAdd = ['validation-passed'];
-              }
-              
-              // Only add labels if they don't already exist
-              const currentLabels = await github.rest.issues.listLabelsOnIssue({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: context.issue.number,
-              });
-              const currentLabelNames = currentLabels.data.map(l => l.name);
-              const newLabels = labelsToAdd.filter(l => !currentLabelNames.includes(l));
-              
-              if (newLabels.length > 0) {
-                await github.rest.issues.addLabels({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: context.issue.number,
-                  labels: newLabels
-                });
-              }
-            } catch (error) {
-              console.log('Error adding labels:', error.message);
-            }
+            // NOTE: Label management is handled by bob-consolidated.yml workflow
+            // This workflow only posts validation comments
+            console.log('Validation complete. Labels will be managed by bob-consolidated workflow.');
             
             // Set commit status - use unique context to avoid conflicts
             try {
