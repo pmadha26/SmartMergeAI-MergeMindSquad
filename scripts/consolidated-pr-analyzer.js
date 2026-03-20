@@ -618,6 +618,8 @@ class ConsolidatedAnalyzer {
     // Check if there's a public-api.ts that exports this identifier
     if (packageInfo) {
       const publicApiPath = path.join(packageInfo.path, 'src', 'public-api.ts');
+      console.log(`[DEBUG] Checking public-api.ts: ${publicApiPath}`);
+      console.log(`[DEBUG] Package name: ${packageInfo.name}`);
       
       if (fs.existsSync(publicApiPath)) {
         try {
@@ -629,25 +631,42 @@ class ConsolidatedAnalyzer {
             .replace(/\\/g, '/')
             .replace(/\.(ts|tsx|js|jsx)$/, '');
           
+          console.log(`[DEBUG] File relative to src: ${fileRelativeToSrc}`);
+          
           // Check if this specific file is exported from public-api.ts
           // Matches: export * from './lib/components/sample-shared.component'
-          const fileExportPattern = new RegExp(`export\\s+\\*\\s+from\\s+['"]\\.\\/` + fileRelativeToSrc.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + `['"]`, 'g');
+          const escapedPath = fileRelativeToSrc.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+          const fileExportPattern = new RegExp(`export\\s+\\*\\s+from\\s+['"]\\.\\/` + escapedPath + `['"]`, 'g');
+          
+          console.log(`[DEBUG] Looking for pattern: export * from './${fileRelativeToSrc}'`);
+          console.log(`[DEBUG] Pattern matches: ${fileExportPattern.test(publicApiContent)}`);
+          
+          // Reset regex after test
+          fileExportPattern.lastIndex = 0;
           
           // Also check for direct named exports: export { SampleSharedComponent } from './...'
           const namedExportPattern = new RegExp(`export\\s*{[^}]*\\b${identifier}\\b[^}]*}\\s*from`, 'g');
           
           if (fileExportPattern.test(publicApiContent) || namedExportPattern.test(publicApiContent)) {
+            console.log(`[DEBUG] ✅ Found export in public-api.ts! Using package import: ${packageInfo.name}`);
             return {
               importPath: packageInfo.name,
               isPackageImport: true,
               filePath: relativePath,
               packageName: packageInfo.name
             };
+          } else {
+            console.log(`[DEBUG] ⚠️  Not found in public-api.ts, will use relative path`);
           }
         } catch (error) {
+          console.log(`[DEBUG] Error reading public-api.ts: ${error.message}`);
           // Fall through to relative path
         }
+      } else {
+        console.log(`[DEBUG] public-api.ts does not exist`);
       }
+    } else {
+      console.log(`[DEBUG] No package info found`);
     }
 
     // Fall back to relative import path
