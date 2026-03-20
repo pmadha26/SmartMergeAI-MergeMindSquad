@@ -619,17 +619,25 @@ class ConsolidatedAnalyzer {
           // Also check for direct named exports: export { SampleSharedComponent } from './...'
           const namedExportPattern = new RegExp(`export\\s*{[^}]*\\b${identifier}\\b[^}]*}\\s*from`, 'g');
           if (fileExportPattern.test(publicApiContent) || namedExportPattern.test(publicApiContent)) {
+            console.log(`[DEBUG] ✅ Found export in public-api.ts! Using package import: ${packageInfo.name}`);
             return {
               importPath: packageInfo.name,
               isPackageImport: true,
               filePath: relativePath,
               packageName: packageInfo.name
             };
+          } else {
+            console.log(`[DEBUG] ⚠️  Not found in public-api.ts, will use relative path`);
           }
         } catch (error) {
+          console.log(`[DEBUG] Error reading public-api.ts: ${error.message}`);
           // Fall through to relative path
         }
+      } else {
+        console.log(`[DEBUG] public-api.ts does not exist`);
       }
+    } else {
+      console.log(`[DEBUG] No package info found`);
     }
     // Fall back to relative import path
     const relativeImport = relativePath
