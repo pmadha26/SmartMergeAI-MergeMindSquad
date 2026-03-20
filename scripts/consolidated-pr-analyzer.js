@@ -1,8 +1,7 @@
 #!/usr/bin/env node
-
 /**
  * Bob - Consolidated PR Analyzer (MVP)
- * 
+ *
  * Performs comprehensive PR analysis in a single run:
  * - Merge conflict detection (including file-level conflicts)
  * - Missing file detection
@@ -10,25 +9,21 @@
  * - Hardcoded credentials detection
  * - Behavior analysis
  * - Regression detection
- * 
+ *
  * Posts a SINGLE consolidated report to reduce email notifications
  */
-
 const { Octokit } = require('@octokit/rest');
 const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
-
 const octokit = new Octokit({
   auth: process.env.GITHUB_TOKEN
 });
-
 const owner = process.env.GITHUB_REPOSITORY_OWNER;
 const repo = process.env.GITHUB_REPOSITORY_NAME;
 const prNumber = parseInt(process.env.PR_NUMBER);
 const baseRef = process.env.BASE_REF || 'main';
 const headRef = process.env.HEAD_REF;
-
 // ANSI colors for console output
 const colors = {
   reset: '\x1b[0m',
@@ -39,14 +34,12 @@ const colors = {
   cyan: '\x1b[36m',
   bold: '\x1b[1m'
 };
-
 // Configuration
 const REQUIRED_FILES = {
   root: ['README.md', 'package.json', '.gitignore'],
   config: ['tsconfig.json', '.eslintrc.json', '.eslintrc.js', '.prettierrc'],
   ci: ['.github/workflows', 'bitbucket-pipelines.yml', '.gitlab-ci.yml']
 };
-
 const BUG_PATTERNS = {
   nullUnsafe: {
     pattern: /(?:const|let|var)\s+\w+\s*=\s*.*\.\w+.*\n.*\1\.\w+/g,
@@ -84,7 +77,6 @@ const BUG_PATTERNS = {
     severity: 'critical'
   }
 };
-
 class ConsolidatedAnalyzer {
   constructor() {
     this.results = {
@@ -102,19 +94,16 @@ class ConsolidatedAnalyzer {
       testsRemoved: 0
     };
   }
-
   /**
    * Main analysis orchestrator
    */
   async analyze() {
     console.log(`${colors.bold}${colors.cyan}🤖 Bob's Consolidated PR Analysis${colors.reset}\n`);
     console.log(`PR #${prNumber}: ${baseRef} ← ${headRef}\n`);
-
     try {
       // Get PR details and diff
       const { data: pr } = await octokit.pulls.get({ owner, repo, pull_number: prNumber });
       const diff = await this.getPRDiff();
-
       // Run all analyses
       await this.analyzeMergeConflicts();
       await this.analyzeMissingFiles();
@@ -124,10 +113,8 @@ class ConsolidatedAnalyzer {
       await this.analyzeBehaviorChanges(diff);
       await this.analyzeTestCoverage(diff);
       this.calculateStats(diff);
-
       // Generate and post consolidated report
       await this.postConsolidatedReport(pr);
-
       // Set GitHub Actions outputs (FIXED: Using new syntax)
       const hasCritical = this.results.critical.length > 0;
       if (process.env.GITHUB_OUTPUT) {
@@ -140,19 +127,16 @@ class ConsolidatedAnalyzer {
         console.log(`critical_count=${this.results.critical.length}`);
         console.log(`warning_count=${this.results.warnings.length}`);
       }
-
       return {
         success: true,
         hasCritical,
         results: this.results
       };
-
     } catch (error) {
       console.error(`${colors.red}❌ Analysis failed: ${error.message}${colors.reset}`);
       throw error;
     }
   }
-
   /**
    * Get PR diff
    */
@@ -163,7 +147,6 @@ class ConsolidatedAnalyzer {
         repo,
         pull_number: prNumber
       });
-
       let fullDiff = '';
       for (const file of files) {
         if (file.patch) {
@@ -171,34 +154,28 @@ class ConsolidatedAnalyzer {
           fullDiff += file.patch + '\n';
         }
       }
-
       return fullDiff;
     } catch (error) {
       console.error('Error fetching diff:', error.message);
       return '';
     }
   }
-
   /**
    * Analyze merge conflicts (including file-level conflicts)
    */
   async analyzeMergeConflicts() {
     console.log(`${colors.blue}🔍 Checking merge conflicts...${colors.reset}`);
-
     try {
       // Fetch branches
       execSync(`git fetch origin ${baseRef}`, { stdio: 'pipe' });
       execSync(`git fetch origin ${headRef}`, { stdio: 'pipe' });
-
       // Use merge-tree to simulate merge
       const output = execSync(
         `git merge-tree $(git merge-base origin/${baseRef} origin/${headRef}) origin/${baseRef} origin/${headRef}`,
         { encoding: 'utf-8', stdio: 'pipe' }
       );
-
       // Check for content conflicts
       const hasContentConflicts = output.includes('<<<<<<<');
-      
       // Check for file-level conflicts (FIXED)
       const fileConflictPatterns = [
         /^changed in both$/m,
@@ -206,17 +183,13 @@ class ConsolidatedAnalyzer {
         /^added in \w+$/m,
         /^removed in \w+$/m
       ];
-
       const hasFileConflicts = fileConflictPatterns.some(pattern => pattern.test(output));
-
       if (hasContentConflicts || hasFileConflicts) {
         // Parse conflicted files
         const conflictedFiles = new Set();
         const lines = output.split('\n');
-        
         for (let i = 0; i < lines.length; i++) {
           const line = lines[i];
-          
           // Content conflicts
           if (line.includes('<<<<<<<')) {
             for (let j = i - 1; j >= Math.max(0, i - 20); j--) {
@@ -227,7 +200,6 @@ class ConsolidatedAnalyzer {
               }
             }
           }
-          
           // File-level conflicts
           if (fileConflictPatterns.some(p => p.test(line))) {
             for (let j = i - 1; j >= Math.max(0, i - 10); j--) {
@@ -239,7 +211,6 @@ class ConsolidatedAnalyzer {
             }
           }
         }
-
         this.results.critical.push({
           type: 'merge-conflicts',
           title: `Merge Conflicts Detected (${conflictedFiles.size} files)`,
@@ -248,48 +219,41 @@ class ConsolidatedAnalyzer {
           severity: 'critical',
           autoFixable: false
         });
-
         console.log(`${colors.red}❌ Found conflicts in ${conflictedFiles.size} files${colors.reset}`);
       } else {
         this.results.passed.push('No merge conflicts detected');
         console.log(`${colors.green}✅ No merge conflicts${colors.reset}`);
       }
-
     } catch (error) {
       console.log(`${colors.yellow}⚠️  Could not check conflicts: ${error.message}${colors.reset}`);
     }
   }
-
   /**
    * Analyze missing required files
    */
   async analyzeMissingFiles() {
     console.log(`${colors.blue}🔍 Checking required files...${colors.reset}`);
-
     const missingFiles = [];
-
     // Check root files
     for (const file of REQUIRED_FILES.root) {
       if (!fs.existsSync(path.join(process.cwd(), file))) {
         missingFiles.push({ file, category: 'root', required: true });
       }
     }
-
     // Check config files (at least one should exist)
-    const hasConfig = REQUIRED_FILES.config.some(file => 
+    const hasConfig = REQUIRED_FILES.config.some(file =>
       fs.existsSync(path.join(process.cwd(), file))
     );
     if (!hasConfig) {
-      missingFiles.push({ 
-        file: 'Configuration file', 
-        category: 'config', 
+      missingFiles.push({
+        file: 'Configuration file',
+        category: 'config',
         required: false,
         suggestion: `Consider adding one of: ${REQUIRED_FILES.config.join(', ')}`
       });
     }
-
     // Check CI files (at least one should exist)
-    const hasCI = REQUIRED_FILES.ci.some(file => 
+    const hasCI = REQUIRED_FILES.ci.some(file =>
       fs.existsSync(path.join(process.cwd(), file))
     );
     if (!hasCI) {
@@ -300,11 +264,9 @@ class ConsolidatedAnalyzer {
         severity: 'info'
       });
     }
-
     if (missingFiles.length > 0) {
       const critical = missingFiles.filter(f => f.required);
       const warnings = missingFiles.filter(f => !f.required);
-
       if (critical.length > 0) {
         this.results.critical.push({
           type: 'missing-files',
@@ -315,7 +277,6 @@ class ConsolidatedAnalyzer {
           autoFixable: false
         });
       }
-
       if (warnings.length > 0) {
         this.results.warnings.push({
           type: 'missing-optional-files',
@@ -325,25 +286,21 @@ class ConsolidatedAnalyzer {
           autoFixable: false
         });
       }
-
       console.log(`${colors.yellow}⚠️  Missing ${missingFiles.length} files${colors.reset}`);
     } else {
       this.results.passed.push('All required files present');
       console.log(`${colors.green}✅ All required files present${colors.reset}`);
     }
   }
-
   /**
    * Analyze bug patterns
    */
   async analyzeBugPatterns(diff) {
     console.log(`${colors.blue}🔍 Scanning for bug patterns...${colors.reset}`);
-
     const lines = diff.split('\n');
     let currentFile = '';
     let lineNumber = 0;
     let foundIssues = 0;
-
     for (const line of lines) {
       // Track current file
       if (line.startsWith('diff --git')) {
@@ -352,23 +309,19 @@ class ConsolidatedAnalyzer {
         lineNumber = 0;
         continue;
       }
-
       // Track line numbers
       if (line.startsWith('@@')) {
         const match = line.match(/@@ -\d+,?\d* \+(\d+)/);
         if (match) lineNumber = parseInt(match[1]);
         continue;
       }
-
       // Only analyze added lines
       if (!line.startsWith('+') || line.startsWith('+++')) {
         if (line.startsWith('-') || line.startsWith(' ')) lineNumber++;
         continue;
       }
-
       lineNumber++;
       const content = line.substring(1);
-
       // Check each bug pattern
       for (const [patternName, config] of Object.entries(BUG_PATTERNS)) {
         if (config.pattern.test(content)) {
@@ -381,7 +334,6 @@ class ConsolidatedAnalyzer {
             severity: config.severity,
             autoFixable: ['consoleLog', 'unusedVariable'].includes(patternName)
           };
-
           if (config.severity === 'critical') {
             this.results.critical.push(issue);
           } else if (config.severity === 'high' || config.severity === 'medium') {
@@ -389,16 +341,13 @@ class ConsolidatedAnalyzer {
           } else {
             this.results.info.push(issue);
           }
-
           if (issue.autoFixable) {
             this.results.autoFixable.push(issue);
           }
-
           foundIssues++;
         }
       }
     }
-
     if (foundIssues === 0) {
       this.results.passed.push('No common bug patterns detected');
       console.log(`${colors.green}✅ No bug patterns found${colors.reset}`);
@@ -406,21 +355,17 @@ class ConsolidatedAnalyzer {
       console.log(`${colors.yellow}⚠️  Found ${foundIssues} potential issues${colors.reset}`);
     }
   }
-
   /**
    * Analyze orphaned references (imports to non-existent files)
    */
   async analyzeOrphanedReferences(diff) {
     console.log(`${colors.blue}🔍 Checking for orphaned references...${colors.reset}`);
-
     const importPattern = /import\s+.*\s+from\s+['"](.+)['"]/g;
     const requirePattern = /require\s*\(\s*['"](.+)['"]\s*\)/g;
-    
     const lines = diff.split('\n');
     let currentFile = '';
     let lineNumber = 0;
     const orphanedRefs = [];
-
     for (const line of lines) {
       if (line.startsWith('diff --git')) {
         const match = line.match(/b\/(.*)/);
@@ -428,21 +373,17 @@ class ConsolidatedAnalyzer {
         lineNumber = 0;
         continue;
       }
-
       if (line.startsWith('@@')) {
         const match = line.match(/@@ -\d+,?\d* \+(\d+)/);
         if (match) lineNumber = parseInt(match[1]);
         continue;
       }
-
       if (!line.startsWith('+') || line.startsWith('+++')) {
         if (line.startsWith('-') || line.startsWith(' ')) lineNumber++;
         continue;
       }
-
       lineNumber++;
       const content = line.substring(1);
-
       // Check imports
       let match;
       while ((match = importPattern.exec(content)) !== null) {
@@ -452,14 +393,12 @@ class ConsolidatedAnalyzer {
             path.dirname(currentFile),
             importPath
           );
-          
           // Check if file exists (with common extensions)
           const extensions = ['', '.js', '.ts', '.jsx', '.tsx', '.json'];
-          const exists = extensions.some(ext => 
-            fs.existsSync(resolvedPath + ext) || 
+          const exists = extensions.some(ext =>
+            fs.existsSync(resolvedPath + ext) ||
             fs.existsSync(path.join(resolvedPath, 'index' + ext))
           );
-
           if (!exists) {
             orphanedRefs.push({
               file: currentFile,
@@ -470,7 +409,6 @@ class ConsolidatedAnalyzer {
           }
         }
       }
-
       // Check requires
       while ((match = requirePattern.exec(content)) !== null) {
         const requirePath = match[1];
@@ -479,12 +417,10 @@ class ConsolidatedAnalyzer {
             path.dirname(currentFile),
             requirePath
           );
-          
           const extensions = ['', '.js', '.ts', '.json'];
-          const exists = extensions.some(ext => 
+          const exists = extensions.some(ext =>
             fs.existsSync(resolvedPath + ext)
           );
-
           if (!exists) {
             orphanedRefs.push({
               file: currentFile,
@@ -496,7 +432,6 @@ class ConsolidatedAnalyzer {
         }
       }
     }
-
     if (orphanedRefs.length > 0) {
       this.results.critical.push({
         type: 'orphaned-references',
@@ -517,13 +452,11 @@ class ConsolidatedAnalyzer {
    */
   async analyzeMissingImports(diff) {
     console.log(`${colors.blue}🔍 Checking for missing imports...${colors.reset}`);
-
     const lines = diff.split('\n');
     let currentFile = '';
     let lineNumber = 0;
     const missingImports = [];
     const fileContents = new Map();
-
     // First pass: collect full file contents for changed files
     for (const line of lines) {
       if (line.startsWith('diff --git')) {
@@ -550,14 +483,12 @@ class ConsolidatedAnalyzer {
         }
       }
     }
-
     // Second pass: analyze each file for missing imports
     for (const [filePath, content] of fileContents.entries()) {
       // Extract all imported identifiers
       const importedIdentifiers = new Set();
       const importPattern = /import\s+(?:{([^}]+)}|(\w+))\s+from/g;
       let match;
-
       while ((match = importPattern.exec(content)) !== null) {
         if (match[1]) {
           // Named imports: { A, B, C }
@@ -569,7 +500,6 @@ class ConsolidatedAnalyzer {
           importedIdentifiers.add(match[2]);
         }
       }
-
       // Check for class/service references in providers, components arrays, etc.
       const referencePatterns = [
         { pattern: /providers\s*[:=]\s*\[([^\]]+)\]/gs, context: 'providers' },
@@ -577,7 +507,6 @@ class ConsolidatedAnalyzer {
         { pattern: /declarations\s*[:=]\s*\[([^\]]+)\]/gs, context: 'declarations' },
         { pattern: /exports\s*[:=]\s*\[([^\]]+)\]/gs, context: 'exports' }
       ];
-
       for (const { pattern, context } of referencePatterns) {
         let arrayMatch;
         while ((arrayMatch = pattern.exec(content)) !== null) {
@@ -585,21 +514,17 @@ class ConsolidatedAnalyzer {
           // Extract identifiers (class names)
           const identifierPattern = /\b([A-Z][a-zA-Z0-9]*)\b/g;
           let idMatch;
-
           while ((idMatch = identifierPattern.exec(arrayContent)) !== null) {
             const identifier = idMatch[1];
-
             // Skip common keywords and built-in types
             if (['Array', 'Object', 'String', 'Number', 'Boolean', 'Date', 'Promise'].includes(identifier)) {
               continue;
             }
-
             // Check if identifier is imported
             if (!importedIdentifiers.has(identifier)) {
               // Find line number in content
               const lineNum = content.substring(0, arrayMatch.index).split('\n').length;
               const codeLine = content.split('\n')[lineNum - 1];
-
               missingImports.push({
                 file: filePath,
                 line: lineNum,
@@ -612,7 +537,6 @@ class ConsolidatedAnalyzer {
         }
       }
     }
-
     if (missingImports.length > 0) {
       this.results.critical.push({
         type: 'missing-imports',
@@ -634,23 +558,18 @@ class ConsolidatedAnalyzer {
       console.log(`${colors.green}✅ No missing imports${colors.reset}`);
     }
   }
-
-
   /**
    * Analyze behavior-impacting changes
    */
   async analyzeBehaviorChanges(diff) {
     console.log(`${colors.blue}🔍 Analyzing behavior changes...${colors.reset}`);
-
     const behaviorPatterns = {
       apiChanges: /export\s+(interface|type|class|function|const)\s+\w+/g,
       logicChanges: /(if|for|while|switch)\s*\(/g,
       returnChanges: /return\s+/g
     };
-
     let behaviorChangeCount = 0;
     const lines = diff.split('\n');
-
     for (const line of lines) {
       if (line.startsWith('+') && !line.startsWith('+++')) {
         const content = line.substring(1);
@@ -661,7 +580,6 @@ class ConsolidatedAnalyzer {
         }
       }
     }
-
     if (behaviorChangeCount > 10) {
       this.results.warnings.push({
         type: 'significant-behavior-changes',
@@ -676,18 +594,15 @@ class ConsolidatedAnalyzer {
       console.log(`${colors.green}✅ Behavior changes: ${behaviorChangeCount}${colors.reset}`);
     }
   }
-
   /**
    * Analyze test coverage
    */
   async analyzeTestCoverage(diff) {
     console.log(`${colors.blue}🔍 Analyzing test coverage...${colors.reset}`);
-
     const lines = diff.split('\n');
     let testsAdded = 0;
     let testsRemoved = 0;
     let inTestFile = false;
-
     for (const line of lines) {
       if (line.startsWith('diff --git')) {
         const match = line.match(/b\/(.*)/);
@@ -696,7 +611,6 @@ class ConsolidatedAnalyzer {
         }
         continue;
       }
-
       if (inTestFile) {
         if (line.startsWith('+') && /it\(|test\(|describe\(/.test(line)) {
           testsAdded++;
@@ -706,10 +620,8 @@ class ConsolidatedAnalyzer {
         }
       }
     }
-
     this.stats.testsAdded = testsAdded;
     this.stats.testsRemoved = testsRemoved;
-
     if (testsRemoved > testsAdded) {
       this.results.warnings.push({
         type: 'test-coverage-decreased',
@@ -732,14 +644,12 @@ class ConsolidatedAnalyzer {
       });
     }
   }
-
   /**
    * Calculate statistics
    */
   calculateStats(diff) {
     const lines = diff.split('\n');
     const files = new Set();
-
     for (const line of lines) {
       if (line.startsWith('diff --git')) {
         const match = line.match(/b\/(.*)/);
@@ -750,18 +660,14 @@ class ConsolidatedAnalyzer {
         this.stats.linesRemoved++;
       }
     }
-
     this.stats.filesChanged = files.size;
   }
-
   /**
    * Post consolidated report
    */
   async postConsolidatedReport(pr) {
     console.log(`\n${colors.bold}${colors.cyan}📝 Generating consolidated report...${colors.reset}`);
-
     const report = this.generateReport(pr);
-
     try {
       // Find existing Bob comment
       const { data: comments } = await octokit.issues.listComments({
@@ -769,7 +675,6 @@ class ConsolidatedAnalyzer {
         repo,
         issue_number: prNumber
       });
-
       // Look for EITHER Bob's comment OR the Simple Validation comment
       // This ensures we update the same comment instead of creating multiple
       const bobComment = comments.find(comment =>
@@ -777,7 +682,6 @@ class ConsolidatedAnalyzer {
         (comment.body.includes('Bob\'s Comprehensive PR Analysis') ||
          comment.body.includes('PR Validation Results'))
       );
-
       if (bobComment) {
         // Update existing comment
         await octokit.issues.updateComment({
@@ -797,12 +701,10 @@ class ConsolidatedAnalyzer {
         });
         console.log(`${colors.green}✅ Posted new comment${colors.reset}`);
       }
-
     } catch (error) {
       console.error(`${colors.red}❌ Failed to post comment: ${error.message}${colors.reset}`);
     }
   }
-
   /**
    * Generate markdown report
    */
@@ -811,9 +713,7 @@ class ConsolidatedAnalyzer {
     const warningCount = this.results.warnings.length;
     const passedCount = this.results.passed.length;
     const autoFixCount = this.results.autoFixable.length;
-
     let report = `## 🤖 Bob's Comprehensive PR Analysis\n\n`;
-    
     // Summary
     report += `### 📊 Summary\n\n`;
     report += `| Metric | Value |\n`;
@@ -826,17 +726,14 @@ class ConsolidatedAnalyzer {
     report += `| **Lines Added** | ➕ ${this.stats.linesAdded} |\n`;
     report += `| **Lines Removed** | ➖ ${this.stats.linesRemoved} |\n`;
     report += `| **Tests Added** | 🧪 ${this.stats.testsAdded} |\n\n`;
-
     // Critical Issues
     if (criticalCount > 0) {
       report += `### 🔴 Critical Issues (${criticalCount})\n\n`;
       report += `These issues **must be fixed** before merging:\n\n`;
-      
       for (const issue of this.results.critical) {
         report += `#### ${issue.title}\n\n`;
         report += `**Severity:** ${issue.severity.toUpperCase()}\n\n`;
         report += `${issue.message}\n\n`;
-        
         if (issue.files && issue.files.length > 0) {
           report += `**Affected Files:**\n`;
           issue.files.forEach(file => {
@@ -844,7 +741,6 @@ class ConsolidatedAnalyzer {
           });
           report += `\n`;
         }
-        
         if (issue.details) {
           report += `<details>\n<summary>View Details</summary>\n\n`;
           issue.details.forEach(detail => {
@@ -853,23 +749,19 @@ class ConsolidatedAnalyzer {
           });
           report += `</details>\n\n`;
         }
-        
         if (issue.file && issue.line) {
           report += `**Location:** [\`${issue.file}:${issue.line}\`](${pr.html_url}/files#diff-${Buffer.from(issue.file).toString('base64')}L${issue.line})\n\n`;
           if (issue.code) {
             report += `\`\`\`\n${issue.code}\n\`\`\`\n\n`;
           }
         }
-        
         report += `---\n\n`;
       }
     }
-
     // Warnings
     if (warningCount > 0) {
       report += `### ⚠️ Warnings (${warningCount})\n\n`;
       report += `These issues should be reviewed:\n\n`;
-      
       for (const warning of this.results.warnings.slice(0, 10)) { // Limit to 10
         report += `- **${warning.title}**`;
         if (warning.file && warning.line) {
@@ -880,13 +772,11 @@ class ConsolidatedAnalyzer {
           report += `  ${warning.message}\n`;
         }
       }
-      
       if (warningCount > 10) {
         report += `\n*...and ${warningCount - 10} more warnings*\n`;
       }
       report += `\n`;
     }
-
     // Passed Checks
     if (passedCount > 0) {
       report += `### ✅ Passed Checks (${passedCount})\n\n`;
@@ -895,25 +785,21 @@ class ConsolidatedAnalyzer {
       });
       report += `\n`;
     }
-
     // Auto-Fix Suggestions
     if (autoFixCount > 0) {
       report += `### 🔧 Auto-Fix Available (${autoFixCount})\n\n`;
       report += `After approval, Bob can automatically fix:\n\n`;
-      
       const fixGroups = {};
       this.results.autoFixable.forEach(fix => {
         const type = fix.type.replace('bug-', '');
         if (!fixGroups[type]) fixGroups[type] = [];
         fixGroups[type].push(fix);
       });
-      
       for (const [type, fixes] of Object.entries(fixGroups)) {
         report += `- **${type}**: ${fixes.length} occurrence(s)\n`;
       }
       report += `\n`;
     }
-
     // Footer
     report += `---\n\n`;
     report += `*Analysis completed at ${new Date().toISOString()}*\n\n`;
@@ -928,43 +814,32 @@ class ConsolidatedAnalyzer {
       report += `1. ✅ All checks passed!\n`;
       report += `2. 👍 Ready for review and merge\n`;
     }
-    
     if (autoFixCount > 0) {
       report += `3. 🔧 Auto-fixes will be applied after approval\n`;
     }
-
     report += `\n*Powered by Bob - Your Intelligent PR Assistant* 🤖`;
-
     return report;
   }
 }
-
 // Main execution
 async function main() {
   const analyzer = new ConsolidatedAnalyzer();
-  
   try {
     const result = await analyzer.analyze();
-    
     console.log(`\n${colors.bold}${colors.green}✅ Analysis Complete${colors.reset}`);
     console.log(`Critical: ${result.results.critical.length}`);
     console.log(`Warnings: ${result.results.warnings.length}`);
     console.log(`Passed: ${result.results.passed.length}`);
-    
     process.exit(result.hasCritical ? 1 : 0);
-    
   } catch (error) {
     console.error(`\n${colors.bold}${colors.red}❌ Analysis Failed${colors.reset}`);
     console.error(error);
     process.exit(1);
   }
 }
-
 // Run if called directly
 if (require.main === module) {
   main();
 }
-
 module.exports = { ConsolidatedAnalyzer };
-
 // Made with Bob
