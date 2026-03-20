@@ -44,3 +44,8 @@ coverage/
 # Validation reports
 validation-report.json
 validation.log
+docs/AUTO_FIX_TEST.md
+docs/CHANGES_TO_COMMIT.md
+docs/MAIN_BRANCH_STATUS.md
+docs/NEXT_STEPS_TO_TEST_LABELS.md
+docs/WORKFLOW_ANALYSIS.md

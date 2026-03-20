@@ -1,7 +1,6 @@
-
-
+import { SampleSharedComponent } from './features/return/return-search/sampleshared.component';
 export class AppCustomizationImpl {
-    static readonly components = [];
-    static readonly providers = [ReturnSearchComponent1];
+    static readonly components = [SampleSharedComponent];
+    static readonly providers = [];
     static readonly imports = [];
 }
