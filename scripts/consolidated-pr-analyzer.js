@@ -634,20 +634,19 @@ class ConsolidatedAnalyzer {
           console.log(`[DEBUG] File relative to src: ${fileRelativeToSrc}`);
           
           // Check if this specific file is exported from public-api.ts
-          // Matches: export * from './lib/components/sample-shared.component'
-          const escapedPath = fileRelativeToSrc.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-          const fileExportPattern = new RegExp(`export\\s+\\*\\s+from\\s+['"]\\.\\/` + escapedPath + `['"]`, 'g');
+          // Simple string check - more reliable than complex regex
+          const exportLine1 = `export * from './${fileRelativeToSrc}'`;
+          const exportLine2 = `export * from "./${fileRelativeToSrc}"`;
           
-          console.log(`[DEBUG] Looking for pattern: export * from './${fileRelativeToSrc}'`);
-          console.log(`[DEBUG] Pattern matches: ${fileExportPattern.test(publicApiContent)}`);
+          console.log(`[DEBUG] Looking for: ${exportLine1}`);
+          console.log(`[DEBUG] File contains export: ${publicApiContent.includes(exportLine1) || publicApiContent.includes(exportLine2)}`);
           
-          // Reset regex after test
-          fileExportPattern.lastIndex = 0;
+          // Also check for direct named exports: export { SampleSharedComponent }
+          const hasNamedExport = publicApiContent.includes(`export { ${identifier} }`) ||
+                                 publicApiContent.includes(`export {${identifier}}`) ||
+                                 new RegExp(`export\\s*{[^}]*\\b${identifier}\\b[^}]*}`).test(publicApiContent);
           
-          // Also check for direct named exports: export { SampleSharedComponent } from './...'
-          const namedExportPattern = new RegExp(`export\\s*{[^}]*\\b${identifier}\\b[^}]*}\\s*from`, 'g');
-          
-          if (fileExportPattern.test(publicApiContent) || namedExportPattern.test(publicApiContent)) {
+          if (publicApiContent.includes(exportLine1) || publicApiContent.includes(exportLine2) || hasNamedExport) {
             console.log(`[DEBUG] ✅ Found export in public-api.ts! Using package import: ${packageInfo.name}`);
             return {
               importPath: packageInfo.name,
