@@ -98,6 +98,60 @@ jobs:
           HEAD_REF: ${{ github.event.pull_request.head.ref }}
         run: node consolidated-pr-analyzer.js
         continue-on-error: true
+      
+      - name: Manage validation labels
+        if: always()
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const hasCritical = '${{ steps.analysis.outputs.has_issues }}' === 'true';
+            
+            console.log(`Analysis result - has_issues: ${hasCritical}`);
+            
+            // Step 1: Remove ALL old validation labels first
+            try {
+              const { data: labels } = await github.rest.issues.listLabelsOnIssue({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.pull_request.number,
+              });
+              
+              const labelsToRemove = ['validation-passed', 'validation-failed', 'has-critical-issues'];
+              for (const label of labels) {
+                if (labelsToRemove.includes(label.name)) {
+                  console.log(`Removing label: ${label.name}`);
+                  await github.rest.issues.removeLabel({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: context.payload.pull_request.number,
+                    name: label.name
+                  }).catch(err => console.log(`Could not remove ${label.name}: ${err.message}`));
+                }
+              }
+            } catch (error) {
+              console.log('Error removing labels:', error.message);
+            }
+            
+            // Step 2: Add appropriate NEW validation label based on analysis result
+            try {
+              const labelsToAdd = hasCritical
+                ? ['validation-failed', 'has-critical-issues']
+                : ['validation-passed'];
+              
+              console.log(`Adding labels: ${labelsToAdd.join(', ')}`);
+              
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.pull_request.number,
+                labels: labelsToAdd
+              });
+              
+              console.log(`✅ Successfully updated labels to: ${labelsToAdd.join(', ')}`);
+            } catch (error) {
+              console.log('Error adding labels:', error.message);
+            }
 
   merge-conflict-detection:
     name: Merge Conflict Detection
