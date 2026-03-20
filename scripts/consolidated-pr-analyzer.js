@@ -533,7 +533,8 @@ class ConsolidatedAnalyzer {
           // Only process TypeScript/JavaScript files
           if (/\.(ts|tsx|js|jsx)$/.test(currentFile)) {
             try {
-              const fullPath = path.join(process.cwd(), currentFile);
+              // Go up one directory from scripts to repository root
+              const fullPath = path.join(process.cwd(), '..', currentFile);
               if (fs.existsSync(fullPath)) {
                 fileContents.set(currentFile, fs.readFileSync(fullPath, 'utf8'));
               }
