@@ -120,6 +120,7 @@ class ConsolidatedAnalyzer {
       await this.analyzeMissingFiles();
       await this.analyzeBugPatterns(diff);
       await this.analyzeOrphanedReferences(diff);
+      await this.analyzeMissingImports(diff);
       await this.analyzeBehaviorChanges(diff);
       await this.analyzeTestCoverage(diff);
       this.calculateStats(diff);
@@ -511,6 +512,123 @@ class ConsolidatedAnalyzer {
       console.log(`${colors.green}✅ No orphaned references${colors.reset}`);
     }
   }
+  /**
+   * Analyze missing imports (identifiers used but not imported)
+   */
+  async analyzeMissingImports(diff) {
+    console.log(`${colors.blue}🔍 Checking for missing imports...${colors.reset}`);
+
+    const lines = diff.split('\n');
+    let currentFile = '';
+    let lineNumber = 0;
+    const missingImports = [];
+    const fileContents = new Map();
+
+    // First pass: collect full file contents for changed files
+    for (const line of lines) {
+      if (line.startsWith('diff --git')) {
+        const match = line.match(/b\/(.*)/);
+        if (match) {
+          currentFile = match[1];
+          // Only process TypeScript/JavaScript files
+          if (/\.(ts|tsx|js|jsx)$/.test(currentFile)) {
+            try {
+              const fullPath = path.join(process.cwd(), currentFile);
+              if (fs.existsSync(fullPath)) {
+                fileContents.set(currentFile, fs.readFileSync(fullPath, 'utf8'));
+              }
+            } catch (error) {
+              // File might not exist yet, skip
+            }
+          }
+        }
+      }
+    }
+
+    // Second pass: analyze each file for missing imports
+    for (const [filePath, content] of fileContents.entries()) {
+      // Extract all imported identifiers
+      const importedIdentifiers = new Set();
+      const importPattern = /import\s+(?:{([^}]+)}|(\w+))\s+from/g;
+      let match;
+
+      while ((match = importPattern.exec(content)) !== null) {
+        if (match[1]) {
+          // Named imports: { A, B, C }
+          match[1].split(',').forEach(name => {
+            importedIdentifiers.add(name.trim().split(/\s+as\s+/)[0]);
+          });
+        } else if (match[2]) {
+          // Default import
+          importedIdentifiers.add(match[2]);
+        }
+      }
+
+      // Check for class/service references in providers, components arrays, etc.
+      const referencePatterns = [
+        { pattern: /providers\s*[:=]\s*\[([^\]]+)\]/gs, context: 'providers' },
+        { pattern: /components\s*[:=]\s*\[([^\]]+)\]/gs, context: 'components' },
+        { pattern: /declarations\s*[:=]\s*\[([^\]]+)\]/gs, context: 'declarations' },
+        { pattern: /exports\s*[:=]\s*\[([^\]]+)\]/gs, context: 'exports' }
+      ];
+
+      for (const { pattern, context } of referencePatterns) {
+        let arrayMatch;
+        while ((arrayMatch = pattern.exec(content)) !== null) {
+          const arrayContent = arrayMatch[1];
+          // Extract identifiers (class names)
+          const identifierPattern = /\b([A-Z][a-zA-Z0-9]*)\b/g;
+          let idMatch;
+
+          while ((idMatch = identifierPattern.exec(arrayContent)) !== null) {
+            const identifier = idMatch[1];
+
+            // Skip common keywords and built-in types
+            if (['Array', 'Object', 'String', 'Number', 'Boolean', 'Date', 'Promise'].includes(identifier)) {
+              continue;
+            }
+
+            // Check if identifier is imported
+            if (!importedIdentifiers.has(identifier)) {
+              // Find line number in content
+              const lineNum = content.substring(0, arrayMatch.index).split('\n').length;
+              const codeLine = content.split('\n')[lineNum - 1];
+
+              missingImports.push({
+                file: filePath,
+                line: lineNum,
+                identifier: identifier,
+                context: context,
+                code: codeLine?.trim()
+              });
+            }
+          }
+        }
+      }
+    }
+
+    if (missingImports.length > 0) {
+      this.results.critical.push({
+        type: 'missing-imports',
+        title: `Missing Imports Detected (${missingImports.length})`,
+        message: 'Classes/Services referenced but not imported',
+        details: missingImports.map(mi => ({
+          file: mi.file,
+          line: mi.line,
+          message: `'${mi.identifier}' used in ${mi.context} but not imported`,
+          suggestion: `Add import statement: import { ${mi.identifier} } from './path/to/${mi.identifier.toLowerCase()}'`,
+          code: mi.code
+        })),
+        severity: 'critical',
+        autoFixable: false
+      });
+      console.log(`${colors.red}❌ Found ${missingImports.length} missing imports${colors.reset}`);
+    } else {
+      this.results.passed.push('No missing imports detected');
+      console.log(`${colors.green}✅ No missing imports${colors.reset}`);
+    }
+  }
+
 
   /**
    * Analyze behavior-impacting changes
