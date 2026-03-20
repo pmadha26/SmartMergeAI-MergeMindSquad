@@ -1,5 +1,5 @@
 export class AppCustomizationImpl {
-    static readonly components = [];
+    static readonly components = [ReturnSearchComponent];
 
     static readonly providers = [];
 
