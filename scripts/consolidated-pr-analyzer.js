@@ -1,3 +1,4 @@
+
 #!/usr/bin/env node
 /**
  * Bob - Consolidated PR Analyzer (MVP)
@@ -520,6 +521,7 @@ class ConsolidatedAnalyzer {
   async findIdentifierDefinition(identifier) {
     const repoRoot = path.join(process.cwd(), '..');
     const searchPattern = new RegExp(`export\\s+class\\s+${identifier}\\b`, 'g');
+    
     try {
       // Search in common directories
       const searchDirs = [
@@ -527,9 +529,11 @@ class ConsolidatedAnalyzer {
         'src',
         'lib'
       ];
+
       for (const dir of searchDirs) {
         const fullDir = path.join(repoRoot, dir);
         if (!fs.existsSync(fullDir)) continue;
+
         const result = await this.searchInDirectory(fullDir, identifier, searchPattern);
         if (result) {
           return result;
@@ -538,20 +542,25 @@ class ConsolidatedAnalyzer {
     } catch (error) {
       console.log(`Error searching for ${identifier}: ${error.message}`);
     }
+
     return null;
   }
+
   /**
    * Recursively search directory for identifier definition
    */
   async searchInDirectory(dir, identifier, pattern) {
     try {
       const entries = fs.readdirSync(dir, { withFileTypes: true });
+
       for (const entry of entries) {
         const fullPath = path.join(dir, entry.name);
+
         // Skip node_modules and other irrelevant directories
         if (entry.name === 'node_modules' || entry.name === '.git' || entry.name === 'dist') {
           continue;
         }
+
         if (entry.isDirectory()) {
           const result = await this.searchInDirectory(fullPath, identifier, pattern);
           if (result) return result;
@@ -572,19 +581,24 @@ class ConsolidatedAnalyzer {
       // Skip directories that can't be read
       return null;
     }
+
     return null;
   }
+
   /**
    * Determine the correct import path for an identifier
    */
   determineImportPath(filePath, identifier, content) {
     const repoRoot = path.join(process.cwd(), '..');
     const relativePath = path.relative(repoRoot, filePath);
+
     // Check if this file is part of a package with public-api.ts
     const pathParts = relativePath.split(path.sep);
+    
     // Look for package.json in parent directories
     let currentDir = path.dirname(filePath);
     let packageInfo = null;
+
     while (currentDir !== repoRoot && currentDir.length > repoRoot.length) {
       const packageJsonPath = path.join(currentDir, 'package.json');
       if (fs.existsSync(packageJsonPath)) {
@@ -601,15 +615,29 @@ class ConsolidatedAnalyzer {
       }
       currentDir = path.dirname(currentDir);
     }
+
     // Check if there's a public-api.ts that exports this identifier
     if (packageInfo) {
       const publicApiPath = path.join(packageInfo.path, 'src', 'public-api.ts');
+      
       if (fs.existsSync(publicApiPath)) {
         try {
           const publicApiContent = fs.readFileSync(publicApiPath, 'utf8');
-          // Check if the identifier is exported from public API
-          const exportPattern = new RegExp(`export.*${identifier}`, 'g');
-          if (exportPattern.test(publicApiContent)) {
+          
+          // Get the file path relative to the package src directory
+          const packageSrcDir = path.join(packageInfo.path, 'src');
+          const fileRelativeToSrc = path.relative(packageSrcDir, filePath)
+            .replace(/\\/g, '/')
+            .replace(/\.(ts|tsx|js|jsx)$/, '');
+          
+          // Check if this specific file is exported from public-api.ts
+          // Matches: export * from './lib/components/sample-shared.component'
+          const fileExportPattern = new RegExp(`export\\s+\\*\\s+from\\s+['"]\\.\\/` + fileRelativeToSrc.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + `['"]`, 'g');
+          
+          // Also check for direct named exports: export { SampleSharedComponent } from './...'
+          const namedExportPattern = new RegExp(`export\\s*{[^}]*\\b${identifier}\\b[^}]*}\\s*from`, 'g');
+          
+          if (fileExportPattern.test(publicApiContent) || namedExportPattern.test(publicApiContent)) {
             return {
               importPath: packageInfo.name,
               isPackageImport: true,
@@ -622,10 +650,12 @@ class ConsolidatedAnalyzer {
         }
       }
     }
+
     // Fall back to relative import path
     const relativeImport = relativePath
       .replace(/\\/g, '/')
       .replace(/\.(ts|tsx|js|jsx)$/, '');
+
     return {
       importPath: relativeImport,
       isPackageImport: false,
@@ -633,6 +663,7 @@ class ConsolidatedAnalyzer {
       packageName: packageInfo?.name || null
     };
   }
+
           const identifierPattern = /\b([A-Z][a-zA-Z0-9]*)\b/g;
           let idMatch;
           while ((idMatch = identifierPattern.exec(arrayContent)) !== null) {
@@ -661,11 +692,14 @@ class ConsolidatedAnalyzer {
     if (missingImports.length > 0) {
       // Search for correct import paths for each missing import
       const detailsWithCorrectPaths = [];
+      
       for (const mi of missingImports) {
         console.log(`${colors.blue}🔍 Searching for ${mi.identifier}...${colors.reset}`);
         const definition = await this.findIdentifierDefinition(mi.identifier);
+        
         let suggestion;
         let autoFixable = false;
+        
         if (definition) {
           if (definition.isPackageImport) {
             suggestion = `Add import statement: import { ${mi.identifier} } from '${definition.importPath}';`;
@@ -673,18 +707,28 @@ class ConsolidatedAnalyzer {
             console.log(`${colors.green}✅ Found in package: ${definition.packageName}${colors.reset}`);
           } else {
             // Calculate relative path from current file to definition
-            const currentFileDir = path.dirname(mi.file);
-            const definitionPath = definition.filePath.replace(/\.(ts|tsx|js|jsx)$/, '');
-            const relativePath = path.relative(currentFileDir, definitionPath).replace(/\\/g, '/');
-            const importPath = relativePath.startsWith('.') ? relativePath : `./${relativePath}`;
-            suggestion = `Add import statement: import { ${mi.identifier} } from '${importPath}';`;
+            const repoRoot = path.join(process.cwd(), '..');
+            const currentFileAbsolute = path.join(repoRoot, mi.file);
+            const currentFileDir = path.dirname(currentFileAbsolute);
+            const definitionAbsolute = path.join(repoRoot, definition.filePath);
+            const definitionPathNoExt = definitionAbsolute.replace(/\.(ts|tsx|js|jsx)$/, '');
+            let relativePath = path.relative(currentFileDir, definitionPathNoExt).replace(/\\/g, '/');
+            
+            // Ensure the path starts with ./ or ../
+            if (!relativePath.startsWith('.')) {
+              relativePath = './' + relativePath;
+            }
+            
+            suggestion = `Add import statement: import { ${mi.identifier} } from '${relativePath}';`;
             autoFixable = true;
             console.log(`${colors.green}✅ Found at: ${definition.filePath}${colors.reset}`);
+            console.log(`${colors.blue}   Relative import: ${relativePath}${colors.reset}`);
           }
         } else {
           suggestion = `Could not find '${mi.identifier}' in repository. Please verify the class name and add the correct import manually.`;
           console.log(`${colors.yellow}⚠️  Could not locate ${mi.identifier}${colors.reset}`);
         }
+        
         detailsWithCorrectPaths.push({
           file: mi.file,
           line: mi.line,
@@ -695,6 +739,7 @@ class ConsolidatedAnalyzer {
           correctImportPath: definition?.importPath || null
         });
       }
+      
       this.results.critical.push({
         type: 'missing-imports',
         title: `Missing Imports Detected (${missingImports.length})`,
