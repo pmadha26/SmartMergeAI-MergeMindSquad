@@ -1,0 +1,16 @@
+{
+  "prNumber": "5",
+  "timestamp": "2026-03-20T10:11:10.141Z",
+  "summary": {
+    "totalChanged": 0,
+    "added": 0,
+    "modified": 0,
+    "deleted": 0
+  },
+  "files": [],
+  "potentialImpact": {
+    "high": [],
+    "medium": [],
+    "low": []
+  }
+}
