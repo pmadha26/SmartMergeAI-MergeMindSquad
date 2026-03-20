@@ -295,8 +295,12 @@ jobs:
               issue_number: context.issue.number,
             });
             
-            const botComment = comments.data.find(c => 
-              c.user.type === 'Bot' && c.body.includes('PR Validation Results')
+            // Look for EITHER validation comment OR Bob's consolidated comment
+            // This ensures both workflows update the same comment
+            const botComment = comments.data.find(c =>
+              c.user.type === 'Bot' &&
+              (c.body.includes('PR Validation Results') ||
+               c.body.includes('Bob\'s Comprehensive PR Analysis'))
             );
             
             if (botComment) {
