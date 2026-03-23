@@ -45,10 +45,27 @@ module.exports = {
   features: {
     behaviorAnalysis: process.env.ENABLE_BEHAVIOR_ANALYSIS !== 'false',
     regressionDetection: process.env.ENABLE_REGRESSION_DETECTION !== 'false',
-    // autoFix: process.env.ENABLE_AUTO_FIX !== 'false',
-    // removeDebug: process.env.REMOVE_DEBUG === 'true'
     autoFix: true,              // Enable auto-fix
     removeDebug: false,         // Remove debug statements
+    fixTypos: true,             // Auto-fix typos
+    fixMissingCommas: true,     // Auto-fix missing commas
+    fixSyntaxErrors: true       // Auto-fix basic syntax errors
+  },
+  
+  // Typo dictionary for auto-fix (can be extended)
+  typoDictionary: {
+    'SERIVCE': 'SERVICE',
+    'RETUNR': 'RETURN',
+    'RECIEVE': 'RECEIVE',
+    'SEPERATE': 'SEPARATE',
+    'OCCURED': 'OCCURRED',
+    'DEFINATELY': 'DEFINITELY',
+    'ACCOMODATE': 'ACCOMMODATE',
+    'recieve': 'receive',
+    'seperate': 'separate',
+    'occured': 'occurred',
+    'definately': 'definitely',
+    'accomodate': 'accommodate'
   }
 };
 
