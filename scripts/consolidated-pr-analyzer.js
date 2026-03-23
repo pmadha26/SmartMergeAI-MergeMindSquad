@@ -591,6 +591,12 @@ class ConsolidatedAnalyzer {
     const repoRoot = path.join(process.cwd(), '..');
     const relativePath = path.relative(repoRoot, filePath);
 
+    console.log(`[DEBUG] ========================================`);
+    console.log(`[DEBUG] determineImportPath called for: ${identifier}`);
+    console.log(`[DEBUG] Full file path: ${filePath}`);
+    console.log(`[DEBUG] Repo root: ${repoRoot}`);
+    console.log(`[DEBUG] Relative path: ${relativePath}`);
+
     // Check if this file is part of a package with public-api.ts
     const pathParts = relativePath.split(path.sep);
     
@@ -607,6 +613,8 @@ class ConsolidatedAnalyzer {
             name: packageJson.name,
             path: currentDir
           };
+          console.log(`[DEBUG] Found package.json at: ${currentDir}`);
+          console.log(`[DEBUG] Package name: ${packageInfo.name}`);
           break;
         } catch (error) {
           // Continue searching
@@ -619,7 +627,7 @@ class ConsolidatedAnalyzer {
     if (packageInfo) {
       const publicApiPath = path.join(packageInfo.path, 'src', 'public-api.ts');
       console.log(`[DEBUG] Checking public-api.ts: ${publicApiPath}`);
-      console.log(`[DEBUG] Package name: ${packageInfo.name}`);
+      console.log(`[DEBUG] public-api.ts exists: ${fs.existsSync(publicApiPath)}`);
       
       if (fs.existsSync(publicApiPath)) {
         try {
@@ -631,6 +639,7 @@ class ConsolidatedAnalyzer {
             .replace(/\\/g, '/')
             .replace(/\.(ts|tsx|js|jsx)$/, '');
           
+          console.log(`[DEBUG] Package src dir: ${packageSrcDir}`);
           console.log(`[DEBUG] File relative to src: ${fileRelativeToSrc}`);
           
           // Check if this specific file is exported from public-api.ts
@@ -638,13 +647,17 @@ class ConsolidatedAnalyzer {
           const exportLine1 = `export * from './${fileRelativeToSrc}'`;
           const exportLine2 = `export * from "./${fileRelativeToSrc}"`;
           
-          console.log(`[DEBUG] Looking for: ${exportLine1}`);
-          console.log(`[DEBUG] File contains export: ${publicApiContent.includes(exportLine1) || publicApiContent.includes(exportLine2)}`);
+          console.log(`[DEBUG] Looking for export line 1: ${exportLine1}`);
+          console.log(`[DEBUG] Looking for export line 2: ${exportLine2}`);
+          console.log(`[DEBUG] Export line 1 found: ${publicApiContent.includes(exportLine1)}`);
+          console.log(`[DEBUG] Export line 2 found: ${publicApiContent.includes(exportLine2)}`);
           
           // Also check for direct named exports: export { SampleSharedComponent }
           const hasNamedExport = publicApiContent.includes(`export { ${identifier} }`) ||
                                  publicApiContent.includes(`export {${identifier}}`) ||
                                  new RegExp(`export\\s*{[^}]*\\b${identifier}\\b[^}]*}`).test(publicApiContent);
+          
+          console.log(`[DEBUG] Has named export: ${hasNamedExport}`);
           
           if (publicApiContent.includes(exportLine1) || publicApiContent.includes(exportLine2) || hasNamedExport) {
             console.log(`[DEBUG] ✅ Found export in public-api.ts! Using package import: ${packageInfo.name}`);
@@ -655,14 +668,21 @@ class ConsolidatedAnalyzer {
               packageName: packageInfo.name
             };
           } else {
-            console.log(`[DEBUG] ⚠️  Not found in public-api.ts, will use relative path`);
+            console.log(`[DEBUG] ⚠️  Not found in public-api.ts`);
+            console.log(`[DEBUG] Dumping first 50 lines of public-api.ts for inspection:`);
+            const lines = publicApiContent.split('\n').slice(0, 50);
+            lines.forEach((line, idx) => {
+              if (line.includes('export')) {
+                console.log(`[DEBUG]   Line ${idx + 1}: ${line}`);
+              }
+            });
           }
         } catch (error) {
           console.log(`[DEBUG] Error reading public-api.ts: ${error.message}`);
           // Fall through to relative path
         }
       } else {
-        console.log(`[DEBUG] public-api.ts does not exist`);
+        console.log(`[DEBUG] public-api.ts does not exist at expected location`);
       }
     } else {
       console.log(`[DEBUG] No package info found`);
@@ -672,6 +692,9 @@ class ConsolidatedAnalyzer {
     const relativeImport = relativePath
       .replace(/\\/g, '/')
       .replace(/\.(ts|tsx|js|jsx)$/, '');
+
+    console.log(`[DEBUG] Falling back to relative import: ${relativeImport}`);
+    console.log(`[DEBUG] ========================================`);
 
     return {
       importPath: relativeImport,
