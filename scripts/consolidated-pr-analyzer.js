@@ -512,6 +512,89 @@ class ConsolidatedAnalyzer {
         while ((arrayMatch = pattern.exec(content)) !== null) {
           const arrayContent = arrayMatch[1];
           // Extract identifiers (class names)
+                    const identifierPattern = /\b([A-Z][a-zA-Z0-9]*)\b/g;
+          let idMatch;
+          while ((idMatch = identifierPattern.exec(arrayContent)) !== null) {
+            const identifier = idMatch[1];
+            // Skip common keywords and built-in types
+            if (['Array', 'Object', 'String', 'Number', 'Boolean', 'Date', 'Promise'].includes(identifier)) {
+              continue;
+            }
+            // Check if identifier is imported
+            if (!importedIdentifiers.has(identifier)) {
+              // Find line number in content
+              const lineNum = content.substring(0, arrayMatch.index).split('\n').length;
+              const codeLine = content.split('\n')[lineNum - 1];
+              missingImports.push({
+                file: filePath,
+                line: lineNum,
+                identifier: identifier,
+                context: context,
+                code: codeLine?.trim()
+              });
+            }
+          }
+        }
+      }
+    }
+    if (missingImports.length > 0) {
+      // Search for correct import paths for each missing import
+      const detailsWithCorrectPaths = [];
+      for (const mi of missingImports) {
+        console.log(`${colors.blue}🔍 Searching for ${mi.identifier}...${colors.reset}`);
+        const definition = await this.findIdentifierDefinition(mi.identifier);
+        let suggestion;
+        let autoFixable = false;
+        if (definition) {
+          if (definition.isPackageImport) {
+            suggestion = `Add import statement: import { ${mi.identifier} } from '${definition.importPath}';`;
+            autoFixable = true;
+            console.log(`${colors.green}✅ Found in package: ${definition.packageName}${colors.reset}`);
+          } else {
+            // Calculate relative path from current file to definition
+            const repoRoot = path.join(process.cwd(), '..');
+            const currentFileAbsolute = path.join(repoRoot, mi.file);
+            const currentFileDir = path.dirname(currentFileAbsolute);
+            const definitionAbsolute = path.join(repoRoot, definition.filePath);
+            const definitionPathNoExt = definitionAbsolute.replace(/\.(ts|tsx|js|jsx)$/, '');
+            let relativePath = path.relative(currentFileDir, definitionPathNoExt).replace(/\\/g, '/');
+            // Ensure the path starts with ./ or ../
+            if (!relativePath.startsWith('.')) {
+              relativePath = './' + relativePath;
+            }
+            suggestion = `Add import statement: import { ${mi.identifier} } from '${relativePath}';`;
+            autoFixable = true;
+            console.log(`${colors.green}✅ Found at: ${definition.filePath}${colors.reset}`);
+            console.log(`${colors.blue}   Relative import: ${relativePath}${colors.reset}`);
+          }
+        } else {
+          suggestion = `Could not find '${mi.identifier}' in repository. Please verify the class name and add the correct import manually.`;
+          console.log(`${colors.yellow}⚠️  Could not locate ${mi.identifier}${colors.reset}`);
+        }
+        detailsWithCorrectPaths.push({
+          file: mi.file,
+          line: mi.line,
+          message: `'${mi.identifier}' used in ${mi.context} but not imported`,
+          suggestion: suggestion,
+          code: mi.code,
+          autoFixable: autoFixable,
+          correctImportPath: definition?.importPath || null
+        });
+      }
+      this.results.critical.push({
+        type: 'missing-imports',
+        title: `Missing Imports Detected (${missingImports.length})`,
+        message: 'Classes/Services referenced but not imported',
+        details: detailsWithCorrectPaths,
+        severity: 'critical',
+        autoFixable: detailsWithCorrectPaths.some(d => d.autoFixable)
+      });
+      console.log(`${colors.red}❌ Found ${missingImports.length} missing imports${colors.reset}`);
+    } else {
+      this.results.passed.push('No missing imports detected');
+      console.log(`${colors.green}✅ No missing imports${colors.reset}`);
+    }
+  }
   /**
    * Search the entire repository to find where a class/component is defined
    * @param {string} identifier - The class/component name to search for
@@ -577,7 +660,7 @@ class ConsolidatedAnalyzer {
   /**
    * Determine the correct import path for an identifier
    */
-  determineImportPath(filePath, identifier, content) {
+  async determineImportPath(filePath, identifier, content) {
     const repoRoot = path.join(process.cwd(), '..');
     const relativePath = path.relative(repoRoot, filePath);
     console.log(`[DEBUG] ========================================`);
@@ -677,89 +760,7 @@ class ConsolidatedAnalyzer {
       packageName: packageInfo?.name || null
     };
   }
-          const identifierPattern = /\b([A-Z][a-zA-Z0-9]*)\b/g;
-          let idMatch;
-          while ((idMatch = identifierPattern.exec(arrayContent)) !== null) {
-            const identifier = idMatch[1];
-            // Skip common keywords and built-in types
-            if (['Array', 'Object', 'String', 'Number', 'Boolean', 'Date', 'Promise'].includes(identifier)) {
-              continue;
-            }
-            // Check if identifier is imported
-            if (!importedIdentifiers.has(identifier)) {
-              // Find line number in content
-              const lineNum = content.substring(0, arrayMatch.index).split('\n').length;
-              const codeLine = content.split('\n')[lineNum - 1];
-              missingImports.push({
-                file: filePath,
-                line: lineNum,
-                identifier: identifier,
-                context: context,
-                code: codeLine?.trim()
-              });
-            }
-          }
-        }
-      }
-    }
-    if (missingImports.length > 0) {
-      // Search for correct import paths for each missing import
-      const detailsWithCorrectPaths = [];
-      for (const mi of missingImports) {
-        console.log(`${colors.blue}🔍 Searching for ${mi.identifier}...${colors.reset}`);
-        const definition = await this.findIdentifierDefinition(mi.identifier);
-        let suggestion;
-        let autoFixable = false;
-        if (definition) {
-          if (definition.isPackageImport) {
-            suggestion = `Add import statement: import { ${mi.identifier} } from '${definition.importPath}';`;
-            autoFixable = true;
-            console.log(`${colors.green}✅ Found in package: ${definition.packageName}${colors.reset}`);
-          } else {
-            // Calculate relative path from current file to definition
-            const repoRoot = path.join(process.cwd(), '..');
-            const currentFileAbsolute = path.join(repoRoot, mi.file);
-            const currentFileDir = path.dirname(currentFileAbsolute);
-            const definitionAbsolute = path.join(repoRoot, definition.filePath);
-            const definitionPathNoExt = definitionAbsolute.replace(/\.(ts|tsx|js|jsx)$/, '');
-            let relativePath = path.relative(currentFileDir, definitionPathNoExt).replace(/\\/g, '/');
-            // Ensure the path starts with ./ or ../
-            if (!relativePath.startsWith('.')) {
-              relativePath = './' + relativePath;
-            }
-            suggestion = `Add import statement: import { ${mi.identifier} } from '${relativePath}';`;
-            autoFixable = true;
-            console.log(`${colors.green}✅ Found at: ${definition.filePath}${colors.reset}`);
-            console.log(`${colors.blue}   Relative import: ${relativePath}${colors.reset}`);
-          }
-        } else {
-          suggestion = `Could not find '${mi.identifier}' in repository. Please verify the class name and add the correct import manually.`;
-          console.log(`${colors.yellow}⚠️  Could not locate ${mi.identifier}${colors.reset}`);
-        }
-        detailsWithCorrectPaths.push({
-          file: mi.file,
-          line: mi.line,
-          message: `'${mi.identifier}' used in ${mi.context} but not imported`,
-          suggestion: suggestion,
-          code: mi.code,
-          autoFixable: autoFixable,
-          correctImportPath: definition?.importPath || null
-        });
-      }
-      this.results.critical.push({
-        type: 'missing-imports',
-        title: `Missing Imports Detected (${missingImports.length})`,
-        message: 'Classes/Services referenced but not imported',
-        details: detailsWithCorrectPaths,
-        severity: 'critical',
-        autoFixable: detailsWithCorrectPaths.some(d => d.autoFixable)
-      });
-      console.log(`${colors.red}❌ Found ${missingImports.length} missing imports${colors.reset}`);
-    } else {
-      this.results.passed.push('No missing imports detected');
-      console.log(`${colors.green}✅ No missing imports${colors.reset}`);
-    }
-  }
+
   /**
    * Analyze behavior-impacting changes
    */
