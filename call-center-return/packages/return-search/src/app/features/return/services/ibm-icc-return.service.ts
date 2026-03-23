@@ -132,8 +132,7 @@ export class IbmIccReturnService {
      * @returns Parsed object
      */
     private parseReturnOrderResponse(response: any): any {
-        // Parse XML response and convert to JSON object
-        // This is a simplified implementation - actual parsing would depend on XML structure
+        // Parse XML response and convert to JSON object,// This is a simplified implementation - actual parsing would depend on XML structure
         return {
             success: true,
             returnOrder: response,
@@ -147,7 +146,7 @@ export class IbmIccReturnService {
      * @returns Parsed validation object
      */
     private parseValidationResponse(response: any): any {
-        // Parse XML response and convert to JSON object
+        // Parse XML response and convert to JSON object,
         return {
             isEligible: response?.IsEligible === 'Y',
             validationMessage: response?.ValidationMessage || '',
@@ -161,8 +160,7 @@ export class IbmIccReturnService {
      * @returns Promise with return lines array
      */
     private async fetchReturnLines(returnOrderKey: string): Promise<any[]> {
-        // This would typically call another API to fetch return lines
-        // Placeholder implementation
+        // This would typically call another API to fetch return lines,// Placeholder implementation
         return [];
     }
 

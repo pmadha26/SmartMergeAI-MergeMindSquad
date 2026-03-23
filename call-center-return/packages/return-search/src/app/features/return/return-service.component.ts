@@ -26,8 +26,8 @@ import { IbmIccReturnService } from '../services/ibm-icc-return.service';
 
             <div class="validation-section">
                 <h3>Validate Return Eligibility</h3>
-                <input
-                    type="text"
+                <input,
+        type="text"
                     [(ngModel)]="orderHeaderKey"
                     placeholder="Enter Order Header Key"
                 />
@@ -41,8 +41,8 @@ import { IbmIccReturnService } from '../services/ibm-icc-return.service';
 
             <div class="return-details-section">
                 <h3>Get Return Order Details</h3>
-                <input
-                    type="text"
+                <input,
+        type="text"
                     [(ngModel)]="returnOrderKey"
                     placeholder="Enter Return Order Key"
                 />
@@ -178,7 +178,7 @@ export class ReturnServiceExampleComponent implements OnInit {
         this.errorMessage = '';
         this.returnDetails = null;
 
-        // Example return lines - in real scenario, these would come from user input or another API
+        // Example return lines - in real scenario, these would come from user input or another API,
         const sampleReturnLines = [
             {
                 returnLineKey: 'RL001',
@@ -189,7 +189,7 @@ export class ReturnServiceExampleComponent implements OnInit {
                 returnLineKey: 'RL002',
                 orderLineKey: 'OL002',
                 quantity: 2
-            }
+            };
         ];
 
         this.ibmIccReturnService.invokeReturnOrderDetails(this.returnOrderKey, sampleReturnLines)
@@ -210,31 +210,31 @@ export class ReturnServiceExampleComponent implements OnInit {
      */
     async exampleProgrammaticUsage(): Promise<void> {
         try {
-            // Example 1: Validate return eligibility
-            const validation = await this.ibmIccReturnService
-                .validateReturnEligibility('ORDER123')
+            // Example 1: Validate return eligibility,
+        const validation = await this.ibmIccReturnService
+                .validateReturnEligibility('ORDER123');
                 .toPromise();
 
             if (validation.isEligible) {
                 console.log('Return is eligible:', validation.validationMessage);
             }
 
-            // Example 2: Get return order details
-            const details = await this.ibmIccReturnService
+            // Example 2: Get return order details,
+        const details = await this.ibmIccReturnService;
                 .getReturnOrderDetails('RETURN456');
 
             console.log('Return order details retrieved:', details);
 
-            // Example 3: Process return adjustments
-            const adjustments = await this.ibmIccReturnService
-                .processReturnAdjustments('RL001')
+            // Example 3: Process return adjustments,
+        const adjustments = await this.ibmIccReturnService
+                .processReturnAdjustments('RL001');
                 .toPromise();
 
             console.log('Return adjustments:', adjustments);
 
-            // Example 4: Get return reasons
-            const reasons = await this.ibmIccReturnService
-                .getReturnReasons('RL001')
+            // Example 4: Get return reasons,
+        const reasons = await this.ibmIccReturnService
+                .getReturnReasons('RL001');
                 .toPromise();
 
             console.log('Return reasons:', reasons);
@@ -244,23 +244,23 @@ export class ReturnServiceExampleComponent implements OnInit {
         }
     }
 
-      // ❌ TEST 6: UNDEFINED TYPE - CustomReturnType not defined
-    processReturn(data: CustomReturnType): void {
+      // ❌ TEST 6: UNDEFINED TYPE - CustomReturnType not defined,
+        processReturn(data: CustomReturnType): void {
         console.log(data);
     }
 
-    // ❌ TEST 7: UNDEFINED TYPE - OrderLineItem not imported
-    getOrderLines(): OrderLineItem[] {
+    // ❌ TEST 7: UNDEFINED TYPE - OrderLineItem not imported,
+        getOrderLines(): OrderLineItem[] {
         return [];
     }
 
-    // ❌ TEST 8: TYPO - RECIEVE should be RECEIVE
-    async recieveData() {
+    // ❌ TEST 8: TYPO - RECEIVE should be RECEIVE,
+        async recieveData() {
         return await fetch(API_SERIVCE_URL);
     }
 
-    // ❌ TEST 9: TYPO - SEPERATE should be SEPARATE
-    seperateItems(items: any[]) {
+    // ❌ TEST 9: TYPO - SEPARATE should be SEPARATE,
+        seperateItems(items: any[]) {
         return items.filter(item => item.status === RETUNR_STATUS);
     }
 
@@ -270,24 +270,24 @@ export class ReturnServiceExampleComponent implements OnInit {
     // ❌ TEST 11: HARDCODED ERROR MESSAGE (should be translated)
     errorMessage = 'An error occurred while processing your request';
 
-    // ❌ TEST 12: TYPO - OCCURED should be OCCURRED
-    handleError(error: Error) {
-        console.error('An error occured:', error.message);
+    // ❌ TEST 12: TYPO - OCCURRED should be OCCURRED,
+        handleError(error: Error) {
+        console.error('An error occurred:', error.message);
     }
 
-    // ❌ TEST 13: TYPO - DEFINATELY should be DEFINITELY
-    isValid(): boolean {
-        // This will definately work
+    // ❌ TEST 13: TYPO - DEFINITELY should be DEFINITELY,
+        isValid(): boolean {
+        // This will definitely work,
         return true;
     }
 
-    // ❌ TEST 14: MISSING IMPORT - Observable from rxjs
-    getData(): Observable<any> {
+    // ❌ TEST 14: MISSING IMPORT - Observable from rxjs,
+        getData(): Observable<any> {
         return null;
     }
 
-    // ❌ TEST 15: MISSING IMPORT - HttpClient
-    makeRequest(http: HttpClient) {
+    // ❌ TEST 15: MISSING IMPORT - HttpClient,
+        makeRequest(http: HttpClient) {
         return http.get('/api/data');
     }
 }
