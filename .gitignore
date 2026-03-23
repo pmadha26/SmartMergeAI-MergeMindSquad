@@ -44,3 +44,4 @@ coverage/
 # Validation reports
 validation-report.json
 validation.log
+.validation/
