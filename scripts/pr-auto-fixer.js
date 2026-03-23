@@ -78,6 +78,23 @@ function fixFormatting(content, filePath) {
   // Ensure newline at end of file
   if (!fixed.endsWith('\n')) {
     fixed += '\n';
+    fixes.push('Added newline at end of file');
+  }
+  return { fixed, fixes };
+}
+
+function removeDebugStatements(content) {
+  const fixes = [];
+  let fixed = content;
+  // Remove console.log statements
+  const beforeDebug = fixed;
+  fixed = fixed.replace(AUTO_FIX_PATTERNS.common.debugStatements, '');
+  if (fixed !== beforeDebug) {
+    fixes.push('Removed debug console statements');
+  }
+  return { fixed, fixes };
+}
+
 /**
  * NEW: Auto-fix typos using config dictionary
  */
@@ -170,10 +187,7 @@ function fixSyntaxErrors(content) {
   
   return { fixed, fixes };
 }
-    fixes.push('Added newline at end of file');
-  }
-  return { fixed, fixes };
-}
+
 function removeDebugStatements(content) {
   const fixes = [];
   let fixed = content;
