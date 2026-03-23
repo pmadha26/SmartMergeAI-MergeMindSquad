@@ -3,9 +3,10 @@
  * This file intentionally contains various issues to demonstrate the validator
  */
 
-
-
 import { IbmIccReturnService } from 'packages/return-search/src/app/features/return/services/ibm-icc-return.service';
+import { SummaryNotesPanelComponent } from '@call-center/return-shared';
+import { ReturnSearchComponent } from 'call-center-return/packages/return-search/src/app/features/return/return-search/return-search.component';
+import { ItemImageComponent } from '@call-center/return-shared';
 
 // ❌ TEST 2: TYPO DETECTION - SERIVCE should be SERVICE
 const API_SERIVCE_URL = 'https://api.example.com';
@@ -22,16 +23,15 @@ export class AppCustomizationImpl {
         TestComponent,  // Missing import
         AnotherMissingComponent  // Missing import
     ];
-    
+
     // ❌ TEST 5: MISSING IMPORT - TestService not imported
     static readonly providers = [
         TestService,  // Missing import
         MissingProviderService,  // Missing import
         IbmIccReturnService
     ];
-    
+
     static readonly imports = [];
-    
-  
+
 }
 

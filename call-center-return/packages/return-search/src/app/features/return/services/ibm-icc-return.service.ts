@@ -23,7 +23,7 @@ import { BucCommOmsRestAPIService } from '@buc/svc-angular';
     providedIn: 'root'
 })
 export class IbmIccReturnService {
-    
+
     private readonly SERVICE_NAME = 'IBMICCReturnService';
     private readonly RETURN_DETAILS_API = 'invokeReturnOrderDetails';
     private readonly VALIDATE_ELIGIBILITY_API = 'validateReturnEligibility';
@@ -40,7 +40,7 @@ export class IbmIccReturnService {
      */
     public invokeReturnOrderDetails(returnOrderKey: string, returnLines: any[]): Observable<any> {
         const inputXml = this.buildReturnOrderXml(returnOrderKey, returnLines);
-        
+
         return this.bucCommOmsRestAPIService.post(
             `/services/${this.SERVICE_NAME}/${this.RETURN_DETAILS_API}`,
             inputXml,
@@ -61,7 +61,7 @@ export class IbmIccReturnService {
      */
     public validateReturnEligibility(orderHeaderKey: string): Observable<any> {
         const inputXml = this.buildValidationXml(orderHeaderKey);
-        
+
         return this.bucCommOmsRestAPIService.post(
             `/services/${this.SERVICE_NAME}/${this.VALIDATE_ELIGIBILITY_API}`,
             inputXml,
@@ -99,7 +99,7 @@ export class IbmIccReturnService {
     private buildReturnOrderXml(returnOrderKey: string, returnLines: any[]): string {
         let xml = `<ReturnOrder ReturnOrderKey="${returnOrderKey}">`;
         xml += '<ReturnLines>';
-        
+
         returnLines.forEach(line => {
             xml += `<ReturnLine ReturnLineKey="${line.returnLineKey}">`;
             if (line.orderLineKey) {
@@ -110,10 +110,10 @@ export class IbmIccReturnService {
             }
             xml += '</ReturnLine>';
         });
-        
+
         xml += '</ReturnLines>';
         xml += '</ReturnOrder>';
-        
+
         return xml;
     }
 

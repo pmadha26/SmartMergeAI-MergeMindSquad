@@ -23,38 +23,38 @@ import { IbmIccReturnService } from '../services/ibm-icc-return.service';
     template: `
         <div class="return-service-example">
             <h2>IBM ICC Return Service Example</h2>
-            
+
             <div class="validation-section">
                 <h3>Validate Return Eligibility</h3>
-                <input 
-                    type="text" 
-                    [(ngModel)]="orderHeaderKey" 
+                <input
+                    type="text"
+                    [(ngModel)]="orderHeaderKey"
                     placeholder="Enter Order Header Key"
                 />
                 <button (click)="validateReturn()">Validate</button>
-                
+
                 <div *ngIf="validationResult" class="result">
                     <p><strong>Eligible:</strong> {{ validationResult.isEligible ? 'Yes' : 'No' }}</p>
                     <p><strong>Message:</strong> {{ validationResult.validationMessage }}</p>
                 </div>
             </div>
-            
+
             <div class="return-details-section">
                 <h3>Get Return Order Details</h3>
-                <input 
-                    type="text" 
-                    [(ngModel)]="returnOrderKey" 
+                <input
+                    type="text"
+                    [(ngModel)]="returnOrderKey"
                     placeholder="Enter Return Order Key"
                 />
                 <button (click)="getReturnDetails()">Get Details</button>
-                
+
                 <div *ngIf="returnDetails" class="result">
                     <p><strong>Success:</strong> {{ returnDetails.success ? 'Yes' : 'No' }}</p>
                     <p><strong>Timestamp:</strong> {{ returnDetails.timestamp }}</p>
                     <pre>{{ returnDetails.returnOrder | json }}</pre>
                 </div>
             </div>
-            
+
             <div class="error-section" *ngIf="errorMessage">
                 <p class="error">{{ errorMessage }}</p>
             </div>
@@ -65,7 +65,7 @@ import { IbmIccReturnService } from '../services/ibm-icc-return.service';
             padding: 20px;
             font-family: Arial, sans-serif;
         }
-        
+
         .validation-section,
         .return-details-section {
             margin-bottom: 30px;
@@ -73,17 +73,17 @@ import { IbmIccReturnService } from '../services/ibm-icc-return.service';
             border: 1px solid #ddd;
             border-radius: 5px;
         }
-        
+
         h2 {
             color: #333;
             margin-bottom: 20px;
         }
-        
+
         h3 {
             color: #555;
             margin-bottom: 15px;
         }
-        
+
         input {
             padding: 8px;
             margin-right: 10px;
@@ -91,7 +91,7 @@ import { IbmIccReturnService } from '../services/ibm-icc-return.service';
             border: 1px solid #ccc;
             border-radius: 3px;
         }
-        
+
         button {
             padding: 8px 16px;
             background-color: #007bff;
@@ -100,23 +100,23 @@ import { IbmIccReturnService } from '../services/ibm-icc-return.service';
             border-radius: 3px;
             cursor: pointer;
         }
-        
+
         button:hover {
             background-color: #0056b3;
         }
-        
+
         .result {
             margin-top: 15px;
             padding: 10px;
             background-color: #f8f9fa;
             border-radius: 3px;
         }
-        
+
         .error {
             color: #dc3545;
             font-weight: bold;
         }
-        
+
         pre {
             background-color: #f4f4f4;
             padding: 10px;
@@ -126,7 +126,7 @@ import { IbmIccReturnService } from '../services/ibm-icc-return.service';
     `]
 })
 export class ReturnServiceExampleComponent implements OnInit {
-    
+
     orderHeaderKey: string = '';
     returnOrderKey: string = '';
     validationResult: any = null;
@@ -214,7 +214,7 @@ export class ReturnServiceExampleComponent implements OnInit {
             const validation = await this.ibmIccReturnService
                 .validateReturnEligibility('ORDER123')
                 .toPromise();
-            
+
             if (validation.isEligible) {
                 console.log('Return is eligible:', validation.validationMessage);
             }
@@ -222,21 +222,21 @@ export class ReturnServiceExampleComponent implements OnInit {
             // Example 2: Get return order details
             const details = await this.ibmIccReturnService
                 .getReturnOrderDetails('RETURN456');
-            
+
             console.log('Return order details retrieved:', details);
 
             // Example 3: Process return adjustments
             const adjustments = await this.ibmIccReturnService
                 .processReturnAdjustments('RL001')
                 .toPromise();
-            
+
             console.log('Return adjustments:', adjustments);
 
             // Example 4: Get return reasons
             const reasons = await this.ibmIccReturnService
                 .getReturnReasons('RL001')
                 .toPromise();
-            
+
             console.log('Return reasons:', reasons);
 
         } catch (error) {
@@ -248,44 +248,44 @@ export class ReturnServiceExampleComponent implements OnInit {
     processReturn(data: CustomReturnType): void {
         console.log(data);
     }
-    
+
     // ❌ TEST 7: UNDEFINED TYPE - OrderLineItem not imported
     getOrderLines(): OrderLineItem[] {
         return [];
     }
-    
+
     // ❌ TEST 8: TYPO - RECIEVE should be RECEIVE
     async recieveData() {
         return await fetch(API_SERIVCE_URL);
     }
-    
+
     // ❌ TEST 9: TYPO - SEPERATE should be SEPARATE
     seperateItems(items: any[]) {
         return items.filter(item => item.status === RETUNR_STATUS);
     }
-    
+
     // ❌ TEST 10: HARDCODED STRING (should be translated)
     welcomeMessage = 'Welcome to our application';
-    
+
     // ❌ TEST 11: HARDCODED ERROR MESSAGE (should be translated)
     errorMessage = 'An error occurred while processing your request';
-    
+
     // ❌ TEST 12: TYPO - OCCURED should be OCCURRED
     handleError(error: Error) {
         console.error('An error occured:', error.message);
     }
-    
+
     // ❌ TEST 13: TYPO - DEFINATELY should be DEFINITELY
     isValid(): boolean {
         // This will definately work
         return true;
     }
-    
+
     // ❌ TEST 14: MISSING IMPORT - Observable from rxjs
     getData(): Observable<any> {
         return null;
     }
-    
+
     // ❌ TEST 15: MISSING IMPORT - HttpClient
     makeRequest(http: HttpClient) {
         return http.get('/api/data');
