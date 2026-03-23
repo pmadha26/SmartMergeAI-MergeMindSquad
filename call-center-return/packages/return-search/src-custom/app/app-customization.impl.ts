@@ -1,5 +1,6 @@
 
 import { ItemImageComponent } from './wrong/path/item-image.component';
+import { SummaryNotesPanelComponent } from '@call-center/return-shared';
 export class AppCustomizationImpl {
     static readonly components = [
         SummaryNotesPanelComponent,
