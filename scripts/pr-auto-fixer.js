@@ -110,9 +110,37 @@ function removeDebugStatements(content) {
   return { fixed, fixes };
 }
 /**
- * Auto-fix missing imports by finding the correct import path
+ * Auto-fix missing imports - DISABLED
+ * Import fixing is now handled by consolidated-pr-analyzer.js with intelligent path detection
+ * This function is kept for backward compatibility but does nothing
  */
 function fixMissingImports(content, filePath) {
+  const fixes = [];
+  let fixed = content;
+  
+  // DISABLED: Import fixing is now handled by consolidated-pr-analyzer.js
+  // That script has intelligent logic to:
+  // 1. Search the entire repository for component definitions
+  // 2. Check if components are exported from package public-api.ts
+  // 3. Suggest package imports (e.g., '@call-center/return-shared') when appropriate
+  // 4. Fall back to relative paths only when necessary
+  //
+  // The old logic here was just guessing paths based on naming conventions,
+  // which resulted in incorrect imports like:
+  // import { SummaryNotesPanelComponent } from './features/return/return-search/summarynotespanel.component';
+  //
+  // Instead of the correct:
+  // import { SummaryNotesPanelComponent } from '@call-center/return-shared';
+  
+  console.log('⚠️  Import fixing is disabled in pr-auto-fixer.js');
+  console.log('   Use consolidated-pr-analyzer.js for intelligent import suggestions');
+  
+  return { fixed, fixes };
+}
+
+// Keep the old implementation commented out for reference
+/*
+function fixMissingImports_OLD_DISABLED(content, filePath) {
   const fixes = [];
   let fixed = content;
   
@@ -159,7 +187,7 @@ function fixMissingImports(content, filePath) {
         
         // Check if not imported
         if (!importedIdentifiers.has(identifier)) {
-          // Try to find the file based on naming conventions
+          // THIS WAS THE PROBLEM: Just guessing paths!
           const possiblePaths = [
             `./features/return/return-search/${identifier.toLowerCase().replace(/component$/, '')}.component`,
             `./${identifier.toLowerCase().replace(/component$/, '')}.component`,
@@ -204,7 +232,7 @@ function fixMissingImports(content, filePath) {
   
   return { fixed, fixes };
 }
-
+*/
 
 async function autoFixPR(owner, repo, prNumber) {
   try {
