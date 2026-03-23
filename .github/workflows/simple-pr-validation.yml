@@ -1,10 +1,11 @@
-name: Simple PR Validation
+name: Simple PR Validation (DISABLED - using bob-consolidated.yml instead)
 
 on:
-  pull_request:
-    types: [opened, reopened, synchronize, edited]
-  pull_request_target:
-    types: [opened, reopened, synchronize, edited]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR number to validate manually'
+        required: true
 
 permissions:
   contents: read
