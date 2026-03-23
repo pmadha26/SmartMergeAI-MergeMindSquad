@@ -1,4 +1,4 @@
-import { NewExampleComponent } from '../app/new-example/new-example.component';
+// Test file - NewExampleComponent should be detected as missing import
 export class AppCustomizationImpl {
     static readonly components = [];
     static readonly providers = [NewExampleComponent];
