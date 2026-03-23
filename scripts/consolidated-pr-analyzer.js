@@ -760,7 +760,7 @@ class ConsolidatedAnalyzer {
       packageName: packageInfo?.name || null
     };
   }
-  
+
   /**
    * Analyze behavior-impacting changes
    */
