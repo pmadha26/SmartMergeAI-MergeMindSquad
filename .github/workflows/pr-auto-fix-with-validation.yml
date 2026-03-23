@@ -1,10 +1,6 @@
-name: PR Auto-Fix with Validation
+name: PR Auto-Fix with Validation (DISABLED - using bob-consolidated.yml instead)
 
 on:
-  pull_request:
-    types: [opened, reopened, synchronize]
-  pull_request_review:
-    types: [submitted]
   workflow_dispatch:
     inputs:
       pr_number:
