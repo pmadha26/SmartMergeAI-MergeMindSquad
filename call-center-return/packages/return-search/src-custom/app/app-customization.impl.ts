@@ -1,8 +1,6 @@
-import { NewExampleComponent } from './features/return/return-search/newexample.component';
-
-// Test file - NewExampleComponent should be detected as missing import
+// Test: SampleSharedComponent should import from @call-center/return-shared
 export class AppCustomizationImpl {
     static readonly components = [];
-    static readonly providers = [NewExampleComponent];
+    static readonly providers = [SampleSharedComponent];
     static readonly imports = [];
 }
