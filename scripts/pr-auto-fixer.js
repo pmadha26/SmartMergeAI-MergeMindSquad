@@ -123,31 +123,51 @@ function fixTypos(content) {
 }
 
 /**
- * NEW: Auto-fix missing commas in arrays
+ * NEW: Auto-fix missing commas in TypeScript/JavaScript arrays only
+ * This function is conservative and only fixes obvious cases in array literals
  */
-function fixMissingCommas(content) {
+function fixMissingCommas(content, filePath) {
   if (!config.features.fixMissingCommas) {
+    return { fixed: content, fixes: [] };
+  }
+  
+  // Only process TypeScript/JavaScript files
+  const ext = path.extname(filePath || '');
+  if (!['.ts', '.tsx', '.js', '.jsx'].includes(ext)) {
     return { fixed: content, fixes: [] };
   }
   
   const fixes = [];
   let fixed = content;
   
-  // Pattern: identifier followed by comment and newline, then another identifier (missing comma)
-  // Example: 
-  //   ReturnSearchComponent // comment
-  //   ItemImageComponent  <- missing comma after ReturnSearchComponent
-  const missingCommaPattern = /(\w+)\s*(\/\/[^\n]*)?\n\s*(\w+)/g;
+  // More specific pattern: Only fix within array contexts
+  // Look for patterns like:
+  //   components = [
+  //     ComponentA
+  //     ComponentB  <- missing comma
+  //   ]
+  // Match: identifier at end of line, followed by newline and whitespace, then another identifier
+  // But only if we're inside square brackets
+  const arrayPattern = /(components|providers|declarations|imports|exports)\s*[:=]\s*\[([^\]]+)\]/gs;
   
-  const beforeFix = fixed;
-  fixed = fixed.replace(missingCommaPattern, (match, id1, comment, id2) => {
-    // Only add comma if it's in an array context (check for surrounding brackets)
-    return `${id1},${comment || ''}\n        ${id2}`;
+  fixed = fixed.replace(arrayPattern, (match, arrayName, arrayContent) => {
+    // Fix missing commas within this array
+    const fixedArray = arrayContent.replace(
+      /([A-Z]\w+)\s*(\/\/[^\n]*)?\n(\s+)([A-Z]\w+)/g,
+      (m, id1, comment, spaces, id2) => {
+        // Only add comma if id1 doesn't already end with comma
+        if (!m.includes(',')) {
+          fixes.push(`Added missing comma after ${id1} in ${arrayName} array`);
+          return `${id1},${comment || ''}\n${spaces}${id2}`;
+        }
+        return m;
+      }
+    );
+    return `${arrayName} = [${fixedArray}]`;
   });
   
-  if (fixed !== beforeFix) {
-    fixes.push('Added missing commas in arrays');
-    console.log('✅ Fixed missing commas in arrays');
+  if (fixes.length > 0) {
+    console.log(`✅ Fixed ${fixes.length} missing comma(s) in arrays`);
   }
   
   return { fixed, fixes };
@@ -353,8 +373,8 @@ async function autoFixPR(owner, repo, prNumber) {
         fixed = typoResult.fixed;
         allFileFixes = [...allFileFixes, ...typoResult.fixes];
         
-        // 2. Fix missing commas (NEW!)
-        const commaResult = fixMissingCommas(fixed);
+        // 2. Fix missing commas (NEW!) - only for TS/JS files
+        const commaResult = fixMissingCommas(fixed, file.filename);
         fixed = commaResult.fixed;
         allFileFixes = [...allFileFixes, ...commaResult.fixes];
         
