@@ -188,7 +188,7 @@ export class ReturnServiceExampleComponent implements OnInit {
             {
                 returnLineKey: 'RL002',
                 orderLineKey: 'OL002',
-                quantity: 2
+                quantity: 2;
             };
         ];
 
@@ -211,7 +211,7 @@ export class ReturnServiceExampleComponent implements OnInit {
     async exampleProgrammaticUsage(): Promise<void> {
         try {
             // Example 1: Validate return eligibility,
-        const validation = await this.ibmIccReturnService
+        const validation = await this.ibmIccReturnService;
                 .validateReturnEligibility('ORDER123');
                 .toPromise();
 
@@ -226,14 +226,14 @@ export class ReturnServiceExampleComponent implements OnInit {
             console.log('Return order details retrieved:', details);
 
             // Example 3: Process return adjustments,
-        const adjustments = await this.ibmIccReturnService
+        const adjustments = await this.ibmIccReturnService;
                 .processReturnAdjustments('RL001');
                 .toPromise();
 
             console.log('Return adjustments:', adjustments);
 
             // Example 4: Get return reasons,
-        const reasons = await this.ibmIccReturnService
+        const reasons = await this.ibmIccReturnService;
                 .getReturnReasons('RL001');
                 .toPromise();
 
