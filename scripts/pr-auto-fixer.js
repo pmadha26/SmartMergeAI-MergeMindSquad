@@ -7,6 +7,8 @@
 const { Octokit } = require('@octokit/rest');
 const { execSync } = require('child_process');
 const fs = require('fs');
+// Import the intelligent import analyzer
+const ConsolidatedPRAnalyzer = require('./consolidated-pr-analyzer');
 const path = require('path');
 const octokit = new Octokit({
   auth: process.env.GITHUB_TOKEN
@@ -94,28 +96,79 @@ function removeDebugStatements(content) {
   return { fixed, fixes };
 }
 /**
- * Auto-fix missing imports - DISABLED
- * Import fixing is now handled by consolidated-pr-analyzer.js with intelligent path detection
- * This function is kept for backward compatibility but does nothing
+ * Auto-fix missing imports using intelligent analyzer
+ * Uses ConsolidatedPRAnalyzer to detect correct import paths
  */
-function fixMissingImports(content, filePath) {
+async function fixMissingImports(content, filePath) {
   const fixes = [];
   let fixed = content;
-  // DISABLED: Import fixing is now handled by consolidated-pr-analyzer.js
-  // That script has intelligent logic to:
-  // 1. Search the entire repository for component definitions
-  // 2. Check if components are exported from package public-api.ts
-  // 3. Suggest package imports (e.g., '@call-center/return-shared') when appropriate
-  // 4. Fall back to relative paths only when necessary
-  //
-  // The old logic here was just guessing paths based on naming conventions,
-  // which resulted in incorrect imports like:
-  // import { SummaryNotesPanelComponent } from './features/return/return-search/summarynotespanel.component';
-  //
-  // Instead of the correct:
-  // import { SummaryNotesPanelComponent } from '@call-center/return-shared';
-  console.log('⚠️  Import fixing is disabled in pr-auto-fixer.js');
-  console.log('   Use consolidated-pr-analyzer.js for intelligent import suggestions');
+  
+  try {
+    // Create analyzer instance
+    const analyzer = new ConsolidatedPRAnalyzer();
+    
+    // Analyze the file content for missing imports
+    const fileData = {
+      filename: filePath,
+      patch: '', // Not needed for this analysis
+      additions: 0,
+      deletions: 0
+    };
+    
+    // Use the analyzer's intelligent import detection
+    await analyzer.analyzeMissingImports([fileData], content);
+    
+    // Get the missing imports from the analyzer results
+    const missingImportsResult = analyzer.results.critical.find(r => r.type === 'missing-imports');
+    
+    if (missingImportsResult && missingImportsResult.details) {
+      // Extract all imports that need to be added
+      const importsToAdd = new Map();
+      
+      for (const detail of missingImportsResult.details) {
+        if (detail.autoFixable && detail.correctImportPath) {
+          // Extract identifier from the suggestion
+          const match = detail.suggestion.match(/import\s+{\s*(\w+)\s*}\s+from\s+['"]([^'"]+)['"]/);
+          if (match) {
+            const [, identifier, importPath] = match;
+            importsToAdd.set(identifier, importPath);
+          }
+        }
+      }
+      
+      // Add missing imports at the top of the file (after existing imports)
+      if (importsToAdd.size > 0) {
+        const lines = fixed.split('\n');
+        let lastImportIndex = -1;
+        
+        // Find the last import statement
+        for (let i = 0; i < lines.length; i++) {
+          if (lines[i].trim().startsWith('import ')) {
+            lastImportIndex = i;
+          }
+        }
+        
+        // Insert new imports after the last import
+        const newImports = [];
+        for (const [identifier, importPath] of importsToAdd.entries()) {
+          newImports.push(`import { ${identifier} } from '${importPath}';`);
+          fixes.push(`Added missing import for ${identifier}`);
+        }
+        
+        if (lastImportIndex >= 0) {
+          lines.splice(lastImportIndex + 1, 0, ...newImports);
+          fixed = lines.join('\n');
+        } else {
+          // No imports found, add at the beginning
+          fixed = newImports.join('\n') + '\n\n' + fixed;
+        }
+      }
+    }
+  } catch (error) {
+    console.log(`⚠️  Error in intelligent import fixing: ${error.message}`);
+    console.log('   Skipping import fixes for this file');
+  }
+  
   return { fixed, fixes };
 }
 // Keep the old implementation commented out for reference
@@ -248,7 +301,7 @@ async function autoFixPR(owner, repo, prNumber) {
         let { fixed, fixes } = fixFormatting(content, file.filename);
         // Fix missing imports for TypeScript/JavaScript files
         if (['.ts', '.tsx', '.js', '.jsx'].includes(ext)) {
-          const importResult = fixMissingImports(fixed, file.filename);
+          const importResult = await fixMissingImports(fixed, file.filename);
           fixed = importResult.fixed;
           fixes = [...fixes, ...importResult.fixes];
         }
