@@ -1,5 +1,5 @@
 /**
- * Configuration for Bob across different platforms
+ * Configuration for SmartMergeAI across different platforms
  * Supports GitHub, GitHub Enterprise, and Bitbucket
  */
 
@@ -49,7 +49,7 @@ module.exports = {
     removeDebug: false,         // Remove debug statements
     fixTypos: true,             // Auto-fix typos
     fixMissingCommas: true,     // Auto-fix missing commas
-    fixSyntaxErrors: true       // Auto-fix basic syntax errors
+    fixSyntaxErrors: false      // Auto-fix basic syntax errors (DISABLED - too aggressive)
   },
   
   // Typo dictionary for auto-fix (can be extended)
@@ -79,4 +79,4 @@ function detectPlatform() {
   return 'github'; // default
 }
 
-// Made with Bob
+

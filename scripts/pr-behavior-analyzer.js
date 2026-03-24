@@ -213,7 +213,7 @@ async function analyzePRBehavior(owner, repo, prNumber) {
     const mediumWarnings = analysis.warnings.filter(w => w.severity === 'medium');
 
     // Generate detailed review comment
-    let reviewComment = `## 🤖 Bob's Intelligent Code Review\n\n`;
+    let reviewComment = `## 🤖 SmartMergeAI's Intelligent Code Review\n\n`;
     reviewComment += `**PR Analysis Summary:**\n`;
     reviewComment += `- 🔴 Critical Issues: ${criticalIssues.length}\n`;
     reviewComment += `- 🟠 High Priority: ${highIssues.length}\n`;
@@ -275,7 +275,7 @@ async function analyzePRBehavior(owner, repo, prNumber) {
       reviewComment += `- 🔍 Verify removed code is no longer needed\n`;
     }
 
-    reviewComment += `\n---\n*This is an automated analysis by Bob. Review carefully and use your judgment.*`;
+    reviewComment += `\n---\n*This is an automated analysis by SmartMergeAI. Review carefully and use your judgment.*`;
 
     // Post the review comment
     await octokit.issues.createComment({
@@ -340,4 +340,4 @@ if (require.main === module) {
 
 module.exports = { analyzePRBehavior };
 
-// Made with Bob
+

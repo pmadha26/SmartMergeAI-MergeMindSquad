@@ -241,7 +241,7 @@ async function detectRegressions(owner, repo, prNumber) {
     const riskScore = (criticalRisks * 3) + (mediumRisks * 2) + regressionRisks.length;
 
     // Generate report
-    let report = `## 🔍 Bob's Regression Analysis\n\n`;
+    let report = `## 🔍 SmartMergeAI's Regression Analysis\n\n`;
     
     // Risk score
     let riskLevel = 'Low';
@@ -321,7 +321,7 @@ async function detectRegressions(owner, repo, prNumber) {
       report += `- 🧪 Run comprehensive regression test suite\n`;
     }
 
-    report += `\n---\n*Automated regression analysis by Bob*`;
+    report += `\n---\n*Automated regression analysis by SmartMergeAI*`;
 
     // Post the report
     await octokit.issues.createComment({
@@ -387,4 +387,4 @@ if (require.main === module) {
 
 module.exports = { detectRegressions };
 
-// Made with Bob
+

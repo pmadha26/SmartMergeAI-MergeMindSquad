@@ -483,4 +483,4 @@ module.exports = {
   fixSyntaxErrors
 };
 
-// Made with Bob - Enhanced Auto-Fixer
+ - Enhanced Auto-Fixer

@@ -729,4 +729,3 @@ if (require.main === module) {
 
 module.exports = ComprehensiveValidator;
 
-// Made with Bob

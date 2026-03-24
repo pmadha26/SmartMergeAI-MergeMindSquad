@@ -492,4 +492,3 @@ if (require.main === module) {
 
 module.exports = MergeConflictResolver;
 
-// Made with Bob

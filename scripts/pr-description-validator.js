@@ -229,4 +229,4 @@ if (require.main === module) {
 
 module.exports = { validatePRDescription };
 
-// Made with Bob
+

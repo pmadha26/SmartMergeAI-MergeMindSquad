@@ -182,4 +182,4 @@ class BitbucketAdapter {
 
 module.exports = BitbucketAdapter;
 
-// Made with Bob
+
