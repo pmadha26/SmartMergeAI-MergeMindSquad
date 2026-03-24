@@ -1,5 +1,5 @@
 /**
- * Configuration for Bob across different platforms
+ * Configuration for SmartMergeAI across different platforms
  * Supports GitHub, GitHub Enterprise, and Bitbucket
  */
 
@@ -79,4 +79,4 @@ function detectPlatform() {
   return 'github'; // default
 }
 
-// Made with Bob
+

@@ -738,4 +738,4 @@ if (require.main === module) {
 
 module.exports = CommitImpactValidator;
 
-// Made with Bob
+

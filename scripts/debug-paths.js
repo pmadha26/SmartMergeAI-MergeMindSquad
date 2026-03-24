@@ -47,4 +47,4 @@ try {
   console.log('Error reading scripts directory:', e.message);
 }
 
-// Made with Bob
+

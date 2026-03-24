@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Bob - Consolidated PR Analyzer (MVP)
+ * SmartMergeAI - Consolidated PR Analyzer (MVP)
  *
  * Performs comprehensive PR analysis in a single run:
  * - Merge conflict detection (including file-level conflicts)
@@ -98,7 +98,7 @@ class ConsolidatedAnalyzer {
    * Main analysis orchestrator
    */
   async analyze() {
-    console.log(`${colors.bold}${colors.cyan}🤖 Bob's Consolidated PR Analysis${colors.reset}\n`);
+    console.log(`${colors.bold}${colors.cyan}🤖 SmartMergeAI's Consolidated PR Analysis${colors.reset}\n`);
     console.log(`PR #${prNumber}: ${baseRef} ← ${headRef}\n`);
     try {
       // Get PR details and diff
@@ -872,17 +872,17 @@ class ConsolidatedAnalyzer {
     console.log(`\n${colors.bold}${colors.cyan}📝 Generating consolidated report...${colors.reset}`);
     const report = this.generateReport(pr);
     try {
-      // Find existing Bob comment
+      // Find existing SmartMergeAI comment
       const { data: comments } = await octokit.issues.listComments({
         owner,
         repo,
         issue_number: prNumber
       });
-      // Look for EITHER Bob's comment OR the Simple Validation comment
+      // Look for EITHER SmartMergeAI's comment OR the Simple Validation comment
       // This ensures we update the same comment instead of creating multiple
       const bobComment = comments.find(comment =>
         comment.user.type === 'Bot' &&
-        (comment.body.includes('Bob\'s Comprehensive PR Analysis') ||
+        (comment.body.includes('SmartMergeAI\'s Comprehensive PR Analysis') ||
          comment.body.includes('PR Validation Results'))
       );
       if (bobComment) {
@@ -916,7 +916,7 @@ class ConsolidatedAnalyzer {
     const warningCount = this.results.warnings.length;
     const passedCount = this.results.passed.length;
     const autoFixCount = this.results.autoFixable.length;
-    let report = `## 🤖 Bob's Comprehensive PR Analysis\n\n`;
+    let report = `## 🤖 SmartMergeAI's Comprehensive PR Analysis\n\n`;
     // Summary
     report += `### 📊 Summary\n\n`;
     report += `| Metric | Value |\n`;
@@ -991,7 +991,7 @@ class ConsolidatedAnalyzer {
     // Auto-Fix Suggestions
     if (autoFixCount > 0) {
       report += `### 🔧 Auto-Fix Available (${autoFixCount})\n\n`;
-      report += `After approval, Bob can automatically fix:\n\n`;
+      report += `After approval, SmartMergeAI can automatically fix:\n\n`;
       const fixGroups = {};
       this.results.autoFixable.forEach(fix => {
         const type = fix.type.replace('bug-', '');
@@ -1020,7 +1020,7 @@ class ConsolidatedAnalyzer {
     if (autoFixCount > 0) {
       report += `3. 🔧 Auto-fixes will be applied after approval\n`;
     }
-    report += `\n*Powered by Bob - Your Intelligent PR Assistant* 🤖`;
+    report += `\n*Powered by SmartMergeAI - Your Intelligent PR Assistant* 🤖`;
     return report;
   }
 }
@@ -1045,4 +1045,4 @@ if (require.main === module) {
   main();
 }
 module.exports = { ConsolidatedAnalyzer };
-// Made with Bob
+

@@ -366,7 +366,7 @@ class MergeConflictDetector {
 **PR #${prNumber}** can be merged cleanly into \`${baseRef}\`
 
 ---
-*Automated by Bob's Merge Conflict Detector* 🤖`;
+*Automated by SmartMergeAI's Merge Conflict Detector* 🤖`;
 
     try {
       await octokit.issues.createComment({
@@ -418,12 +418,12 @@ class MergeConflictDetector {
       comment += `
 ### 🤖 Auto-Resolution Available
 
-These conflicts appear to be simple and can be **automatically resolved** by Bob!
+These conflicts appear to be simple and can be **automatically resolved** by SmartMergeAI!
 
 **To enable auto-resolution:**
 1. Review the conflicts above
 2. Approve this PR (if you haven't already)
-3. Bob will automatically resolve and commit the changes
+3. SmartMergeAI will automatically resolve and commit the changes
 
 **Note:** Auto-resolution only works for:
 - Simple addition conflicts
@@ -474,7 +474,7 @@ These conflicts appear to be simple and can be **automatically resolved** by Bob
 - [Git: Merge Conflicts](https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging)
 
 ---
-*Automated by Bob's Merge Conflict Detector* 🤖`;
+*Automated by SmartMergeAI's Merge Conflict Detector* 🤖`;
 
     try {
       await octokit.issues.createComment({
@@ -519,4 +519,4 @@ async function main() {
 
 main();
 
-// Made with Bob
+

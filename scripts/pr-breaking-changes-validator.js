@@ -953,4 +953,3 @@ if (require.main === module) {
 
 module.exports = BreakingChangesValidator;
 
-// Made with Bob

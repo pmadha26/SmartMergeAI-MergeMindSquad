@@ -557,4 +557,3 @@ if (require.main === module) {
 
 module.exports = MissingReferenceDetector;
 
-// Made with Bob

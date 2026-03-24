@@ -426,7 +426,7 @@ class AutoConflictResolver {
       comment += `**✅ Changes committed and pushed automatically**\n\n`;
     }
 
-    comment += `---\n*Automated by Bob's Auto-Conflict Resolver* 🤖`;
+    comment += `---\n*Automated by SmartMergeAI's Auto-Conflict Resolver* 🤖`;
 
     try {
       await octokit.issues.createComment({
@@ -468,4 +468,4 @@ async function main() {
 
 main();
 
-// Made with Bob
+
